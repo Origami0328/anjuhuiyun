@@ -1063,6 +1063,7 @@
   const changeTableItem = (record) => {
     console.log(record)
     modalRef.value.open()
+
     for (let recordKey in record) {
       if (recordKey == 'isAuth') {
         formState[recordKey] = record[recordKey].toString()
