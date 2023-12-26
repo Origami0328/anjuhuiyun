@@ -6,7 +6,7 @@ export function useTableInit(opt = {}) {
   let resetTableObj = null
   let requestObj = reactive({})
   const paginationInfo = reactive({
-    total: 200,
+    total: 20,
     pageSize: 10,
     current: 1,
     showQuickJumper: true,
@@ -43,6 +43,7 @@ export function useTableInit(opt = {}) {
                 No: index + 1, //序号字段
                 ...item,
                 delLoading: false,
+                changeLoading: false,
                 operation: '',
               }))
             : res.result.map((item, index) => ({
@@ -84,13 +85,27 @@ export function useTableInit(opt = {}) {
     await getData(requestObj)
     record.delLoading = false
   }
+
+  // 多选
+  const state = reactive({
+    selectedRowKeys: [],
+    ids: [],
+  })
+  const onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log('selectedRows changed: ', selectedRows)
+    state.selectedRowKeys = selectedRowKeys
+    state.ids = selectedRows.map((item) => {
+      return item.id
+    })
+  }
   return {
     getData,
     requestObj,
     dataSource,
     searchTableItem,
     resetTableObj,
-
+    state,
+    onSelectChange,
     paginationInfo,
     handleTableChange,
     tableLoading,
@@ -102,16 +117,16 @@ export function useInitFrom(opt = {}) {
   const editId = ref(0)
   const titleValue = computed(() => (editId.value ? '修改' : '新增'))
   let formState = reactive({})
-  const formRef = ref(null)
+  const formRef = ref()
   const defaultForm = opt.form
   const modalRef = ref()
   //重置表单
   function resetForm(row = false) {
     if (formRef.value) formRef.value.clearValidate()
     for (const key in defaultForm) {
-      // if (Array.isArray(defaultForm[key])){
-      //   form[key]=row[key]
-      // }
+      if (Array.isArray(defaultForm[key])) {
+        formState[key] = row[key]
+      }
       formState[key] = row[key]
     }
   }
@@ -119,6 +134,14 @@ export function useInitFrom(opt = {}) {
   function handleCreate() {
     editId.value = 0
     resetForm(defaultForm)
+    modalRef.value.open()
+  }
+  // 修改
+  function handleChange(item) {
+    editId.value = item.id
+    resetForm(item)
+    console.log(formState.houseType)
+    item.changeLoading = false
     modalRef.value.open()
   }
   //使表单居中显示
@@ -135,9 +158,11 @@ export function useInitFrom(opt = {}) {
         }
       : {}
   })
+
   return {
     titleValue,
     handleCreate,
+    handleChange,
     modalRef,
     editId,
     formState,

@@ -72,7 +72,7 @@ export function delMenu(data) {
     data,
   })
 }
-//菜单管理的删除
+//菜单管理的添加
 export function addMenu(data) {
   return request({
     url: '/managerPC/systemMenu/addMenu',

@@ -22,13 +22,16 @@
             <template
               v-if="column.dataIndex == 'operation' && record.operation == ''"
             >
-              <a-button
-                type="link"
-                @click="delTableItem(record)"
-                :loading="record.delLoading"
+              <a-popconfirm
+                title="确定要删除该表格项吗?"
+                ok-text="确认"
+                cancel-text="取消"
+                @confirm="delTableItem(record)"
               >
-                删除
-              </a-button>
+                <a-button type="link" :loading="record.delLoading">
+                  删除
+                </a-button>
+              </a-popconfirm>
             </template>
             <template v-else-if="column.dataIndex == 'rightType'">
               <a-tag color="orange" v-if="record.rightType == '1'">读写</a-tag>
@@ -73,6 +76,12 @@
             placeholder="请输入url"
           ></a-input>
         </a-form-item>
+        <a-form-item label="排序" name="sort">
+          <a-input-number
+            v-model:value="formState.sort"
+            style="width: 150px"
+          ></a-input-number>
+        </a-form-item>
         <a-form-item label="权限" name="rightType">
           <a-radio-group v-model:value="formState.rightType" name="radioGroup">
             <a-radio value="0">只读</a-radio>
@@ -90,12 +99,15 @@
   import { computed, reactive, ref } from 'vue'
   import Modal from '@/components/Modal.vue'
   import { useInitFrom } from '@/hooks/useTableComponent'
+  import { message } from 'ant-design-vue'
   const { titleValue, modalRef } = useInitFrom()
   const formRef = ref()
   const rules = {
     name: [{ required: true, message: '请输入角色名称' }],
     url: [{ required: true, message: '请输入排序' }],
     menuRightId: [{ required: true, message: '请输入菜单级别' }],
+    sort: [{ required: true, message: '请输入排序' }],
+    rightType: [{ required: true, message: '请输入排序' }],
   }
   const tableLoading = ref(false)
   const columns = [
@@ -134,6 +146,7 @@
   const formState = reactive({
     name: '',
     url: '',
+    sort: '',
     rightType: '',
     menuRightId: [],
   })
@@ -259,7 +272,6 @@
   getApiLIst()
   const handleCreate = () => {
     modalRef.value.open()
-    console.log(menuList.value)
   }
   const delTableItem = async (record) => {
     record.delLoading = true
@@ -293,6 +305,7 @@
         await getApiLIst()
         modalRef.value.close()
         clearForm()
+        message.success('新增表单项成功')
       })
       .finally(() => {
         modalRef.value.hideLoading()

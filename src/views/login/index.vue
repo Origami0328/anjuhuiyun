@@ -35,7 +35,7 @@
               </a-button>
             </a-form-item>
           </a-form>
-          <div id="vaptcha-container" style="width: 300px; height: 36px"></div>
+          <div id="vaptchaContainer" style="width: 300px; height: 36px"></div>
         </div>
       </a-col>
     </a-row>
@@ -50,6 +50,7 @@
   import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
   import { encrypt } from '@/utils/loginEncrypt'
   import { vaptcha } from '@/utils/vaptcha'
+  import { message } from 'ant-design-vue'
 
   export default {
     name: 'Login',
@@ -107,25 +108,27 @@
       },
       initVaptcha() {
         const that = this
-        vaptcha().then((vaptcha) => {
-          vaptcha({
-            vid: '6572cc76d3784602950e68eb', // 验证单元id
-            mode: 'invisible',
-            scene: 0, // 场景值 默认0
-            container: '#vaptcha-container', // 容器，可为Element 或者 selector
-          }).then(function (VAPTCHAObj) {
-            vaptchaobj = VAPTCHAObj
-
-            VAPTCHAObj.listen('pass', function () {
-              let serverToken = VAPTCHAObj.getServerToken()
-              let data = {
-                verServer: serverToken.server,
-                verToken: serverToken.token,
-              }
-              that.handleSubmit(data)
-              VAPTCHAObj.reset()
+        vaptcha().then(() => {
+          window
+            .vaptcha({
+              vid: '6572cc76d3784602950e68eb', // 验证单元id
+              mode: 'invisible',
+              scene: 0, // 场景值 默认0
+              container: '#vaptcha-container', // 容器，可为Element 或者 selector
             })
-          })
+            .then((VAPTCHAObj) => {
+              vaptchaobj = VAPTCHAObj
+
+              VAPTCHAObj.listen('pass', function () {
+                let serverToken = VAPTCHAObj.getServerToken()
+                let data = {
+                  verServer: serverToken.server,
+                  verToken: serverToken.token,
+                }
+                that.handleSubmit(data)
+                VAPTCHAObj.reset()
+              })
+            })
         })
       },
       async showVaptcha() {
@@ -135,7 +138,9 @@
         if (res.code == '552') {
           vaptchaobj.validate()
         } else if (res.code == '200') {
-          this.handleSubmit()
+          await this.handleSubmit()
+        } else if (res.code == '409') {
+          message.error(res.desc)
         }
       },
     },

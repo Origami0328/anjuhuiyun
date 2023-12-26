@@ -17,6 +17,7 @@
           :columns="columns"
           :data-source="dataSource"
           :loading="tableLoading"
+          :pagination="{ defaultPageSize: 20 }"
         >
           <template v-slot:emptyText>
             <div style="text-align: center; padding: 20px; font-size: 30px">
@@ -38,13 +39,16 @@
               >
                 修改
               </a-button>
-              <a-button
-                type="link"
-                @click="delRoleItem(record)"
-                :loading="record.delLoading"
+              <a-popconfirm
+                title="确定删除该表格项吗?"
+                ok-text="确认"
+                cancel-text="删除"
+                @confirm="delRoleItem(record)"
               >
-                删除
-              </a-button>
+                <a-button type="link" :loading="record.delLoading">
+                  删除
+                </a-button>
+              </a-popconfirm>
             </template>
           </template>
         </a-table>
@@ -100,7 +104,6 @@
             show-line
             v-model:expandedKeys="expandedKeys"
             v-model:checkedKeys="formState.checkedKeys"
-            :fieldNames="replaceFields"
             checkable
             v-if="treeData.length > 0"
             :defaultExpandAll="false"
@@ -127,7 +130,7 @@
     delRole,
   } from '@/api/system'
   import { reactive, ref, toRaw } from 'vue'
-  import { generateUniqueValue } from '@/utils/uniqueKey'
+  // import { generateUniqueValue } from '@/utils/uniqueKey'
   import { useStore } from 'vuex'
   const store = useStore()
   const btnLoading = ref(false)
@@ -189,54 +192,21 @@
   const disabled = ref(false)
   const treeData = ref([])
   const expandedKeys = ref([])
-  const replaceFields = {
-    children: 'child',
-    title: 'rightName',
-    key: 'rightId',
-  }
-  const onCheck = (checkedKeys) => {
-    let latest = checkedKeys[checkedKeys.length - 1]
-    let siblings
+  const onCheck = (checkedKeys, e) => {
+    const push = []
+    checkedKeys.forEach((item) => push.push(item))
+    const node = e.node.parent.children
 
-    // 复杂度高后续优化
-    for (let i = 0; i < treeData.value.length; i++) {
-      for (let j = 0; j < treeData.value[i].child.length; j++) {
-        for (let k = 0; k < treeData.value[i].child[j].child.length; k++) {
-          if (latest == treeData.value[i].child[j].child[k].rightId) {
-            // 拿到点击的权限在树形组件中的位置
-            if (k == 1) {
-              if (
-                checkedKeys.includes(
-                  treeData.value[i].child[j].child[0].rightId
-                )
-              ) {
-                siblings = treeData.value[i].child[j].child[0].rightId
-              }
-            } else {
-              if (
-                checkedKeys.includes(
-                  treeData.value[i].child[j].child[1].rightId
-                )
-              ) {
-                siblings = treeData.value[i].child[j].child[1].rightId
-              }
-            }
-            break
-          }
-        }
+    node.forEach((item) => {
+      let index = checkedKeys.indexOf(item.key)
+      if (index > -1) {
+        checkedKeys.splice(index, 1)
       }
-    }
-
-    if (siblings) {
-      // 存在同级则删除之前的同级，变成但选择效果
-      for (let z = 0; z < checkedKeys.length; z++) {
-        if (siblings == checkedKeys[z]) {
-          checkedKeys.splice(z, 1)
-        }
-      }
-      // checkedKey.value = checkedKeys
-    }
+    })
+    checkedKeys.push(push[push.length - 1])
+    console.log(checkedKeys)
   }
+
   const rules = {
     name: [{ required: true, message: '请输入角色名称' }],
     sort: [{ required: true, message: '请输入排序' }],
@@ -265,10 +235,6 @@
       label: '市场',
     },
     {
-      value: 'e',
-      label: '市场',
-    },
-    {
       value: 'f',
       label: '一标三实-民警',
     },
@@ -284,33 +250,66 @@
   //存储修改角色的id
   const tableChangeItemID = ref()
 
+  function transformArray(arr) {
+    return arr.map((item) => {
+      const newItem = {
+        ...item,
+        title: item.name,
+        value: item.id,
+        key: item.id,
+        disableCheckbox: !item.disableCheckbox,
+        children: item.children,
+      }
+      if (item.rights && item.rights.length > 0) {
+        const readAndWrite = item.rights.map((item1) => {
+          // console.log(item1)
+          return {
+            // ...item1,
+            name: item1.rightName,
+            id: item1.rightId,
+            disableCheckbox: true,
+          }
+        })
+        // console.log(readAndWrite)
+        newItem.children?.push(...readAndWrite)
+      }
+      if (item?.children && item.children.length > 0) {
+        newItem.children = transformArray(item.children)
+      }
+      return newItem
+    })
+  }
+
   const getAllmenuAndGroup = async () => {
     await getAllMenu({ roleId: store.getters['user/roleId'] }).then((res) => {
+      console.log(res)
       let treeDataValue = []
-      for (let k in res.result.menu) {
-        // console.log('属性名为',k)
-        const obj = {}
-        obj.rightName = k
-        obj.child = []
-        obj.rightId = generateUniqueValue()
-        obj.disableCheckbox = true
-        for (let j in res.result.menu[k]) {
-          // console.log('第二级的属性为',j)
-          const secObj = {}
-          secObj.rightName = j
-          secObj.child = res.result.menu[k][j]
-          console.log(res.result.menu[k][j])
-          secObj.rightId = generateUniqueValue()
-          // expandedKeys.value.push(secObj.rightId)
-          secObj.disableCheckbox = true
-          obj.child.push(secObj)
-        }
-        treeDataValue.push(obj)
-      }
+      treeDataValue = transformArray(res.result)
+      // for (let k in res.result.menu) {
+      //   // console.log('属性名为',k)
+      //   const obj = {}
+      //   obj.rightName = k
+      //   obj.child = []
+      //   obj.rightId = generateUniqueValue()
+      //   obj.disableCheckbox = true
+      //   for (let j in res.result.menu[k]) {
+      //     // console.log('第二级的属性为',j)
+      //     const secObj = {}
+      //     secObj.rightName = j
+      //     secObj.child = res.result.menu[k][j]
+      //     console.log(res.result.menu[k][j])
+      //     secObj.rightId = generateUniqueValue()
+      //     // expandedKeys.value.push(secObj.rightId)
+      //     secObj.disableCheckbox = true
+      //     obj.child.push(secObj)
+      //   }
+      //   treeDataValue.push(obj)
+      // }
+      console.log(treeDataValue)
       treeData.value = treeDataValue
     })
     await getGroup().then((res) => {
-      selectOptions.value = res.result.map((item) => ({
+      selectOptions.value = res.result?.map((item) => ({
         label: item.groupName,
         value: item.groupId,
       }))
@@ -354,6 +353,7 @@
     }
     // 获取角色的菜单权限
     let res = await getRoleRight({ roleId: record.id })
+    console.log(res)
     res.result.forEach((item) => {
       formState.checkedKeys.push(item.rightId)
     })
@@ -392,6 +392,8 @@
             await getUserMenuList({})
             clear()
             modalRef.value.close()
+            expandedKeys.value = []
+            message.success('表格项新增成功')
           })
         })
         .finally(() => {
@@ -409,6 +411,8 @@
         .finally(() => {
           modalRef.value.hideLoading()
           modalRef.value.close()
+          message.success('表格项修改成功')
+          expandedKeys.value = []
         })
     }
   }
@@ -424,6 +428,7 @@
         formState[formStateKey] = undefined
       }
     }
+    expandedKeys.value = []
     modalRef.value.close()
   }
 </script>

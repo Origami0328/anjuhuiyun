@@ -9,7 +9,6 @@ import {
   setAccessToken,
 } from '@/utils/accessToken'
 import { message } from 'ant-design-vue'
-
 const state = () => ({
   accessToken: getAccessToken(),
   username: '',

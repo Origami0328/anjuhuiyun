@@ -25,7 +25,6 @@
   import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
   let store = useStore()
   let collapse = computed(() => store.getters['settings/collapse'])
-  console.log(collapse.value)
   const toggleCollapse = () => {
     store.dispatch('settings/toggleCollapse')
   }
@@ -42,7 +41,7 @@
     width: 100%;
     height: 52px;
     background-color: rgba(67, 56, 202, 1);
-    z-index: 1000;
+    z-index: 2000;
     .logo {
       width: 250px;
       height: 100%;

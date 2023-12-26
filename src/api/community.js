@@ -82,6 +82,31 @@ export function getHouseList(data) {
   })
 }
 
+// 房屋列表
+export function addHouseList(data) {
+  return request({
+    url: '/managerPC/villageHouse/add',
+    method: 'post',
+    data,
+  })
+}
+// 小区楼号
+export function getBuilding(data) {
+  return request({
+    url: '/managerPC/villageUnit/getBuilding',
+    method: 'post',
+    data,
+  })
+}
+
+// 小区楼号
+export function getUnit(data) {
+  return request({
+    url: '/managerPC/villageUnit/getUnit',
+    method: 'post',
+    data,
+  })
+}
 // 门禁卡管理列表
 export function getVillageDoorCardList(data) {
   return request({

@@ -101,11 +101,10 @@
           </div>
         </a-form-item>
         <a-form-item label="排序" name="sort">
-          <a-input
+          <a-input-number
             v-model:value="formState.sort"
             placeholder="排序"
             style="width: 150px"
-            @change="onlyNumber"
           />
         </a-form-item>
       </a-form>
@@ -170,6 +169,7 @@
     {
       title: '操作',
       dataIndex: 'operation',
+      align: 'center',
     },
   ]
   const dataSource = ref([])
@@ -241,10 +241,6 @@
     formState.photoSrc = file
     return false
   }
-  const onlyNumber = (e) => {
-    const numericValue = e.target.value.replace(/\D/g, '')
-    formState.sort = numericValue
-  }
   const rules = {
     name: [{ required: true, message: '请输入用户名', trigger: 'change' }],
     sort: [{ required: true, message: '请输入排序', trigger: 'change' }],
@@ -301,7 +297,6 @@
     open.value = true
     if (tableItem != undefined) {
       // 点击修改而进入modal
-      console.log(tableItem)
       formState.id = tableItem.id
       formState.name = tableItem.name
       formState.code = tableItem.code

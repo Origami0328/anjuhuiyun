@@ -38,7 +38,7 @@ const columns = ref([
     title: '所管辖区域',
     dataIndex: 'area',
     resizable: true,
-    width: 100,
+    width: 110,
     minWidth: 100,
     maxWidth: 200,
   },
@@ -57,8 +57,9 @@ const columns = ref([
     width: 150,
   },
 ])
+const formRef = ref()
 const formState = reactive({
-  username: '',
+  username: undefined,
   password: '',
   chkpwd: '',
   realName: '',
@@ -68,8 +69,8 @@ const formState = reactive({
   remarks: '',
   recommendUser: '',
   recommendReason: '',
-  startTime: '',
-  endTime: '',
+  startTime: undefined,
+  endTime: undefined,
   isAuth: undefined,
   status: undefined,
   roleGroupId: undefined,
@@ -77,12 +78,15 @@ const formState = reactive({
   provieceCode: undefined,
   villageIds: [],
   cityCode: undefined,
+  streetCode: undefined,
+  districtCode: undefined,
   poProvieceCode: undefined,
   poCityCode: undefined,
   poDistrictCode: undefined,
   poStreetCode: undefined,
   villageId: undefined,
-  buildingIds: undefined,
+  buildingIds: [],
+  buildingId: undefined,
 })
 const authList = [
   {
@@ -214,9 +218,102 @@ const userListObj = {
   roleId: undefined,
   isAuth: undefined,
 }
-
+const rules = {
+  username: [{ required: true, message: '请选择角色分组' }],
+  password: [{ required: true, message: '请选择角色分组' }],
+  chkpwd: [{ required: true, message: '请选择角色分组' }],
+  roleGroupId: [{ required: true, message: '请选择角色分组' }],
+  roleId: [{ required: true, message: '请选择角色' }],
+  provieceCode: [{ required: true, message: '请选择省份' }],
+  villageId: [{ required: true, message: '请选择小区' }],
+  villageIds: [{ required: true, message: '请选择小区' }],
+  cityCode: [{ required: true, message: '请选择城市' }],
+  poProvieceCode: [{ required: true, message: '请选择省厅' }],
+  poCityCode: [{ required: true, message: '请选择市局' }],
+  poDistrictCode: [{ required: true, message: '请选择分局' }],
+  poStreetCode: [{ required: true, message: '请选择派出所' }],
+  buildingIds: [{ required: true, message: '请选择楼栋' }],
+  buildingId: [{ required: true, message: '请选择楼栋' }],
+  districtCode: [{ required: true, message: '请选择区县' }],
+  streetCode: [{ required: true, message: '请选择楼栋' }],
+  startTime: [{ required: true, message: '请选择开始时间' }],
+  phone: [{ required: true, message: '请输入手机号' }],
+  endTime: [{ required: true, message: '请选择结束时间' }],
+  realName: [{ required: true, message: '请输入姓名' }],
+  status: [{ required: true, message: '请选择状态' }],
+  isAuth: [{ required: true, message: '请选择审核状态' }],
+}
+const rulesEdit = {
+  roleGroupId: [{ required: true, message: '请选择角色分组' }],
+  roleId: [{ required: true, message: '请选择角色' }],
+  provieceCode: [{ required: true, message: '请选择省份' }],
+  villageId: [{ required: true, message: '请选择小区' }],
+  villageIds: [{ required: true, message: '请选择小区' }],
+  cityCode: [{ required: true, message: '请选择城市' }],
+  poProvieceCode: [{ required: true, message: '请选择省厅' }],
+  poCityCode: [{ required: true, message: '请选择市局' }],
+  poDistrictCode: [{ required: true, message: '请选择分局' }],
+  poStreetCode: [{ required: true, message: '请选择派出所' }],
+  buildingIds: [{ required: true, message: '请选择楼栋' }],
+  buildingId: [{ required: true, message: '请选择楼栋' }],
+  districtCode: [{ required: true, message: '请选择区县' }],
+  streetCode: [{ required: true, message: '请选择楼栋' }],
+  startTime: [{ required: true, message: '请选择开始时间' }],
+  phone: [{ required: true, message: '请输入手机号' }],
+  endTime: [{ required: true, message: '请选择结束时间' }],
+  realName: [{ required: true, message: '请输入姓名' }],
+  status: [{ required: true, message: '请选择状态' }],
+  isAuth: [{ required: true, message: '请选择审核状态' }],
+}
+const formRoleGroup = [
+  {
+    value: '0',
+    label: '系统管理员',
+  },
+  {
+    value: '1',
+    label: '省份管理员',
+  },
+  {
+    value: '2',
+    label: '市级管理员',
+  },
+  {
+    value: '3',
+    label: '县级管理员',
+  },
+  {
+    value: '4',
+    label: '街道管理员',
+  },
+  {
+    value: '5',
+    label: '小区管理组',
+  },
+  {
+    value: '6',
+    label: '楼栋管理组',
+  },
+  {
+    value: '7',
+    label: '市局',
+  },
+  {
+    value: '9',
+    label: '分局',
+  },
+  {
+    value: '8',
+    label: '派出所',
+  },
+  {
+    value: '11',
+    label: '管理员',
+  },
+]
 export {
   columns,
+  formRef,
   userListObj,
   buildingList,
   poDistrictList,
@@ -236,4 +333,7 @@ export {
   statusOptions,
   districtList,
   formAuthList,
+  rules,
+  rulesEdit,
+  formRoleGroup,
 }

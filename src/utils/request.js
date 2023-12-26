@@ -7,12 +7,13 @@ import {
   successCode,
   tokenName,
 } from '@/config'
-import store from '@/store'
+
 import qs from 'qs'
-import router from '@/router'
 import { isArray } from '@/utils/validate'
 import { message } from 'ant-design-vue'
 
+import router from '@/router'
+import store from '@/store'
 let loadingInstance
 
 /**
@@ -20,7 +21,7 @@ let loadingInstance
  * @param {*} code
  * @param {*} msg
  */
-const handleCode = (code, msg) => {
+const handleCode = async (code, msg) => {
   switch (code) {
     case 401:
       message.error(msg || '登录失效')
@@ -28,6 +29,11 @@ const handleCode = (code, msg) => {
       break
     case 403:
       router.push({ path: '/401' }).catch(() => {})
+      break
+    case 501:
+      await store.dispatch('user/logout').catch(() => {})
+      await router.push('/login')
+      message.error('token过期了，请重新登录')
       break
     default:
       message.error(msg || `后端接口${code}异常`)
@@ -91,7 +97,7 @@ instance.interceptors.response.use(
     if (loadingInstance) loadingInstance.close()
 
     const { data, config } = response
-    const { code, msg } = data
+    const { code, desc } = data
     // 操作正常Code数组
     const codeVerificationArray = isArray(successCode)
       ? [...successCode]
@@ -100,9 +106,9 @@ instance.interceptors.response.use(
     if (codeVerificationArray.includes(Number(code))) {
       return data
     } else {
-      handleCode(code, msg)
+      handleCode(Number(code), desc)
       return Promise.reject(
-        '请求异常拦截:' + JSON.stringify({ url: config.url, code, msg }) ||
+        '请求异常拦截:' + JSON.stringify({ url: config.url, code, desc }) ||
           'Error'
       )
     }
