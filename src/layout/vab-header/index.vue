@@ -41,7 +41,7 @@
     width: 100%;
     height: 52px;
     background-color: rgba(67, 56, 202, 1);
-    z-index: 2000;
+    z-index: 1200;
     .logo {
       width: 250px;
       height: 100%;

@@ -12,48 +12,44 @@
           新增
         </a-button>
       </a-space>
-      <a-space>
-        <a-table
-          :columns="columns"
-          :data-source="dataSource"
-          :loading="tableLoading"
-          :pagination="{ defaultPageSize: 20 }"
-        >
-          <template v-slot:emptyText>
-            <div style="text-align: center; padding: 20px; font-size: 30px">
-              正在为您加载数据
-            </div>
-          </template>
-          <template #bodyCell="{ column, record }">
-            <template
-              v-if="
-                column.dataIndex == 'operation' &&
-                record.operation == '' &&
-                record.name != '超级管理员'
-              "
-            >
-              <a-button
-                type="link"
-                @click="changeMenuInfo(record)"
-                :loading="record.loading"
-              >
-                修改
-              </a-button>
-              <a-popconfirm
-                title="确定删除该表格项吗?"
-                ok-text="确认"
-                cancel-text="删除"
-                @confirm="delRoleItem(record)"
-              >
-                <a-button type="link" :loading="record.delLoading">
-                  删除
-                </a-button>
-              </a-popconfirm>
-            </template>
-          </template>
-        </a-table>
-      </a-space>
     </a-space>
+    <a-table
+      :columns="columns"
+      :data-source="dataSource"
+      :loading="tableLoading"
+      :pagination="false"
+    >
+      <template v-slot:emptyText>
+        <div style="text-align: center; padding: 20px; font-size: 30px">
+          正在为您加载数据
+        </div>
+      </template>
+      <template #bodyCell="{ column, record }">
+        <template
+          v-if="
+            column.dataIndex == 'operation' &&
+            record.operation == '' &&
+            record.name != '超级管理员'
+          "
+        >
+          <a-button
+            type="link"
+            @click="changeMenuInfo(record)"
+            :loading="record.loading"
+          >
+            修改
+          </a-button>
+          <a-popconfirm
+            title="确定删除该表格项吗?"
+            ok-text="确认"
+            cancel-text="删除"
+            @confirm="delRoleItem(record)"
+          >
+            <a-button type="link" :loading="record.delLoading">删除</a-button>
+          </a-popconfirm>
+        </template>
+      </template>
+    </a-table>
     <Modal
       :title="titleValue"
       ref="modalRef"
@@ -69,7 +65,6 @@
         <a-form-item label="角色名称" name="name">
           <a-input
             v-model:value="formState.name"
-            :disabled="disabled"
             placeholder="请输入角色名称"
           />
         </a-form-item>
@@ -94,7 +89,6 @@
           <a-input-number
             v-model:value="formState.sort"
             placeholder="排序越小越靠前"
-            :disabled="disabled"
             :min="1"
             style="width: 200px"
           />
@@ -204,7 +198,6 @@
       }
     })
     checkedKeys.push(push[push.length - 1])
-    console.log(checkedKeys)
   }
 
   const rules = {
@@ -262,7 +255,6 @@
       }
       if (item.rights && item.rights.length > 0) {
         const readAndWrite = item.rights.map((item1) => {
-          // console.log(item1)
           return {
             // ...item1,
             name: item1.rightName,
@@ -282,7 +274,6 @@
 
   const getAllmenuAndGroup = async () => {
     await getAllMenu({ roleId: store.getters['user/roleId'] }).then((res) => {
-      console.log(res)
       let treeDataValue = []
       treeDataValue = transformArray(res.result)
       // for (let k in res.result.menu) {
@@ -305,7 +296,6 @@
       //   }
       //   treeDataValue.push(obj)
       // }
-      console.log(treeDataValue)
       treeData.value = treeDataValue
     })
     await getGroup().then((res) => {
@@ -343,6 +333,7 @@
     disabled.value = true
     editId.value = 12
     await getAllmenuAndGroup()
+    record.groupId = Number(record.groupId)
     //填充表单的内容，菜单权限暂时清空
     for (let formStateKey in formState) {
       if (formStateKey == 'checkedKeys') {
@@ -353,7 +344,6 @@
     }
     // 获取角色的菜单权限
     let res = await getRoleRight({ roleId: record.id })
-    console.log(res)
     res.result.forEach((item) => {
       formState.checkedKeys.push(item.rightId)
     })
@@ -404,6 +394,8 @@
       saveRoleRight({
         roleId: tableChangeItemID.value,
         menuRightIds: toRaw(formState.checkedKeys).join(','),
+        name: formState.name,
+        sort: formState.sort,
       })
         .then(() => {
           getUserMenuList({})

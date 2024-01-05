@@ -3,7 +3,9 @@
     <a-watermark :content="$store.state.user.username">
       <router-view v-slot="{ Component }">
         <transition mode="out-in" name="fade-transform">
-          <component :is="Component" />
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
         </transition>
       </router-view>
     </a-watermark>

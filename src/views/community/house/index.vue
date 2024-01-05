@@ -10,42 +10,43 @@
 
         <a-space>
           <a-select
-            v-model:value="requestObj.province"
+            v-model:value="requestObj.provieceCode"
             placeholder="选择省份"
             show-search
             style="width: 150px"
             :filter-option="filterOption"
             :options="provinceList"
-            @change="handleCityChange"
+            @change="(value, options) => cityToStreet(value, options, 'city')"
           ></a-select>
           <a-select
-            v-model:value="requestObj.city"
+            v-model:value="requestObj.cityCode"
             show-search
             style="width: 150px"
             placeholder="选择城市"
             :not-found-content="null"
-            :options="cityInfo"
+            :options="cityList"
             :filter-option="filterOption"
-            @change="handleDistrictChange"
+            @change="
+              (value, options) => cityToStreet(value, options, 'district')
+            "
           ></a-select>
           <a-select
-            v-model:value="requestObj.district"
+            v-model:value="requestObj.districtCode"
             show-search
             placeholder="选择区县"
             style="width: 150px"
-            :options="districtInfo"
+            :options="districtList"
             :filter-option="filterOption"
-            @change="handleStreetChange"
+            @change="(value, options) => cityToStreet(value, options, 'street')"
           ></a-select>
           <a-select
-            v-model:value="requestObj.street"
+            v-model:value="requestObj.streetCode"
             show-search
             style="width: 150px"
             placeholder="选择街道"
+            :options="streetList"
             :filter-option="filterOption"
             :not-found-content="null"
-            :options="streetInfo"
-            @change="handleChange"
           ></a-select>
         </a-space>
       </a-space>
@@ -54,6 +55,7 @@
           v-model:value="requestObj.villageId"
           style="width: 150px"
           show-search
+          :filter-option="filterOption"
           placeholder="选择小区"
           :not-found-content="null"
           :options="villageList"
@@ -62,21 +64,57 @@
         <a-select
           v-model:value="requestObj.buildingId"
           placeholder="请选择楼栋"
+          show-search
+          :filter-option="filterOption"
           :options="buildingList"
           style="width: 150px"
           @change="createUnit"
         ></a-select>
         <a-select
+          v-model:value="requestObj.unitId"
           placeholder="请选择单元"
+          show-search
+          :filter-option="filterOption"
           style="width: 150px"
           :options="unitList"
         ></a-select>
       </a-space>
       <a-space>
-        <a-select placeholder="请选择省厅" style="width: 150px"></a-select>
-        <a-select placeholder="请选择市局" style="width: 150px"></a-select>
-        <a-select placeholder="请选择分局" style="width: 150px"></a-select>
-        <a-select placeholder="请选择派出所" style="width: 150px"></a-select>
+        <a-select
+          v-model:value="requestObj.poProvieceCode"
+          placeholder="请选择省厅"
+          show-search
+          :filter-option="filterOption"
+          style="width: 150px"
+          :options="poProvinceList"
+          @change="(value, options) => cityToStreet(value, options, 'city')"
+        ></a-select>
+        <a-select
+          v-model:value="requestObj.poCityCode"
+          placeholder="请选择市局"
+          show-search
+          :filter-option="filterOption"
+          style="width: 150px"
+          :options="poCityList"
+          @change="(value, options) => cityToStreet(value, options, 'district')"
+        ></a-select>
+        <a-select
+          v-model:value="requestObj.poDistrictCode"
+          placeholder="请选择分局"
+          show-search
+          :filter-option="filterOption"
+          style="width: 100%"
+          :options="poDistrictList"
+          @change="(value, options) => cityToStreet(value, options, 'street')"
+        ></a-select>
+        <a-select
+          v-model:value="requestObj.poStreetCode"
+          placeholder="请选择派出所"
+          show-search
+          :filter-option="filterOption"
+          style="width: 100%"
+          :options="poStreetList"
+        ></a-select>
       </a-space>
       <a-space>
         <a-button type="primary" @click="searchTableItem">
@@ -91,47 +129,62 @@
           <template #icon><sync-outlined /></template>
         </a-button>
         <a-button type="primary" @click="handleCreate">新增</a-button>
-        <a-button
-          style="background-color: red; width: 70px; text-align: center"
-          size="middle"
+
+        <a-popconfirm
+          title="确定要删除选中项吗?"
+          ok-text="确定"
+          cancel-text="取消"
+          @confirm="multipleDel"
         >
-          <template #icon>
-            <DeleteOutlined style="color: #fff" />
-          </template>
-        </a-button>
+          <a-button
+            style="background-color: red; width: 70px; text-align: center"
+            size="middle"
+          >
+            <template #icon>
+              <DeleteOutlined style="color: #fff" />
+            </template>
+          </a-button>
+        </a-popconfirm>
       </a-space>
-      <a-table
-        :columns="columns"
-        :data-source="dataSource"
-        :pagination="paginationInfo"
-        :row-selection="{
-          selectedRowKeys: state.selectedRowKeys,
-          onChange: onSelectChange,
-        }"
-        bordered
-        :loading="tableLoading"
-        @change="handleTableChange"
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'operation'">
-            <div>
-              <a-button
-                type="link"
-                @click="edit(record)"
-                :loading="record.changeLoading"
-              >
-                修改
-              </a-button>
-              <a-button type="link">分配房东</a-button>
-              <a-button type="link" :loading="record.delLoading">删除</a-button>
-            </div>
-          </template>
-          <template v-else-if="column.dataIndex == 'houseType'">
-            <span>{{ houseTypeName(record.houseType) }}</span>
-          </template>
-        </template>
-      </a-table>
     </a-space>
+    <a-table
+      :columns="columns"
+      :data-source="dataSource"
+      :pagination="paginationInfo"
+      :row-selection="{
+        selectedRowKeys: state.selectedRowKeys,
+        onChange: onSelectChange,
+      }"
+      bordered
+      :loading="tableLoading"
+      @change="handleTableChange"
+    >
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex == 'operation'">
+          <div>
+            <a-button
+              type="link"
+              @click="edit(record)"
+              :loading="record.changeLoading"
+            >
+              修改
+            </a-button>
+            <a-button type="link">分配房东(未写)</a-button>
+            <a-popconfirm
+              title="确定要删除选中项吗?"
+              ok-text="确定"
+              cancel-text="取消"
+              @confirm="delTableItem(record)"
+            >
+              <a-button type="link">删除</a-button>
+            </a-popconfirm>
+          </div>
+        </template>
+        <template v-else-if="column.dataIndex == 'houseType'">
+          <span>{{ houseTypeName(record.houseType) }}</span>
+        </template>
+      </template>
+    </a-table>
     <Modal
       :title="titleValue"
       ref="modalRef"
@@ -144,9 +197,9 @@
         v-bind="formItemLayout"
         ref="formRef"
       >
-        <a-form-item label="房屋名称" name="houseName">
+        <a-form-item label="房屋名称" name="name">
           <a-input
-            v-model:value="formState.houseName"
+            v-model:value="formState.name"
             style="width: 200px"
             placeholder="房屋名称"
           />
@@ -159,7 +212,10 @@
           />
         </a-form-item>
         <a-form-item label="标准地址编号">
-          <a-input v-model:value="formState.name" placeholder="标准地址编号" />
+          <a-input
+            v-model:value="formState.qrCodeId"
+            placeholder="标准地址编号"
+          />
         </a-form-item>
         <a-form-item label="房屋类型">
           <a-select
@@ -179,7 +235,7 @@
         </a-form-item>
         <a-form-item label="备注">
           <a-input
-            v-model:value="formState.name"
+            v-model:value="formState.houseName"
             placeholder="公司型房屋填写公司名称"
           />
         </a-form-item>
@@ -225,13 +281,18 @@
 
   import {
     addHouseList,
-    getBuilding,
     getHouseList,
     getUnit,
+    getBuilding,
+    onlyHouseName,
+    editHouseList,
+    multipleDeleteApi,
+    deleteHouse,
   } from '@/api/community'
-  import { getProvince, getVillageList } from '@/api/system'
-  import { message } from 'ant-design-vue'
-  import { useRequestProvinceToStreet } from '@/hooks/useProvinceToStreet'
+  // import { getBuilding } from '@/api/system'
+  import { getDictionary } from '@/api/system'
+  import { useSimpleRequest } from '@/hooks/useSimpleRequest'
+  import { messageContent } from '@/utils/message'
   const houseObj = {
     searchName: '',
     provieceCode: undefined,
@@ -249,6 +310,7 @@
     pageSize: 10,
   }
   const form = {
+    id: '',
     buildingName: '',
     unitName: '',
     name: '',
@@ -264,6 +326,8 @@
   const formRef = ref()
   const {
     dataSource,
+    multipleDel,
+    delTableItem,
     searchTableItem,
     resetTableObj,
     paginationInfo,
@@ -273,9 +337,15 @@
     getData,
     requestObj,
     onSelectChange,
+    villageList,
+    poProvinceList,
+    provinceList,
+    formVillageList,
   } = useTableInit({
     getTableList: getHouseList,
     tableObj: houseObj,
+    delTableEle: deleteHouse,
+    allDel: multipleDeleteApi,
   })
   const {
     handleCreate,
@@ -288,18 +358,17 @@
   } = useInitFrom({
     form,
   })
-  const provinceList = ref([])
-  const formProvinceList = ref([])
-  const { getProvinceToStreetList } = useRequestProvinceToStreet()
-  getProvinceToStreetList({
-    requestFun: getProvince,
-    tableList: provinceList,
-    formList: formProvinceList,
-    labelString: 'name',
-    valueString: 'province_code',
-  })
+
+  const cityList = ref([])
+  const districtList = ref([])
+  const streetList = ref([])
+  const poCityList = ref([])
+  const poDistrictList = ref([])
+  const poStreetList = ref([])
+  const { simpleRequest, clearFormOrPageInput } = useSimpleRequest()
+
   const rules = {
-    houseName: [{ required: true, message: '请输入房屋名称' }],
+    name: [{ required: true, message: '请输入房屋名称' }],
     villageId: [{ required: true, message: '请选择小区' }],
     buildingId: [{ required: true, message: '请选择楼号' }],
     unitId: [{ required: true, message: '请选择单元' }],
@@ -309,60 +378,58 @@
       title: '房屋名称',
       dataIndex: 'name',
       align: 'center',
-      width: '100px',
+      width: '10%',
     },
     {
       title: '小区名',
       dataIndex: 'villageName',
       align: 'center',
-      width: '150px',
+      width: '10%',
     },
     {
       title: '楼层',
       dataIndex: 'floor',
       align: 'center',
-      width: '100px',
+      width: '10%',
     },
 
     {
       title: '楼号',
       dataIndex: 'buildingName',
       align: 'center',
-      width: '150px',
+      width: '10%',
     },
     {
       title: '单元',
       dataIndex: 'unitName',
       align: 'center',
-      width: '150px',
+      width: '10%',
     },
     {
       title: '设备编码',
       dataIndex: 'callId',
       align: 'center',
-      width: '200px',
+      width: '10%',
     },
     {
       title: '房屋类型',
       dataIndex: 'houseType',
       align: 'center',
-      width: '150px',
+      width: '10%',
     },
     {
       title: '备注',
       dataIndex: 'houseName',
       align: 'center',
-      width: '100px',
+      width: '10%',
     },
     {
       title: '操作',
       dataIndex: 'operation',
-      width: '500px',
+      width: '20%',
       align: 'center',
     },
   ]
-  const villageList = ref([])
-  const formVillageList = ref([])
   const buildingList = ref([])
   const formBuildingList = ref([])
   const unitList = ref([])
@@ -399,42 +466,166 @@
         return houseTypeMap[houseTypeMapKey].label
     }
   }
-  getVillageList().then((res) => {
-    const villageArray = res.result.map((item) => {
-      return {
-        ...item,
-        value: item.id,
-        label: item.name,
+
+  const cityToStreet = (value, options, type, isForm = false) => {
+    let changeList
+    if (options.childCode == 'DQ') {
+      if (type == 'city') {
+        changeList = cityList
+        clearFormOrPageInput({
+          requestObj,
+          label: '3',
+          childCode: 'DQ',
+          isForm,
+          pageList: {
+            cityList,
+            streetList,
+            districtList,
+          },
+        })
+      } else if (type == 'district') {
+        changeList = districtList
+        clearFormOrPageInput({
+          requestObj,
+          label: '2',
+          childCode: 'DQ',
+          isForm,
+          pageList: {
+            cityList,
+            streetList,
+            districtList,
+          },
+        })
+      } else if (type == 'street') {
+        changeList = streetList
+        clearFormOrPageInput({
+          requestObj,
+          label: '1',
+          childCode: 'DQ',
+          isForm,
+          pageList: {
+            cityList,
+            streetList,
+            districtList,
+          },
+        })
+        // requestObj.streetCode = undefined
       }
-    })
-    formVillageList.value = villageArray
-    villageArray.unshift({
-      value: '',
-      label: '全部',
-    })
-    villageList.value = villageArray
-  })
-  // const handleCityChange = (value) => {
-  //   const cityList = ref([])
-  //   // if (value != '') {
-  //   //   getProvinceToStreetList({
-  //   //     requestFun,
-  //   //     requestObj: {
-  //   //       value,
-  //   //     },
-  //   //     tableList: cityList,
-  //   //     labelString: '',
-  //   //     valueString: '',
-  //   //   })
-  //   // } else {
-  //   //   cityList.value = [
-  //   //     {
-  //   //       value: '',
-  //   //       label: '全部',
-  //   //     },
-  //   //   ]
-  //   // }
-  // }
+    } else if (options.childCode == 'PO') {
+      if (type == 'city') {
+        changeList = poCityList
+        clearFormOrPageInput({
+          requestObj,
+          label: 'p3',
+          childCode: 'PO',
+          isForm,
+          pageList: {
+            poCityList,
+            poStreetList,
+            poDistrictList,
+          },
+        })
+        // requestObj.poCityCode = undefined
+        // requestObj.poDistrictCode = undefined
+        // requestObj.poStreetCode = undefined
+      } else if (type == 'district') {
+        changeList = poDistrictList
+        // requestObj.poDistrictCode = undefined
+        // requestObj.poStreetCode = undefined
+        clearFormOrPageInput({
+          requestObj,
+          label: 'p2',
+          childCode: 'PO',
+          isForm,
+          pageList: {
+            poCityList,
+            poStreetList,
+            poDistrictList,
+          },
+        })
+      } else if (type == 'street') {
+        changeList = poStreetList
+        // requestObj.poStreetCode = undefined
+        clearFormOrPageInput({
+          requestObj,
+          label: 'p1',
+          childCode: 'PO',
+          isForm,
+          pageList: {
+            poCityList,
+            poStreetList,
+            poDistrictList,
+          },
+        })
+      }
+    }
+    if (value != '') {
+      simpleRequest({
+        requestFun: getDictionary,
+        requestObj: {
+          dicCode: value,
+          grade: type,
+          childCode: options.childCode,
+        },
+        tableList: changeList,
+        labelString: 'dicName',
+        valueString: 'dicCode',
+      })
+    }
+    // else {
+    //   if (options.childCode == 'DQ' && type == 'city') {
+    //     requestObj.cityCode = undefined
+    //     requestObj.streetCode = undefined
+    //     requestObj.districtCode = undefined
+    //     cityList.value = [
+    //       {
+    //         value: '',
+    //         label: '全部',
+    //         childCode: 'DQ',
+    //       },
+    //     ]
+    //     streetList.value = [
+    //       {
+    //         value: '',
+    //         label: '全部',
+    //         childCode: 'DQ',
+    //       },
+    //     ]
+    //     districtList.value = [
+    //       {
+    //         value: '',
+    //         label: '全部',
+    //         childCode: 'DQ',
+    //       },
+    //     ]
+    //   } else if (options.childCode == 'PO' && type == 'city') {
+    //     requestObj.poCityCode = undefined
+    //     requestObj.poStreetCode = undefined
+    //     requestObj.poDistrictCode = undefined
+    //     poCityList.value = [
+    //       {
+    //         value: '',
+    //         label: '全部',
+    //         childCode: 'PO',
+    //       },
+    //     ]
+    //     poStreetList.value = [
+    //       {
+    //         value: '',
+    //         label: '全部',
+    //         childCode: 'PO',
+    //       },
+    //     ]
+    //     poDistrictList.value = [
+    //       {
+    //         value: '',
+    //         label: '全部',
+    //         childCode: 'PO',
+    //       },
+    //     ]
+    //   }
+    // }
+  }
   const createBuilding = (value, options, isForm = false) => {
     if (isForm) {
       formState.buildingId = undefined
@@ -444,7 +635,7 @@
       requestObj.unitId = undefined
     }
     if (value != '') {
-      getBuilding({ value }).then((res) => {
+      getBuilding({ villageId: value }).then((res) => {
         let buildingArray = res.result.map((item) => {
           return {
             ...item,
@@ -454,7 +645,13 @@
         })
         isForm
           ? (formBuildingList.value = buildingArray)
-          : (buildingList.value = [...buildingArray])
+          : (buildingList.value = [
+              {
+                value: '',
+                label: '全部',
+              },
+              ...buildingArray,
+            ])
       })
     } else {
       isForm
@@ -474,7 +671,7 @@
       requestObj.unitId = undefined
     }
     if (value != '') {
-      getUnit({ value }).then((res) => {
+      getUnit({ buildingId: value }).then((res) => {
         let unitArray = res.result.map((item) => {
           return {
             ...item,
@@ -502,26 +699,55 @@
     return option.label.indexOf(inputValue) > -1
   }
 
+  const addOrEdit = async () => {
+    let res = await onlyHouseName({
+      name: formState.name,
+      unitId: formState.unitId,
+      onlyId: formState.id ? formState.id : undefined,
+    })
+    if (res.result == '0') {
+      if (editId.value == '0') {
+        const buildingName = formBuildingList.value.find(
+          (item) => item.value === formState.buildingId
+        )
+        const unitName = formUnitList.value.find(
+          (item) => item.value === formState.unitId
+        )
+        await addHouseList({
+          ...formState,
+          buildingName: buildingName.name,
+          unitName: unitName.name,
+        })
+        modalRef.value.close()
+        messageContent('success', '新增表单项成功')
+      } else {
+        await editHouseList(formState)
+      }
+    } else {
+      messageContent('error', '房屋名称已存在')
+      return
+    }
+    await getData(requestObj)
+  }
+
   const submit = async () => {
     modalRef.value.showLoading()
     if (editId.value == '0') {
       formRef.value
         .validate()
         .then(async () => {
-          await addHouseList(formState).then((res) => {
-            console.log(res)
-          })
-          await getData(requestObj)
-
-          modalRef.value.close()
-          message.success('新增表单项成功')
+          await addOrEdit()
         })
         .finally(() => {
           modalRef.value.hideLoading()
         })
+    } else {
+      await addOrEdit()
+      modalRef.value.close()
+      modalRef.value.hideLoading()
+      messageContent('success', '修改表单项成功')
     }
   }
-  const close = () => {}
   const edit = async (item) => {
     item.changeLoading = true
     handleChange(item)
@@ -530,8 +756,13 @@
     if (typeof resetTableObj == 'function') {
       resetTableObj()
     }
-
+    paginationInfo.current = 1
     getData(requestObj)
+  }
+  const close = () => {
+    if (formRef.value) {
+      formRef.value.clearValidate()
+    }
   }
 </script>
 

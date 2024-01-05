@@ -1,6 +1,83 @@
 import request from '@/utils/request'
 import { getAccessToken } from '@/utils/accessToken'
+//小区信息管理的列表接口
+export function getVillageInformList(data) {
+  return request({
+    url: '/managerPC/village/list',
+    method: 'post',
+    data,
+  })
+}
 
+//小区信息管理的新增获取省份接口
+export function getProvinceToStreet(data) {
+  return request({
+    url: '/managerPC/village/toAdd',
+    method: 'post',
+    data,
+  })
+}
+
+//小区信息管理的修改接口--只用于获取addUser
+export function editTableItem(data) {
+  return request({
+    url: '/managerPC/village/toEdit',
+    method: 'post',
+    data,
+  })
+}
+//小区信息管理的删除接口
+export function delVillageInfoItem(data) {
+  return request({
+    url: '/managerPC/village/del',
+    method: 'post',
+    data,
+  })
+}
+
+//小区信息管理的配置提交
+export function submitSetting(data) {
+  return request({
+    url: '/managerPC/village/submitSetting',
+    method: 'post',
+    data,
+  })
+}
+
+//小区信息管理的保障房配置提交
+export function submitSettingBzf(data) {
+  return request({
+    url: '/managerPC/village/submitSettingBzf',
+    method: 'post',
+    data,
+  })
+}
+//小区信息管理的检测是否存在小区
+export function hasVillage(data) {
+  return request({
+    url: '/managerPC/village/hasVillage',
+    method: 'post',
+    data,
+  })
+}
+//小区信息管理的新增接口
+export function addVillage(data) {
+  return request({
+    url: '/managerPC/village/add',
+    method: 'post',
+    data,
+  })
+}
+
+//小区信息管理的新增接口
+export function editVillage(data) {
+  return request({
+    url: '/managerPC/village/edit',
+    method: 'post',
+    data,
+  })
+}
+//小区功能管理的列表接口
 export function getvillageFunction(data) {
   return request({
     url: '/managerPC/villageFunction/list',
@@ -64,6 +141,66 @@ export function getBuildingList(data) {
   })
 }
 
+// 楼栋删除
+export function delBuildingItem(data) {
+  return request({
+    url: '/managerPC/villageBuilding/del',
+    method: 'post',
+    data,
+  })
+}
+
+// 楼栋删除
+export function delAllBuildingItem(data) {
+  return request({
+    url: '/managerPC/villageBuilding/delAll',
+    method: 'post',
+    data,
+  })
+}
+// 楼栋新增
+export function addBuilding(data) {
+  return request({
+    url: '/managerPC/villageBuilding/add',
+    method: 'post',
+    data,
+  })
+}
+// 楼栋修改
+export function editBuilding(data) {
+  return request({
+    url: '/managerPC/villageBuilding/edit',
+    method: 'post',
+    data,
+  })
+}
+
+// 楼栋表单小区
+export function formVillageBuilding(data) {
+  return request({
+    url: '/managerPC/villageBuilding/toAdd',
+    method: 'post',
+    data,
+  })
+}
+
+// 楼栋验证名称唯一
+export function onlyBuildingName(data) {
+  return request({
+    url: '/managerPC/villageBuilding/onlyName',
+    method: 'post',
+    data,
+  })
+}
+
+// 楼栋验证名称唯一
+export function downXcxCode(data) {
+  return request({
+    url: '/managerPC/villageBuilding/getVisitorXcxCode',
+    method: 'post',
+    data,
+  })
+}
 // 单元列表
 export function getUnitList(data) {
   return request({
@@ -72,7 +209,56 @@ export function getUnitList(data) {
     data,
   })
 }
+// 单元的删除
+export function delUnitItem(data) {
+  return request({
+    url: '/managerPC/villageUnit/del',
+    method: 'post',
+    data,
+  })
+}
+// 单元的删除
+export function delAllUnitItem(data) {
+  return request({
+    url: '/managerPC/villageUnit/delAll',
+    method: 'post',
+    data,
+  })
+}
+// 单元的有权限小区
+export function formUnitVillage(data) {
+  return request({
+    url: '/managerPC/villageUnit/toAdd',
+    method: 'post',
+    data,
+  })
+}
 
+// 单元的新增
+export function addUnit(data) {
+  return request({
+    url: '/managerPC/villageUnit/add',
+    method: 'post',
+    data,
+  })
+}
+
+// 单元的修改
+export function editUnit(data) {
+  return request({
+    url: '/managerPC/villageUnit/edit',
+    method: 'post',
+    data,
+  })
+}
+// 单元的验证名称唯一
+export function onlyUnitName(data) {
+  return request({
+    url: '/managerPC/villageUnit/onlyName',
+    method: 'post',
+    data,
+  })
+}
 // 房屋列表
 export function getHouseList(data) {
   return request({
@@ -82,10 +268,44 @@ export function getHouseList(data) {
   })
 }
 
-// 房屋列表
+// 房屋下的验证房屋名唯一
+export function onlyHouseName(data) {
+  return request({
+    url: '/managerPC/villageHouse/onlyName',
+    method: 'post',
+    data,
+  })
+}
+// 房屋下的新增
 export function addHouseList(data) {
   return request({
     url: '/managerPC/villageHouse/add',
+    method: 'post',
+    data,
+  })
+}
+
+// 房屋下的修改
+export function editHouseList(data) {
+  return request({
+    url: '/managerPC/villageHouse/edit',
+    method: 'post',
+    data,
+  })
+}
+// 房屋下的批量删除
+export function multipleDeleteApi(data) {
+  return request({
+    url: '/managerPC/villageHouse/delAll',
+    method: 'post',
+    data,
+  })
+}
+
+// 房屋下的批量删除
+export function deleteHouse(data) {
+  return request({
+    url: '/managerPC/villageHouse/del',
     method: 'post',
     data,
   })
@@ -99,7 +319,7 @@ export function getBuilding(data) {
   })
 }
 
-// 小区楼号
+// 小区单元
 export function getUnit(data) {
   return request({
     url: '/managerPC/villageUnit/getUnit',

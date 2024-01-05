@@ -40,34 +40,33 @@
         </a-button>
         <a-button @click="handleCreate" type="primary">新增</a-button>
       </a-space>
-      <a-space>
-        <a-table
-          :data-source="dataSource"
-          :columns="column"
-          @change="handleTableChange"
-          :pagination="paginationInfo"
-          :loading="tableLoading"
-        >
-          <template #bodyCell="{ column, record }">
-            <template
-              v-if="column.dataIndex == 'operation' && record.operation == ''"
-            >
-              <a-button
-                type="link"
-                :loading="record.delLoading"
-                @click="delTableItem(record)"
-              >
-                删除
-              </a-button>
-            </template>
-            <template v-else-if="column.dataIndex == 'status'">
-              <span v-if="record.status == 0">未分配</span>
-              <span v-else>已分配</span>
-            </template>
-          </template>
-        </a-table>
-      </a-space>
     </a-space>
+    <a-table
+      :data-source="dataSource"
+      :columns="column"
+      @change="handleTableChange"
+      :pagination="paginationInfo"
+      :loading="tableLoading"
+    >
+      <template #bodyCell="{ column, record }">
+        <template
+          v-if="column.dataIndex == 'operation' && record.operation == ''"
+        >
+          <a-popconfirm
+            title="确定要删除选中项吗?"
+            ok-text="确定"
+            cancel-text="取消"
+            @confirm="delTableItem(record)"
+          >
+            <a-button type="link">删除</a-button>
+          </a-popconfirm>
+        </template>
+        <template v-else-if="column.dataIndex == 'status'">
+          <span v-if="record.status == 0">未分配</span>
+          <span v-else>已分配</span>
+        </template>
+      </template>
+    </a-table>
     <Modal :title="titleValue" ref="modalRef" @handleOk="submit">
       <a-form :model="formState" v-bind="formItemLayout">
         <a-form-item label="小区">
@@ -103,6 +102,7 @@
   } from '@/api/community'
   import { getVillageList } from '@/api/system'
   import Modal from '@/components/Modal'
+  import { messageContent } from '@/utils/message'
   const dateFormat = 'YYYY-MM-DD'
   const userListObj = reactive({
     searchName: '',
@@ -215,6 +215,7 @@
       await searchTableItem(requestObj)
       modalRef.value.hideLoading()
       modalRef.value.close()
+      messageContent('success', '新增卡号成功')
     }
   }
 </script>

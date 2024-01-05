@@ -9,6 +9,8 @@
       @cancel="closeModal"
       :footer="footer"
       :width="width"
+      :maskClosable="false"
+      style="font-size: 20px"
     >
       <slot></slot>
     </a-modal>
@@ -29,7 +31,7 @@
       type: String,
     },
     width: {
-      type: Number,
+      type: [Number, String],
     },
   })
   import { ref } from 'vue'

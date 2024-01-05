@@ -4,15 +4,16 @@ const columns = ref([
   {
     title: '序号',
     dataIndex: 'No',
-    width: 5,
   },
   {
     title: '用户名',
     dataIndex: 'username',
+    width: '10%',
   },
   {
     title: '姓名',
     dataIndex: 'realName',
+    width: '10%',
   },
   {
     title: '职位',
@@ -25,19 +26,23 @@ const columns = ref([
   {
     title: '审核状态',
     dataIndex: 'isAuth',
+    width: '10%',
   },
   {
     title: '推荐用户',
     dataIndex: 'recommendUser',
+    width: '10%',
   },
   {
     title: '账号状态',
     dataIndex: 'status',
+    width: '10%',
   },
   {
     title: '所管辖区域',
     dataIndex: 'area',
     resizable: true,
+
     width: 110,
     minWidth: 100,
     maxWidth: 200,
@@ -45,16 +50,17 @@ const columns = ref([
   {
     title: '添加用户',
     dataIndex: 'addUser',
+    width: '10%',
   },
   {
     title: '审核用户',
     dataIndex: 'updateUser',
+    width: '10%',
   },
   {
     title: '操作',
     dataIndex: 'operation',
     align: 'center',
-    width: 150,
   },
 ])
 const formRef = ref()
@@ -87,6 +93,9 @@ const formState = reactive({
   villageId: undefined,
   buildingIds: [],
   buildingId: undefined,
+  createdTime: '',
+  addUser: '',
+  isShowStatis: undefined,
 })
 const authList = [
   {
@@ -106,7 +115,20 @@ const authList = [
     label: '审核失败',
   },
 ]
-
+const showStatisOptions = [
+  {
+    value: '0',
+    label: '不展示',
+  },
+  {
+    value: '1',
+    label: '物业统计',
+  },
+  {
+    value: '2',
+    label: '民警统计',
+  },
+]
 const statusOptions = [
   {
     value: '0',
@@ -219,9 +241,9 @@ const userListObj = {
   isAuth: undefined,
 }
 const rules = {
-  username: [{ required: true, message: '请选择角色分组' }],
-  password: [{ required: true, message: '请选择角色分组' }],
-  chkpwd: [{ required: true, message: '请选择角色分组' }],
+  username: [{ required: true, message: '请输入用户名' }],
+  password: [{ required: true, message: '请输入密码' }],
+  chkpwd: [{ required: true, message: '请输入密码' }],
   roleGroupId: [{ required: true, message: '请选择角色分组' }],
   roleId: [{ required: true, message: '请选择角色' }],
   provieceCode: [{ required: true, message: '请选择省份' }],
@@ -336,4 +358,5 @@ export {
   rules,
   rulesEdit,
   formRoleGroup,
+  showStatisOptions,
 }

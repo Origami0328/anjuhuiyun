@@ -11,10 +11,8 @@
           </template>
         </a-input>
       </a-space>
-      <a-space>
-        <a-table :data-source="dataSource"></a-table>
-      </a-space>
     </a-space>
+    <a-table :data-source="dataSource"></a-table>
   </div>
 </template>
 

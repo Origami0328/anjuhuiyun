@@ -32,7 +32,7 @@ const actions = {
     const finallyRoutes = filterRoutes([...constantRoutes, ...asyncRoutes])
     console.log(finallyRoutes)
     commit('setRoutes', finallyRoutes)
-    return [...asyncRoutes]
+    return [...finallyRoutes]
   },
   /**
    * @description all模式设置路由

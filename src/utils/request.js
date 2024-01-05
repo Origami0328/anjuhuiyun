@@ -10,12 +10,10 @@ import {
 
 import qs from 'qs'
 import { isArray } from '@/utils/validate'
-import { message } from 'ant-design-vue'
-
+import { messageContent } from '@/utils/message'
 import router from '@/router'
 import store from '@/store'
 let loadingInstance
-
 /**
  * @description 处理code异常
  * @param {*} code
@@ -24,8 +22,9 @@ let loadingInstance
 const handleCode = async (code, msg) => {
   switch (code) {
     case 401:
-      message.error(msg || '登录失效')
-      store.dispatch('user/resetAll').catch(() => {})
+      messageContent('error', msg || '登录失效')
+      //只有token过期才清除token
+      // store.dispatch('user/resetAll').catch(() => {})
       break
     case 403:
       router.push({ path: '/401' }).catch(() => {})
@@ -33,10 +32,10 @@ const handleCode = async (code, msg) => {
     case 501:
       await store.dispatch('user/logout').catch(() => {})
       await router.push('/login')
-      message.error('token过期了，请重新登录')
+      messageContent('error', 'token过期了，请重新登录')
       break
     default:
-      message.error(msg || `后端接口${code}异常`)
+      messageContent('error', msg || `后端接口${code}异常`)
       break
   }
 }
@@ -106,7 +105,7 @@ instance.interceptors.response.use(
     if (codeVerificationArray.includes(Number(code))) {
       return data
     } else {
-      handleCode(Number(code), desc)
+      handleCode(Number(code), desc).then(() => {})
       return Promise.reject(
         '请求异常拦截:' + JSON.stringify({ url: config.url, code, desc }) ||
           'Error'
@@ -132,7 +131,7 @@ instance.interceptors.response.use(
         const code = message.substr(message.length - 3)
         message = '后端接口' + code + '异常'
       }
-      message.error(message || `后端接口未知异常`)
+      messageContent('error', message || `后端接口未知异常`)
       return Promise.reject(error)
     }
   }

@@ -1,10 +1,14 @@
 import { computed, reactive, ref } from 'vue'
-
+import { messageContent } from '@/utils/message'
 export function useTableInit(opt = {}) {
   const dataSource = ref([])
   const tableLoading = ref(true) // 表格loading
   let resetTableObj = null
   let requestObj = reactive({})
+  const villageList = ref([])
+  const formVillageList = ref([])
+  const provinceList = ref([])
+  const poProvinceList = ref([])
   const paginationInfo = reactive({
     total: 20,
     pageSize: 10,
@@ -21,6 +25,10 @@ export function useTableInit(opt = {}) {
       for (let tableObjKey in requestObj) {
         if (Array.isArray(requestObj[tableObjKey])) {
           requestObj[tableObjKey] = []
+        } else if (tableObjKey == 'pageSize') {
+          requestObj[tableObjKey] = 10
+        } else if (tableObjKey == 'pageNum') {
+          requestObj[tableObjKey] = 1
         } else {
           requestObj[tableObjKey] = undefined
         }
@@ -50,6 +58,55 @@ export function useTableInit(opt = {}) {
                 key: item.id || index + 1,
                 ...item,
               }))
+          paginationInfo.total = res.result.page.totalResult
+          if (res.result.provieceList) {
+            const provinceArray = res.result.provieceList.map((item) => {
+              return {
+                ...item,
+                value: item.dicCode,
+                label: item.dicName,
+              }
+            })
+            // formProvieceList = provieceList.value.slice(1)
+            provinceArray.splice(0, 0, {
+              value: '',
+              label: '全部',
+              childCode: 'DQ',
+            })
+            provinceList.value = provinceArray
+          }
+          if (res.result.villageList) {
+            const villageArray = res.result.villageList.map((item) => {
+              return {
+                ...item,
+                value: item.id,
+                label: item.name,
+              }
+            })
+
+            villageArray.splice(0, 0, {
+              value: '',
+              label: '全部',
+            })
+            villageList.value = villageArray
+            formVillageList.value = villageArray.slice(1)
+          }
+          if (res.result.poProvieceList) {
+            const poProvinceArray = res.result.poProvieceList.map((item) => {
+              return {
+                ...item,
+                value: item.dicCode,
+                label: item.dicName,
+              }
+            })
+            // formProvieceList = provieceList.value.slice(1)
+            poProvinceArray.splice(0, 0, {
+              value: '',
+              label: '全部',
+              childCode: 'PO',
+            })
+            poProvinceList.value = poProvinceArray
+          }
         })
         .finally(() => {
           tableLoading.value = false
@@ -78,12 +135,21 @@ export function useTableInit(opt = {}) {
   }
   //删除
   async function delTableItem(record) {
-    console.log(record)
     record.delLoading = true
     const itemId = record.id
-    await opt.delTableEle({ id: itemId })
-    await getData(requestObj)
-    record.delLoading = false
+    let res = await opt.delTableEle({ id: itemId })
+    if (res.result && res.result == '0') {
+      record.delLoading = false
+      await getData(requestObj)
+      messageContent('success', '删除表单项成功')
+    } else if (res.result && res.result == '1') {
+      record.delLoading = false
+      messageContent('error', '删除失败，可能该小区还有楼栋/房屋/单元关联')
+    } else {
+      record.delLoading = false
+      await getData(requestObj)
+      messageContent('success', '删除表单项成功')
+    }
   }
 
   // 多选
@@ -92,14 +158,25 @@ export function useTableInit(opt = {}) {
     ids: [],
   })
   const onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log('selectedRows changed: ', selectedRows)
     state.selectedRowKeys = selectedRowKeys
     state.ids = selectedRows.map((item) => {
       return item.id
     })
   }
+  async function multipleDel() {
+    if (state.ids.length > 0) {
+      await opt.allDel({
+        ids: state.ids.join(','),
+      })
+      await getData(requestObj)
+      state.selectedRowKeys = []
+      state.ids = []
+      messageContent('success', '删除表格项成功')
+    }
+  }
   return {
     getData,
+    multipleDel,
     requestObj,
     dataSource,
     searchTableItem,
@@ -110,6 +187,10 @@ export function useTableInit(opt = {}) {
     handleTableChange,
     tableLoading,
     delTableItem,
+    villageList,
+    poProvinceList,
+    provinceList,
+    formVillageList,
   }
 }
 
@@ -125,9 +206,20 @@ export function useInitFrom(opt = {}) {
     if (formRef.value) formRef.value.clearValidate()
     for (const key in defaultForm) {
       if (Array.isArray(defaultForm[key])) {
+        if (row[key] != undefined) {
+          if (row[key].includes('[') && row[key].includes(']')) {
+            formState[key] = row[key] && JSON.parse(row[key])
+          } else {
+            if (Array.isArray(row[key])) {
+              formState[key] = row[key]
+            } else {
+              formState[key] = row[key].split(',')
+            }
+          }
+        }
+      } else {
         formState[key] = row[key]
       }
-      formState[key] = row[key]
     }
   }
   //新增
@@ -140,7 +232,6 @@ export function useInitFrom(opt = {}) {
   function handleChange(item) {
     editId.value = item.id
     resetForm(item)
-    console.log(formState.houseType)
     item.changeLoading = false
     modalRef.value.open()
   }
@@ -150,22 +241,77 @@ export function useInitFrom(opt = {}) {
     return layout === 'horizontal'
       ? {
           labelCol: {
-            span: 8,
+            span: 10,
           },
           wrapperCol: {
-            span: 12,
+            span: 16,
           },
         }
       : {}
   })
 
+  const addOrEdit = async (submitState, onlyNameObj) => {
+    let res = undefined
+    if (opt.onlyName && typeof opt.onlyName == 'function' && onlyNameObj) {
+      res = await opt.onlyName(onlyNameObj)
+    }
+    if (!res || (res.result && res.result == '0')) {
+      if (editId.value == '0') {
+        // 新增接口
+        await opt
+          .addList(submitState)
+          .then(() => {
+            modalRef.value.hideLoading()
+            modalRef.value.close()
+            messageContent('success', '新增表单项成功')
+          })
+          .catch(() => {
+            modalRef.value.hideLoading()
+          })
+      } else {
+        // 修改接口
+        await opt
+          .editList(submitState)
+          .then(() => {
+            modalRef.value.hideLoading()
+            modalRef.value.close()
+            messageContent('success', '修改表单项成功')
+          })
+          .catch(() => {
+            modalRef.value.hideLoading()
+          })
+      }
+    } else if (res.result && res.result == '1') {
+      messageContent('error', '名称已存在')
+      modalRef.value.hideLoading()
+      return
+    }
+    await opt.getData(opt.requestObj)
+  }
+  async function submit(submitState, onlyNameObj) {
+    modalRef.value.showLoading()
+    if (editId.value == '0') {
+      formRef.value
+        .validate()
+        .then(async () => {
+          await addOrEdit(submitState, onlyNameObj)
+        })
+        .finally(() => {
+          modalRef.value.hideLoading()
+        })
+    } else {
+      await addOrEdit(submitState, onlyNameObj)
+    }
+  }
   return {
+    submit,
     titleValue,
     handleCreate,
     handleChange,
     modalRef,
     editId,
     formState,
+    formRef,
     formItemLayout,
   }
 }

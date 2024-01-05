@@ -118,7 +118,7 @@
             })
             .then((VAPTCHAObj) => {
               vaptchaobj = VAPTCHAObj
-
+              VAPTCHAObj.reset()
               VAPTCHAObj.listen('pass', function () {
                 let serverToken = VAPTCHAObj.getServerToken()
                 let data = {
@@ -132,7 +132,6 @@
         })
       },
       async showVaptcha() {
-        // console.log(this.obj.validate())
         const password = encrypt(this.form.password)
         const res = await tempLogin({ ...this.form, password })
         if (res.code == '552') {

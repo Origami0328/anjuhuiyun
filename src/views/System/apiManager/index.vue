@@ -7,40 +7,36 @@
           新增
         </a-button>
       </a-space>
-      <a-space>
-        <a-table
-          :columns="columns"
-          :data-source="dataSource"
-          :loading="tableLoading"
-        >
-          <template v-slot:emptyText>
-            <div style="text-align: center; padding: 20px; font-size: 30px">
-              正在为您加载数据
-            </div>
-          </template>
-          <template #bodyCell="{ column, record }">
-            <template
-              v-if="column.dataIndex == 'operation' && record.operation == ''"
-            >
-              <a-popconfirm
-                title="确定要删除该表格项吗?"
-                ok-text="确认"
-                cancel-text="取消"
-                @confirm="delTableItem(record)"
-              >
-                <a-button type="link" :loading="record.delLoading">
-                  删除
-                </a-button>
-              </a-popconfirm>
-            </template>
-            <template v-else-if="column.dataIndex == 'rightType'">
-              <a-tag color="orange" v-if="record.rightType == '1'">读写</a-tag>
-              <a-tag color="green" v-if="record.rightType == '0'">只读</a-tag>
-            </template>
-          </template>
-        </a-table>
-      </a-space>
     </a-space>
+    <a-table
+      :columns="columns"
+      :data-source="dataSource"
+      :loading="tableLoading"
+    >
+      <template v-slot:emptyText>
+        <div style="text-align: center; padding: 20px; font-size: 30px">
+          正在为您加载数据
+        </div>
+      </template>
+      <template #bodyCell="{ column, record }">
+        <template
+          v-if="column.dataIndex == 'operation' && record.operation == ''"
+        >
+          <a-popconfirm
+            title="确定要删除该表格项吗?"
+            ok-text="确认"
+            cancel-text="取消"
+            @confirm="delTableItem(record)"
+          >
+            <a-button type="link" :loading="record.delLoading">删除</a-button>
+          </a-popconfirm>
+        </template>
+        <template v-else-if="column.dataIndex == 'rightType'">
+          <a-tag color="orange" v-if="record.rightType == '1'">读写</a-tag>
+          <a-tag color="green" v-if="record.rightType == '0'">只读</a-tag>
+        </template>
+      </template>
+    </a-table>
     <Modal
       :title="titleValue"
       ref="modalRef"

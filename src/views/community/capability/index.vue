@@ -4,7 +4,7 @@
       <a-space>
         <a-input
           placeholder="输入关键词"
-          v-model:value="searchObj.searchName"
+          v-model:value="requestObj.searchName"
         ></a-input>
         <a-button type="primary" @click="searchTableItem">
           <SearchOutlined />
@@ -12,15 +12,21 @@
       </a-space>
       <a-space>
         <a-button type="primary" @click="openModal('新增')">新增</a-button>
-        <a-button
-          style="background-color: red; width: 70px; text-align: center"
-          size="middle"
-          @click="delAllTaBleItem"
+        <a-popconfirm
+          title="确定要删除选中项吗?"
+          ok-text="确定"
+          cancel-text="取消"
+          @confirm="multipleDel"
         >
-          <template #icon>
-            <DeleteOutlined style="color: #fff" />
-          </template>
-        </a-button>
+          <a-button
+            style="background-color: red; width: 70px; text-align: center"
+            size="middle"
+          >
+            <template #icon>
+              <DeleteOutlined style="color: #fff" />
+            </template>
+          </a-button>
+        </a-popconfirm>
       </a-space>
     </a-space>
     <div style="margin-top: 10px">
@@ -31,8 +37,10 @@
           selectedRowKeys: state.selectedRowKeys,
           onChange: onSelectChange,
         }"
+        :pagination="paginationInfo"
         bordered
         :loading="tableLoading"
+        @change="handleTableChange"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'operation'">
@@ -40,9 +48,14 @@
               <a-button type="link" @click="openModal('修改', record)">
                 修改
               </a-button>
-              <a-button type="link" @click="delTableItem(record)">
-                删除
-              </a-button>
+              <a-popconfirm
+                title="确定要删除选中项吗?"
+                ok-text="确定"
+                cancel-text="取消"
+                @confirm="delTableItem(record)"
+              >
+                <a-button type="link">删除</a-button>
+              </a-popconfirm>
             </div>
           </template>
           <template v-else-if="column.dataIndex == 'imageUrl'">
@@ -124,10 +137,10 @@
     DeleteOutlined,
     PlusOutlined,
   } from '@ant-design/icons-vue'
-  const searchObj = reactive({
+  const searchObj = {
     searchName: '',
-  })
-  import { computed, reactive, ref, toRaw } from 'vue'
+  }
+  import { reactive, ref, toRaw } from 'vue'
   import {
     addVillageItem,
     delAllVillageItem,
@@ -135,7 +148,27 @@
     editVillageItem,
     getvillageFunction,
   } from '@/api/community'
-  const tableLoading = ref(false)
+  import { messageContent } from '@/utils/message'
+  import { useInitFrom, useTableInit } from '@/hooks/useTableComponent'
+  const {
+    tableLoading,
+    dataSource,
+    requestObj,
+    state,
+    onSelectChange,
+    getData,
+    delTableItem,
+    searchTableItem,
+    paginationInfo,
+    multipleDel,
+    handleTableChange,
+  } = useTableInit({
+    getTableList: getvillageFunction,
+    tableObj: searchObj,
+    delTableEle: delVillageItem,
+    allDel: delAllVillageItem,
+  })
+  const { formItemLayout } = useInitFrom({})
   const columns = [
     {
       title: '编号',
@@ -172,60 +205,15 @@
       align: 'center',
     },
   ]
-  const dataSource = ref([])
-  const getVillageFunctionList = (obj) => {
-    tableLoading.value = true
-    getvillageFunction(obj).then((res) => {
-      res.result.list.sort((a, b) => a.sort - b.sort)
-      dataSource.value = res.result.list.map((item, index) => {
-        return {
-          ...item,
-          key: index + 1,
-          No: index + 1,
-        }
-      })
-      tableLoading.value = false
-    })
-  }
-  getVillageFunctionList({
-    searchName: '',
-  })
-  const searchTableItem = () => {
-    getVillageFunctionList(searchObj)
-  }
-  const state = reactive({
-    selectedRowKeys: [],
-    ids: [],
-  })
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log('selectedRows changed: ', selectedRows)
-    state.selectedRowKeys = selectedRowKeys
-    state.ids = selectedRows.map((item) => {
-      return item.id
-    })
-  }
-  const delAllTaBleItem = async () => {
-    tableLoading.value = true
-    await delAllVillageItem({ ids: state.ids.join(',') })
-    await getVillageFunctionList({
-      searchName: '',
-    })
-    state.selectedRowKeys = []
-    tableLoading.value = false
-  }
-  const formItemLayout = computed(() => {
-    const layout = 'horizontal'
-    return layout === 'horizontal'
-      ? {
-          labelCol: {
-            span: 8,
-          },
-          wrapperCol: {
-            span: 12,
-          },
-        }
-      : {}
-  })
+  // const delAllTaBleItem = async () => {
+  //   tableLoading.value = true
+  //   await delAllVillageItem({ ids: state.ids.join(',') })
+  //   await getData(requestObj)
+  //   state.selectedRowKeys = []
+  //   state.ids = []
+  //   tableLoading.value = false
+  //   messageContent('success', '删除表单项成功')
+  // }
   const open = ref(false)
   const formState = reactive({
     name: '',
@@ -263,6 +251,7 @@
             formData.append(formStateKey, formState[formStateKey])
           }
           await addVillageItem(formData)
+          messageContent('success', '新增表格项成功')
         } else if (title.value == '修改') {
           // 调用修改接口
           const formData = new FormData()
@@ -270,10 +259,9 @@
             formData.append(formStateKey, formState[formStateKey])
           }
           await editVillageItem(formData)
+          messageContent('success', '修改表格项成功')
         }
-        await getVillageFunctionList({
-          searchName: '',
-        })
+        await getData(requestObj)
         //重新刷新页面
         cancel()
         btnLoading.value = false
@@ -303,15 +291,6 @@
       formState.sort = tableItem.sort
       formState.imageUrl = tableItem.imageUrl
     }
-  }
-  const delTableItem = async (item) => {
-    tableLoading.value = true
-    await delVillageItem({ id: item.id })
-    await getVillageFunctionList({
-      searchName: '',
-    })
-
-    tableLoading.value = false
   }
   const delItemImage = () => {
     formState.imageUrl = ''

@@ -69,7 +69,6 @@ const actions = {
     commit('setUsername', 'admin(未开启登录拦截)')
   },
   /**
-   * @author chuzhixin 1204505056@qq.com
    * @description 登录
    * @param {*} { commit }
    * @param {*} userInfo
@@ -107,7 +106,6 @@ const actions = {
    */
   async getUserInfo({ dispatch, commit }) {
     const data = await getUserInfo(state.accessToken)
-    console.log(data)
     if (!data.result) {
       message.error(`验证失败，请重新登录...`)
       return false
