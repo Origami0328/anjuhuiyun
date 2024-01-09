@@ -131,6 +131,15 @@ export function getRole(data) {
     data,
   })
 }
+
+//系统用户的获取表格详情
+export function toEdit(data) {
+  return request({
+    url: '/managerPC/user/toEdit',
+    method: 'post',
+    data,
+  })
+}
 //获取省份
 export function getProvince(data) {
   return request({

@@ -238,140 +238,6 @@
             </div>
           </a-col>
         </a-row>
-        <!--      <a-space>-->
-        <!--        <a-select-->
-        <!--          v-model:value="requestObj.provieceCode"-->
-        <!--          placeholder="选择省份"-->
-        <!--          show-search-->
-        <!--          :options="provieceList"-->
-        <!--          style="width: 150px"-->
-        <!--          :filter-option="filterOption"-->
-        <!--          @change="(value, options) => cityToStreet(value, options, 'city')"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          v-model:value="requestObj.cityCode"-->
-        <!--          show-search-->
-        <!--          style="width: 150px"-->
-        <!--          placeholder="选择城市"-->
-        <!--          :options="cityList"-->
-        <!--          :not-found-content="null"-->
-        <!--          :filter-option="filterOption"-->
-        <!--          @change="(value, options) => cityToStreet(value, options, 'district')"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          v-model:value="requestObj.districtCode"-->
-        <!--          show-search-->
-        <!--          placeholder="选择区县"-->
-        <!--          :options="districtList"-->
-        <!--          style="width: 150px"-->
-        <!--          :filter-option="filterOption"-->
-        <!--          @change="(value, options) => cityToStreet(value, options, 'street')"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          v-model:value="requestObj.streetCode"-->
-        <!--          show-search-->
-        <!--          style="width: 150px"-->
-        <!--          placeholder="选择街道"-->
-        <!--          :options="streetList"-->
-        <!--          :filter-option="filterOption"-->
-        <!--          :not-found-content="null"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          v-model:value="requestObj.villageId"-->
-        <!--          show-search-->
-        <!--          style="width: 150px"-->
-        <!--          placeholder="选择小区"-->
-        <!--          :options="villageList"-->
-        <!--          :filter-option="filterOption"-->
-        <!--          :not-found-content="null"-->
-        <!--          @change="createBuildingList"-->
-        <!--        ></a-select>-->
-        <!--      </a-space>-->
-        <!--      <a-space>-->
-        <!--        <a-select-->
-        <!--          placeholder="请选择省厅"-->
-        <!--          style="width: 150px"-->
-        <!--          v-model:value="requestObj.poProvieceCode"-->
-        <!--          show-search-->
-        <!--          :options="poProvieceList"-->
-        <!--          :not-found-content="null"-->
-        <!--          :filter-option="filterOption"-->
-        <!--          @change="(value, options) => cityToStreet(value, options, 'city')"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          placeholder="请选择市局"-->
-        <!--          style="width: 150px"-->
-        <!--          v-model:value="requestObj.poCityCode"-->
-        <!--          show-search-->
-        <!--          :options="poCityList"-->
-        <!--          :not-found-content="null"-->
-        <!--          :filter-option="filterOption"-->
-        <!--          @change="(value, options) => cityToStreet(value, options, 'district')"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          placeholder="请选择分局"-->
-        <!--          style="width: 150px"-->
-        <!--          v-model:value="requestObj.poDistrictCode"-->
-        <!--          show-search-->
-        <!--          :options="poDistrictList"-->
-        <!--          :not-found-content="null"-->
-        <!--          :filter-option="filterOption"-->
-        <!--          @change="(value, options) => cityToStreet(value, options, 'street')"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          placeholder="请选择派出所"-->
-        <!--          style="width: 150px"-->
-        <!--          v-model:value="requestObj.poStreetCode"-->
-        <!--          show-search-->
-        <!--          :options="poStreetList"-->
-        <!--          :not-found-content="null"-->
-        <!--          :filter-option="filterOption"-->
-        <!--        ></a-select>-->
-        <!--      </a-space>-->
-        <!--      <a-space>-->
-        <!--        <a-select-->
-        <!--          placeholder="请选择分组"-->
-        <!--          style="width: 150px"-->
-        <!--          show-search-->
-        <!--          :filter-option="filterOption"-->
-        <!--          v-model:value="requestObj.roleGroup"-->
-        <!--          :options="roleGroupList"-->
-        <!--          @change="createRole"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          placeholder="请选择楼栋"-->
-        <!--          style="width: 150px"-->
-        <!--          show-search-->
-        <!--          :filter-option="filterOption"-->
-        <!--          v-model:value="requestObj.buildingId"-->
-        <!--          :options="buildingList"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          placeholder="请选择职位"-->
-        <!--          style="width: 150px"-->
-        <!--          show-search-->
-        <!--          :filter-option="filterOption"-->
-        <!--          v-model:value="requestObj.roleId"-->
-        <!--          :options="roleList"-->
-        <!--        ></a-select>-->
-        <!--        <a-select-->
-        <!--          placeholder="请选择审核状态"-->
-        <!--          v-model:value="requestObj.isAuth"-->
-        <!--          :options="authList"-->
-        <!--          style="width: 150px"-->
-        <!--        ></a-select>-->
-        <!--      </a-space>-->
-        <a-space>
-          <!--        <a-input-->
-          <!--          v-model:value="requestObj.searchName"-->
-          <!--          style="width: 150px"-->
-          <!--          placeholder="这里输入关键词"-->
-          <!--        >-->
-          <!--          <template #prefix>-->
-          <!--            <SearchOutlined />-->
-          <!--          </template>-->
-          <!--        </a-input>-->
-        </a-space>
         <a-space>
           <a-button class="button add" @click="openAdd" type="primary">
             新增
@@ -392,35 +258,40 @@
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'operation'">
-            <span style="display: flex; justify-content: space-around">
-              <a-tooltip>
-                <template #title>编辑</template>
-                <div @click="changeTableItem(record)" style="cursor: pointer">
-                  <EditOutlined />
-                </div>
-              </a-tooltip>
+            <span>
+              <a-button
+                type="link"
+                @click="changeTableItem(record)"
+                :loading="record.changeLoading"
+              >
+                编辑
+              </a-button>
               <!--                  <a-tooltip>-->
               <!--                    <template #title>分配房屋</template>-->
               <!--                    <div @click="show" style="cursor: pointer">-->
               <!--                      <SettingOutlined />-->
               <!--                    </div>-->
               <!--                  </a-tooltip>-->
-
-              <a-tooltip>
-                <template #title>删除</template>
-                <a-popconfirm
-                  title="确定删除该表格项吗?"
-                  ok-text="确认"
-                  cancel-text="取消"
-                  @confirm="delTableItem(record)"
-                >
-                  <DeleteOutlined style="color: red" />
-                </a-popconfirm>
-              </a-tooltip>
+              <a-popconfirm
+                title="确定删除该表格项吗?"
+                ok-text="确认"
+                cancel-text="取消"
+                @confirm="delTableItem(record)"
+              >
+                <a-button type="link" style="color: red">删除</a-button>
+              </a-popconfirm>
             </span>
           </template>
           <template v-else-if="column.dataIndex == 'status'">
-            {{ record.status == '1' ? '冻结' : '正常' }}
+            {{
+              record.isAuth == '1'
+                ? record.status == '1'
+                  ? '冻结'
+                  : '正常'
+                : record.isAuth == '0'
+                ? '待审核'
+                : '审核失败'
+            }}
           </template>
           <template v-else-if="column.dataIndex == 'isAuth'">
             <span v-if="record.isAuth == '0'">待审核</span>
@@ -444,432 +315,596 @@
         ref="modalRef"
         :title="titleValue"
         @handleOk="submit"
-        width="100%"
+        width="70%"
         @closeModal="close"
       >
-        <a-form
-          layout="inline"
-          :model="formState"
-          ref="formRef"
-          v-bind="formItemLayout"
-          :rules="editId == '0' ? rules : rulesEdit"
+        <div
+          style="height: 100%; overflow: auto; overflow-x: hidden"
+          id="modalScroll"
         >
-          <a-divider>基本信息</a-divider>
-          <a-form-item
-            label="用户名"
-            name="username"
-            style="margin-bottom: 10px"
+          <a-form
+            layout="inline"
+            :model="formState"
+            ref="formRef"
+            v-bind="formItemLayout"
+            :rules="editId == '0' ? rules : rulesEdit"
           >
-            <a-input
-              placeholder="这里输入用户名"
-              style="width: 200px"
-              v-model:value="formState.username"
-            ></a-input>
-          </a-form-item>
-          <a-form-item
-            :label="editId != 0 ? '重置密码' : '密码'"
-            name="password"
-          >
-            <a-input-password
-              placeholder="输入密码"
-              v-model:value="formState.password"
-              style="width: 200px"
-            ></a-input-password>
-          </a-form-item>
-          <a-form-item
-            label="确认密码"
-            v-if="editId == 0"
-            name="chkpwd"
-            style="width: 300px"
-          >
-            <a-input-password
-              placeholder="确认密码"
-              style="width: 200px"
-              v-model:value="formState.chkpwd"
-            ></a-input-password>
-          </a-form-item>
-          <a-form-item label="开始时间" name="startTime">
-            <a-date-picker
-              v-model:value="formState.startTime"
-              style="width: 200px"
-              :value-format="dateFormat"
-              :format="dateFormat"
-            />
-          </a-form-item>
-          <a-form-item label="结束时间" name="endTime">
-            <a-date-picker
-              v-model:value="formState.endTime"
-              :value-format="dateFormat"
-              style="width: 200px"
-              :format="dateFormat"
-            />
-          </a-form-item>
-          <a-form-item label="审核状态" name="isAuth">
-            <a-select
-              placeholder="请选择审核状态"
-              :options="formAuthList"
-              style="width: 200px; margin-left: -3px"
-              v-model:value="formState.isAuth"
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="备注"
-            :style="{
-              marginLeft: editId != 0 ? '12px' : '0px',
-              marginBottom: editId != 0 ? '10px' : 0,
-            }"
-          >
-            <a-input
-              placeholder="这里输入备注"
-              style="width: 200px"
-              v-model:value="formState.remarks"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="状态" name="status" style="margin-left: 20px">
-            <a-select
-              placeholder="请选择状态"
-              :options="statusOptions"
-              style="width: 200px"
-              v-model:value="formState.status"
-            ></a-select>
-          </a-form-item>
-          <a-form-item label="添加时间" v-if="editId != 0" name="time">
-            <a-input
-              v-model:value="formState.createdTime"
-              style="width: 200px"
-              :disabled="true"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="审核人员" v-if="editId != 0" name="user">
-            <a-input
-              v-model:value="formState.addUser"
-              style="width: 200px"
-              :disabled="true"
-            ></a-input>
-          </a-form-item>
-          <a-form-item
-            label="统计弹框类型"
-            style="margin-left: 20px"
-            v-if="editId != 0"
-          >
-            <a-select
-              placeholder="请选择统计弹框类型"
-              :options="showStatisOptions"
-              style="width: 200px"
-              v-model:value="formState.isShowStatis"
-            ></a-select>
-          </a-form-item>
-          <a-divider>实名信息</a-divider>
-          <a-form-item
-            label="真实姓名"
-            name="realName"
-            style="margin-bottom: 10px"
-          >
-            <a-input
-              placeholder="这里输入姓名"
-              v-model:value="formState.realName"
-              style="width: 200px"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="手机号" name="phone">
-            <a-input
-              placeholder="这里输入手机号"
-              style="width: 200px"
-              v-model:value="formState.phone"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="身份证号">
-            <a-input
-              placeholder="这里输入身份证号"
-              v-model:value="formState.identity"
-              style="width: 200px"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="邮箱">
-            <a-input
-              placeholder="这里输入邮箱"
-              style="width: 200px"
-              v-model:value="formState.email"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="推荐用户">
-            <a-input
-              placeholder="这里输入用户"
-              style="width: 200px"
-              v-model:value="formState.recommendUser"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="推荐理由">
-            <a-textarea
-              v-model:value="formState.recommendReason"
-              style="width: 200px"
-            ></a-textarea>
-          </a-form-item>
-
-          <a-divider>权限管理</a-divider>
-          <a-form-item
-            label="角色分组"
-            name="roleGroupId"
-            style="margin-bottom: 10px"
-          >
-            <a-select
-              :options="formRoleGroup"
-              show-search
-              placeholder="请选择角色分组"
-              style="width: 200px"
-              v-model:value="formState.roleGroupId"
-              :filter-option="filterOption"
-              @change="
-                (value, options) => createRole(value, options, false, false)
-              "
-            ></a-select>
-          </a-form-item>
-          <a-form-item label="角色" name="roleId" style="margin-bottom: 10px">
-            <a-select
-              :options="roleList"
-              show-search
-              style="width: 200px"
-              placeholder="请选择角色"
-              :filter-option="filterOption"
-              v-model:value="formState.roleId"
-              @change="roleChange"
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="省份"
-            name="provieceCode"
-            v-if="
-              ['1', '2', '3', '4', '7', '8', '9'].includes(
-                formState.roleGroupId
-              )
-            "
-          >
-            <a-select
-              :options="formProvieceList"
-              show-search
-              style="width: 200px"
-              placeholder="请选择省份"
-              :filter-option="filterOption"
-              v-model:value="formState.provieceCode"
-              @change="
-                (value, options) => formCityToStreet(value, options, 'city')
-              "
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="市"
-            name="cityCode"
-            v-if="
-              ['2', '3', '4', '7', '8', '9'].includes(formState.roleGroupId)
-            "
-          >
-            <a-select
-              placeholder="选择市"
-              v-model:value="formState.cityCode"
-              :options="formCityList"
-              style="width: 200px"
-              :filter-option="filterOption"
-              show-search
-              @change="
-                (value, options) => formCityToStreet(value, options, 'district')
-              "
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="区县"
-            name="districtCode"
-            v-if="['3', '4', '8', '9'].includes(formState.roleGroupId)"
-          >
-            <a-select
-              placeholder="选择区县"
-              v-model:value="formState.districtCode"
-              :options="formDistrictList"
-              :filter-option="filterOption"
-              show-search
-              style="width: 200px"
-              @change="
-                (value, options) => formCityToStreet(value, options, 'street')
-              "
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="街道"
-            v-if="['4', '8'].includes(formState.roleGroupId)"
-            name="streetCode"
-          >
-            <a-select
-              placeholder="选择街道"
-              :filter-option="filterOption"
-              :options="formStreetList"
-              style="width: 200px"
-              show-search
-              v-model:value="formState.streetCode"
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="省厅"
-            name="poProvieceCode"
-            style="margin-left: 10px"
-            v-if="
-              ['1', '2', '3', '4', '7', '8', '9'].includes(
-                formState.roleGroupId
-              )
-            "
-          >
-            <a-select
-              :options="formPoProvieceList"
-              show-search
-              placeholder="请选择省厅"
-              :filter-option="filterOption"
-              style="width: 200px"
-              v-model:value="formState.poProvieceCode"
-              @change="
-                (value, options) => formCityToStreet(value, options, 'city')
-              "
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="市局"
-            style="margin-left: 10px"
-            name="poCityCode"
-            v-if="
-              ['2', '3', '4', '7', '8', '9'].includes(formState.roleGroupId)
-            "
-          >
-            <a-select
-              placeholder="请选择市局"
-              :filter-option="filterOption"
-              show-search
-              v-model:value="formState.poCityCode"
-              :options="formPoCityList"
-              style="width: 200px"
-              @change="
-                (value, options) => formCityToStreet(value, options, 'district')
-              "
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="分局"
-            name="poDistrictCode"
-            v-if="['3', '4', '8', '9'].includes(formState.roleGroupId)"
-          >
-            <a-select
-              placeholder="选择分局"
-              v-model:value="formState.poDistrictCode"
-              :filter-option="filterOption"
-              show-search
-              style="width: 200px"
-              :options="formPoDistrictList"
-              @change="
-                (value, options) => formCityToStreet(value, options, 'street')
-              "
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="派出所"
-            name="poStreetCode"
-            style="margin-left: 10px"
-            v-if="['4', '8'].includes(formState.roleGroupId)"
-          >
-            <a-select
-              placeholder="选择派出所"
-              v-model:value="formState.poStreetCode"
-              :filter-option="filterOption"
-              show-search
-              :options="formPoStreetList"
-              style="width: 200px"
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="小区"
-            name="villageIds"
-            :style="{
-              marginLeft: transferArray.length > 0 ? '-130px' : '-130px',
-            }"
-            v-if="['5', '6'].includes(formState.roleGroupId) && isMV == '1'"
-          >
-            <template v-if="isMV == '1'">
-              <span style="display: block; width: 500px">
-                <a-tag v-for="(item, index) in transferArray" :key="index">
-                  {{ item }}
-                </a-tag>
-                <PlusOutlined
-                  style="
-                    cursor: pointer;
-                    border: 1px deepskyblue dashed;
-                    border-radius: 50%;
-                  "
-                  @click="openTransfer"
-                />
-              </span>
-            </template>
-          </a-form-item>
-          <a-form-item
-            label="小区"
-            name="villageId"
-            v-if="['5', '6'].includes(formState.roleGroupId) && isMV != '1'"
-          >
-            <a-select
-              v-model:value="formState.villageId"
-              :filter-option="filterOption"
-              show-search
-              placeholder="请选择小区"
-              style="width: 200px"
-              :options="formVillageId"
-              @change="(value) => createBuildingList(value, false)"
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="楼栋"
-            v-if="['6'].includes(formState.roleGroupId)"
-            :name="isMV == '3' ? 'buildingIds' : 'buildingId'"
-            :style="{
-              marginLeft: isMV === '3' ? '-100px' : 0,
-            }"
-          >
-            <!--            <a-select-->
-            <!--              v-if="isMV == '3'"-->
-            <!--              placeholder="选择楼栋"-->
-            <!--              style="width: 200px"-->
-            <!--              :options="buildingList"-->
-            <!--              mode="multiple"-->
-            <!--              v-model:value="formState.buildingIds"-->
-            <!--              :filter-option="filterOption"-->
-            <!--              show-search-->
-            <!--              @change="addBuildingId"-->
-            <!--            ></a-select>-->
-            <template v-if="isMV == '3'">
-              <span style="width: 500px; display: block" class="building">
-                <a-tag
-                  v-for="(item, index) in transferBuildingArray"
-                  :key="index"
+            <a-row :gutter="[48, 16]">
+              <a-divider orientation="left">基本信息</a-divider>
+              <a-col class="gutter-row" :md="6" :sm="2" :offset="3">
+                <a-form-item label="用户名" name="username">
+                  <a-input
+                    placeholder="这里输入用户名"
+                    style="width: 200px"
+                    v-model:value="formState.username"
+                  ></a-input>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-row" :md="6" :sm="2">
+                <a-form-item
+                  :label="editId != 0 ? '重置密码' : '密码'"
+                  name="password"
                 >
-                  {{ item }}
-                </a-tag>
-                <span>
-                  <PlusOutlined
-                    style="
-                      cursor: pointer;
-                      border: 1px deepskyblue dashed;
-                      border-radius: 50%;
-                    "
-                    @click="openBuildingTransfer"
+                  <a-input-password
+                    placeholder="输入密码"
+                    v-model:value="formState.password"
+                    style="width: 200px"
+                  ></a-input-password>
+                </a-form-item>
+              </a-col>
+              <a-col :md="6" :sm="2" v-if="editId != 0">
+                <a-form-item label="状态" name="status">
+                  <a-select
+                    placeholder="请选择状态"
+                    :options="statusOptions"
+                    style="width: 200px"
+                    v-model:value="formState.status"
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :md="6" :sm="2" v-if="editId != 0" :offset="3">
+                <a-form-item label="审核状态" name="isAuth">
+                  <a-select
+                    placeholder="请选择审核状态"
+                    :options="formAuthList"
+                    style="width: 200px"
+                    v-model:value="formState.isAuth"
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :md="6" :sm="2">
+                <a-form-item label="备注">
+                  <a-input
+                    placeholder="这里输入备注"
+                    style="width: 200px"
+                    v-model:value="formState.remarks"
+                  ></a-input>
+                </a-form-item>
+              </a-col>
+
+              <a-col :md="6" :sm="2" v-if="editId != 0">
+                <a-form-item label="添加时间" name="time">
+                  <a-input
+                    v-model:value="formState.createdTime"
+                    :disabled="true"
+                  ></a-input>
+                </a-form-item>
+              </a-col>
+              <a-col :md="6" :sm="2" :offset="3" v-if="editId != 0">
+                <a-form-item label="审核人员" name="user">
+                  <a-input
+                    v-model:value="formState.addUser"
+                    style="width: 200px"
+                    :disabled="true"
+                  ></a-input>
+                </a-form-item>
+              </a-col>
+              <a-col
+                class="gutter-row"
+                :md="6"
+                :sm="2"
+                :offset="editId == '0' ? 3 : 0"
+              >
+                <a-form-item label="有效期" name="startTime">
+                  <a-range-picker
+                    v-model:value="startTimeAndEndTime"
+                    :value-format="dateFormat"
+                    :format="dateFormat"
+                    show-time
+                    style="width: 250px"
+                    @change="distributeTime"
                   />
-                </span>
-              </span>
-            </template>
-            <a-select
-              placeholder="选择楼栋"
-              v-else
-              style="width: 200px"
-              :options="formBuildingList"
-              v-model:value="formState.buildingId"
-              :filter-option="filterOption"
-              show-search
-              @change="addBuildingIds"
-            ></a-select>
-          </a-form-item>
-        </a-form>
+                </a-form-item>
+              </a-col>
+              <!--              <a-col :md="6" :sm="2" :offset="3">-->
+              <!--                <a-form-item label="统计弹框类型" v-if="editId != 0">-->
+              <!--                  <a-select-->
+              <!--                    placeholder="请选择统计弹框类型"-->
+              <!--                    :options="showStatisOptions"-->
+              <!--                    style="width: 200px"-->
+              <!--                    v-model:value="formState.isShowStatis"-->
+              <!--                  ></a-select>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--            </a-row>-->
+              <a-divider orientation="left">实名信息</a-divider>
+
+              <!--            <a-row :gutter="[48, 16]">-->
+              <a-col class="gutter-row" :md="6" :sm="2" :offset="3">
+                <a-form-item
+                  label="真实姓名"
+                  name="realName"
+                  style="margin-bottom: 10px"
+                >
+                  <a-input
+                    placeholder="这里输入姓名"
+                    v-model:value="formState.realName"
+                    style="width: 200px"
+                  ></a-input>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-row" :md="6" :sm="2">
+                <a-form-item label="手机号" name="phone">
+                  <a-input
+                    placeholder="这里输入手机号"
+                    style="width: 200px"
+                    v-model:value="formState.phone"
+                  ></a-input>
+                </a-form-item>
+              </a-col>
+
+              <a-col class="gutter-row" :md="6" :sm="2">
+                <a-form-item label="身份证号">
+                  <a-input
+                    placeholder="这里输入身份证号"
+                    v-model:value="formState.identity"
+                    style="width: 200px"
+                  ></a-input>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-row" :md="10" :sm="2" :offset="3">
+                <a-form-item label="身份证国徽面">
+                  <div style="display: flex">
+                    <div
+                      v-if="formState.identityGUrl != ''"
+                      style="position: relative"
+                    >
+                      <img
+                        :src="formState.identityGUrl"
+                        style="width: 100px; height: 100px"
+                      />
+                      <div class="imageDel" @click="delItemImage">
+                        <DeleteOutlined />
+                      </div>
+                    </div>
+                    <a-upload
+                      v-else
+                      accept="image/png, image/jpeg"
+                      list-type="picture-card"
+                      :maxCount="1"
+                      :beforeUpload="beforeUpload"
+                      :showUploadList="{
+                        showPreviewIcon: false,
+                        showRemoveIcon: true,
+                      }"
+                      v-model:file-list="formState.fileList"
+                    >
+                      <PlusOutlined style="font-size: 22px" />
+                    </a-upload>
+                  </div>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-row" :md="10" :sm="2">
+                <a-form-item label="身份证人像面">
+                  <div style="display: flex">
+                    <div
+                      v-if="formState.identityPUrl != ''"
+                      style="position: relative"
+                    >
+                      <img
+                        :src="formState.identityPUrl"
+                        style="width: 100px; height: 100px"
+                      />
+                      <div class="imageDel" @click="delItemImage">
+                        <DeleteOutlined />
+                      </div>
+                    </div>
+                    <a-upload
+                      v-else
+                      accept="image/png, image/jpeg"
+                      list-type="picture-card"
+                      :maxCount="1"
+                      :beforeUpload="beforeUpload"
+                      :showUploadList="{
+                        showPreviewIcon: false,
+                        showRemoveIcon: true,
+                      }"
+                      v-model:file-list="formState.filePList"
+                    >
+                      <PlusOutlined style="font-size: 22px" />
+                    </a-upload>
+                  </div>
+                </a-form-item>
+              </a-col>
+              <!--              <a-col-->
+              <!--                class="gutter-row"-->
+              <!--                :md="6"-->
+              <!--                :sm="2"-->
+              <!--                :offset="3"-->
+              <!--                v-if="editId != 0"-->
+              <!--              >-->
+              <!--                <a-form-item label="邮箱">-->
+              <!--                  <a-input-->
+              <!--                    placeholder="这里输入邮箱"-->
+              <!--                    style="width: 200px"-->
+              <!--                    v-model:value="formState.email"-->
+              <!--                  ></a-input>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--              <a-col :md="6" :sm="2" v-if="editId != 0">-->
+              <!--                <a-form-item label="推荐用户">-->
+              <!--                  <a-input-->
+              <!--                    placeholder="这里输入用户"-->
+              <!--                    style="width: 200px"-->
+              <!--                    v-model:value="formState.recommendUser"-->
+              <!--                  ></a-input>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--              <a-col :md="6" :sm="2" v-if="editId != 0">-->
+              <!--                <a-form-item label="推荐理由">-->
+              <!--                  <a-textarea-->
+              <!--                    v-model:value="formState.recommendReason"-->
+              <!--                    style="width: 200px"-->
+              <!--                  ></a-textarea>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--            </a-row>-->
+
+              <a-divider orientation="left">权限管理</a-divider>
+
+              <!--            <a-row :gutter="[48, 16]">-->
+              <a-col class="gutter-row" :md="6" :sm="2" :offset="3">
+                <a-form-item label="角色分组" name="roleGroupId">
+                  <a-select
+                    :options="formRoleGroup"
+                    show-search
+                    :filter-option="filterOption"
+                    placeholder="请选择角色分组"
+                    style="width: 200px"
+                    v-model:value="formState.roleGroupId"
+                    @change="
+                      (value, options) =>
+                        createRole(value, options, false, false)
+                    "
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-row" :md="6" :sm="2">
+                <a-form-item label="角色" name="roleId">
+                  <a-select
+                    :options="roleList"
+                    show-search
+                    style="width: 200px"
+                    placeholder="请选择角色"
+                    :filter-option="filterOption"
+                    v-model:value="formState.roleId"
+                    @change="roleChange"
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                class="gutter-row"
+                :md="6"
+                :sm="2"
+                v-if="
+                  ['1', '2', '3', '4', '7', '8', '9'].includes(
+                    formState.roleGroupId
+                  )
+                "
+              >
+                <a-form-item label="省份" name="provieceCode">
+                  <a-select
+                    :options="formProvieceList"
+                    show-search
+                    style="width: 200px"
+                    placeholder="请选择省份"
+                    :filter-option="filterOption"
+                    v-model:value="formState.provieceCode"
+                    @change="
+                      (value, options) =>
+                        formCityToStreet(value, options, 'city')
+                    "
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                class="gutter-row"
+                :md="6"
+                :sm="2"
+                :offset="3"
+                v-if="
+                  ['2', '3', '4', '7', '8', '9'].includes(formState.roleGroupId)
+                "
+              >
+                <a-form-item label="市" name="cityCode">
+                  <a-select
+                    placeholder="选择市"
+                    v-model:value="formState.cityCode"
+                    :options="formCityList"
+                    style="width: 200px"
+                    :filter-option="filterOption"
+                    show-search
+                    @change="
+                      (value, options) =>
+                        formCityToStreet(value, options, 'district')
+                    "
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="6"
+                :sm="2"
+                v-if="['3', '4', '8', '9'].includes(formState.roleGroupId)"
+              >
+                <a-form-item label="区县" name="districtCode">
+                  <a-select
+                    placeholder="选择区县"
+                    v-model:value="formState.districtCode"
+                    :options="formDistrictList"
+                    :filter-option="filterOption"
+                    show-search
+                    style="width: 200px"
+                    @change="
+                      (value, options) =>
+                        formCityToStreet(value, options, 'street')
+                    "
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="6"
+                :sm="2"
+                v-if="['4', '8'].includes(formState.roleGroupId)"
+              >
+                <a-form-item label="街道" name="streetCode">
+                  <a-select
+                    placeholder="选择街道"
+                    :filter-option="filterOption"
+                    :options="formStreetList"
+                    style="width: 200px"
+                    show-search
+                    v-model:value="formState.streetCode"
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="6"
+                :sm="2"
+                :offset="
+                  !['2', '3', '7', '9'].includes(formState.roleGroupId) ? 3 : 0
+                "
+                v-if="
+                  ['1', '2', '3', '4', '7', '8', '9'].includes(
+                    formState.roleGroupId
+                  )
+                "
+              >
+                <a-form-item label="省厅" name="poProvieceCode">
+                  <a-select
+                    :options="formPoProvieceList"
+                    show-search
+                    placeholder="请选择省厅"
+                    :filter-option="filterOption"
+                    style="width: 200px"
+                    v-model:value="formState.poProvieceCode"
+                    @change="
+                      (value, options) =>
+                        formCityToStreet(value, options, 'city')
+                    "
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="6"
+                :sm="2"
+                :offset="
+                  !['2', '4', '7', '8'].includes(formState.roleGroupId) ? 3 : 0
+                "
+                v-if="
+                  ['2', '3', '4', '7', '8', '9'].includes(formState.roleGroupId)
+                "
+              >
+                <a-form-item label="市局" name="poCityCode">
+                  <a-select
+                    placeholder="请选择市局"
+                    :filter-option="filterOption"
+                    show-search
+                    v-model:value="formState.poCityCode"
+                    :options="formPoCityList"
+                    style="width: 200px"
+                    @change="
+                      (value, options) =>
+                        formCityToStreet(value, options, 'district')
+                    "
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="6"
+                :sm="2"
+                v-if="['3', '4', '8', '9'].includes(formState.roleGroupId)"
+              >
+                <a-form-item label="分局" name="poDistrictCode">
+                  <a-select
+                    placeholder="选择分局"
+                    v-model:value="formState.poDistrictCode"
+                    :filter-option="filterOption"
+                    show-search
+                    style="width: 200px"
+                    :options="formPoDistrictList"
+                    @change="
+                      (value, options) =>
+                        formCityToStreet(value, options, 'street')
+                    "
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="6"
+                :sm="2"
+                :offset="3"
+                v-if="['4', '8'].includes(formState.roleGroupId)"
+              >
+                <a-form-item label="派出所" name="poStreetCode">
+                  <a-select
+                    placeholder="选择派出所"
+                    v-model:value="formState.poStreetCode"
+                    :filter-option="filterOption"
+                    show-search
+                    :options="formPoStreetList"
+                    style="width: 200px"
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <!--              <a-col-->
+              <!--                :md="6"-->
+              <!--                :sm="2"-->
+              <!--                v-if="['5', '6'].includes(formState.roleGroupId) && isMV == '1'"-->
+              <!--              >-->
+              <!--                <a-form-item-->
+              <!--                  label="小区"-->
+              <!--                  name="villageIds"-->
+              <!--                  style="position: relative"-->
+              <!--                >-->
+              <!--                  <template v-if="isMV == '1'">-->
+              <!--                    <span style="display: block; width: 500px">-->
+              <!--                      <PlusOutlined-->
+              <!--                        style="-->
+              <!--                          position: absolute;-->
+              <!--                          left: 50px;-->
+              <!--                          top: -31px;-->
+              <!--                          cursor: pointer;-->
+              <!--                          border: 1px deepskyblue dashed;-->
+              <!--                          border-radius: 50%;-->
+              <!--                        "-->
+              <!--                        @click="openTransfer"-->
+              <!--                      />-->
+              <!--                    </span>-->
+              <!--                  </template>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <a-col
+                :md="6"
+                :sm="2"
+                v-if="['5', '6'].includes(formState.roleGroupId) && isMV != '1'"
+              >
+                <a-form-item label="小区" name="villageId">
+                  <a-select
+                    v-model:value="formState.villageId"
+                    :filter-option="filterOption"
+                    show-search
+                    placeholder="请选择小区"
+                    style="width: 200px"
+                    :options="formVillageId"
+                    @change="(value) => createBuildingList(value, false)"
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="6"
+                :sm="2"
+                :offset="3"
+                v-if="['6'].includes(formState.roleGroupId) && isMV == '2'"
+              >
+                <a-form-item
+                  label="楼栋"
+                  style="position: relative"
+                  :name="isMV == '3' ? 'buildingIds' : 'buildingId'"
+                >
+                  <template v-if="isMV == '3'">
+                    <!--                    <span style="width: 500px; display: block" class="building">-->
+                    <!--                      <span>-->
+                    <!--                        <PlusOutlined-->
+                    <!--                          style="-->
+                    <!--                            position: absolute;-->
+                    <!--                            left: 50px;-->
+                    <!--                            top: -31px;-->
+                    <!--                            cursor: pointer;-->
+                    <!--                            border: 1px deepskyblue dashed;-->
+                    <!--                            border-radius: 50%;-->
+                    <!--                          "-->
+                    <!--                          @click="openBuildingTransfer"-->
+                    <!--                        />-->
+                    <!--                      </span>-->
+                    <!--                    </span>-->
+                  </template>
+                  <a-select
+                    placeholder="选择楼栋"
+                    v-else
+                    style="width: 200px"
+                    :options="formBuildingList"
+                    v-model:value="formState.buildingId"
+                    :filter-option="filterOption"
+                    show-search
+                    @change="addBuildingIds"
+                  ></a-select>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="24"
+                :sm="2"
+                :offset="3"
+                v-if="['5', '6'].includes(formState.roleGroupId) && isMV == '1'"
+              >
+                <a-form-item style="position: relative">
+                  <a-button
+                    type="link"
+                    @click="openTransfer"
+                    style="
+                      position: absolute;
+                      z-index: 100;
+                      left: 424px;
+                      top: 11px;
+                      font-weight: 600;
+                    "
+                  >
+                    编辑
+                  </a-button>
+                  <a-table
+                    :columns="transferVillage"
+                    :data-source="transferTable"
+                  ></a-table>
+                </a-form-item>
+              </a-col>
+              <a-col
+                :md="24"
+                :sm="2"
+                :offset="3"
+                v-if="['6'].includes(formState.roleGroupId) && isMV == '3'"
+              >
+                <a-form-item style="position: relative">
+                  <a-button
+                    type="link"
+                    @click="openBuildingTransfer"
+                    style="
+                      position: absolute;
+                      z-index: 100;
+                      left: 530px;
+                      top: 11px;
+                      font-weight: 600;
+                    "
+                  >
+                    编辑
+                  </a-button>
+                  <a-table
+                    :columns="transferBuilding"
+                    :data-source="transferBuildingTable"
+                  ></a-table>
+                </a-form-item>
+              </a-col>
+            </a-row>
+          </a-form>
+        </div>
       </Modal>
     </div>
     <a-modal
@@ -912,7 +947,7 @@
 </template>
 
 <script setup>
-  import { computed, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref } from 'vue'
   import { PlusOutlined } from '@ant-design/icons-vue'
   import Modal from '@/components/Modal.vue'
   import { useTableInit, useInitFrom } from '@/hooks/useTableComponent'
@@ -920,7 +955,6 @@
   const { simpleRequest } = useSimpleRequest()
   import {
     SearchOutlined,
-    EditOutlined,
     DeleteOutlined,
     DownOutlined,
     UpOutlined,
@@ -935,16 +969,17 @@
     getUserList,
     getVillageList,
     hasU,
+    toEdit,
   } from '@/api/system'
   const formItemLayout = computed(() => {
     const layout = 'horizontal'
     return layout === 'horizontal'
       ? {
           labelCol: {
-            span: 10,
+            span: 24,
           },
           wrapperCol: {
-            span: 8,
+            span: 16,
           },
         }
       : {}
@@ -974,14 +1009,13 @@
     rules,
     rulesEdit,
     formRoleGroup,
-    showStatisOptions,
   } from './data'
   import { messageContent } from '@/utils/message'
-
   const { dataSource, tableLoading, requestObj } = useTableInit({
     tableObj: userListObj,
   })
   const { modalRef, titleValue, editId } = useInitFrom()
+  const startTimeAndEndTime = ref([])
   // 表单的省
   let formProvieceList = []
   // 表单的省厅
@@ -998,6 +1032,8 @@
   let role = []
   // 新增
   const openAdd = async () => {
+    formState.identityGUrl = ''
+    formState.identityPUrl = ''
     editId.value = 0
     modalRef.value.open()
   }
@@ -1010,7 +1046,7 @@
         dataSource.value = res.result.userList.map((item, index) => {
           return {
             ...item,
-            delLoading: false,
+            changeLoading: false,
             No: index + 1,
             operation: '',
             key: item.id,
@@ -1146,7 +1182,7 @@
     formState.buildingIds = []
     formState.buildingId = undefined
     formState.districtCode = undefined
-    transferArray.value = []
+    // transferArray.value = []
   }
   // 表单中角色改变
   const roleChange = (value) => {
@@ -1353,16 +1389,25 @@
   //   formState.villageId = value[value.length - 1]
   // }
   // 创建角色 通常用于选中角色分组之后再调用
-  const createRole = (value, options, controlAdd = true, form = true) => {
-    if (form) {
+  const createRole = (value, options, controlAdd = true, page = true) => {
+    if (page) {
       requestObj.roleId = undefined
     } else {
       clearPartFormState()
       isMV.value = 0
       formState.roleId = undefined
       formState.villageIds = []
-      transferArray.value = []
+      // transferArray.value = []
+      transferTable.value = []
     }
+    nextTick(() => {
+      let modalScroll = document.getElementById('modalScroll')
+      console.log(modalScroll)
+      if (modalScroll) {
+        // modalScroll.scrollTop = 0
+        modalScroll.scrollTop = modalScroll.scrollHeight
+      }
+    })
     if (value !== '') {
       getRole({ roleGroupId: value }).then((res) => {
         roleList.value = res.result.map((item) => {
@@ -1423,9 +1468,11 @@
       }
     }
     targetKeys.value = []
-    transferArray.value = []
+    // transferArray.value = []
+    transferTable.value = []
     targetBuildingKeys.value = []
-    transferBuildingArray.value = []
+    transferBuildingTable.value = []
+    // transferBuildingArray.value = []
     isMV.value = undefined
   }
   const addBuildingIds = (value) => {
@@ -1475,7 +1522,6 @@
     } else {
       await changeFun({
         ...formState,
-        chkpwd: formState.password,
         villageIds: Array.isArray(formState.villageIds)
           ? formState.villageIds.join(',')
           : formState.villageIds,
@@ -1514,7 +1560,11 @@
   }
   // 修改功能
   const changeTableItem = async (record) => {
+    formState.identityGUrl = ''
+    formState.identityPUrl = ''
     editId.value = record.id
+    record.changeLoading = true
+
     await createRole(record.groupType, formState, false, false)
     await roleChange(record.roleId)
     for (let recordKey in record) {
@@ -1535,9 +1585,9 @@
         continue
       } else if (recordKey == 'villageIds') {
         formState[recordKey] = record[recordKey].split(',')
-        transferArray.value = formState.villageIds.map((item) => {
+        transferTable.value = formState.villageIds.map((item) => {
           const ele = villageList.value.filter((itemV) => itemV.value === item)
-          return ele[0].name
+          return { value: ele[0].name }
         })
         continue
       } else if (recordKey == 'buildingIds' && record[recordKey] != '') {
@@ -1545,59 +1595,101 @@
         await createBuildingList(record.villageId, false)
         if (record.isMV === '3') {
           const dataArray = JSON.parse(record.buildingIds)
-          // 多个楼栋
-          let completeArray = [],
-            build = []
-          // 选中楼栋的id
+          // // 多个楼栋
+          let completeArray = []
+          //   build = []
+          // // 选中楼栋的id
           for (const dataArrayKey in dataArray) {
             let arrayItem = dataArray[dataArrayKey].ids.split(',')
             completeArray.push(...arrayItem)
           }
-          for (const dataArrayKey in dataArray) {
-            await getBuilding({
-              villageId: dataArray[dataArrayKey].villageId,
+          // setBuildingArray = []
+          // for (const dataArrayKey in dataArray) {
+          //   await getBuilding({
+          //     villageId: dataArray[dataArrayKey].villageId,
+          //   })
+          //     .then((res) => {
+          //       build = res.result.map((item) => {
+          //         return {
+          //           ...item,
+          //           value: item.id,
+          //           label: item.name,
+          //         }
+          //       })
+          //     })
+          //     .then(() => {
+          //       setBuildingArray.push(...build)
+          //     })
+          // }
+          formState.buildingIds = completeArray
+
+          if (transferBuildingTable.value.length === 0) {
+            await toEdit({
+              id: record.id,
+              identityImage: '',
             }).then((res) => {
-              build = res.result.map((item) => {
+              const buildingList_ = res.result.buildingList_
+              transferBuildingTable.value = buildingList_.map((item) => {
                 return {
                   ...item,
-                  value: item.id,
-                  label: item.name,
+                  value: item.villageName,
+                  buildingValue: item.name,
                 }
               })
             })
-          }
-          setBuildingArray = []
-          setBuildingArray.push(...build)
-          formState.buildingIds = completeArray
-          if (transferBuildingArray.value.length === 0) {
-            let buildingAddArray = []
-            formState.buildingIds.forEach((item) => {
-              const ele = setBuildingArray.filter(
-                (itemV) => itemV.value === item
-              )
-              const selectVillage = villageList.value.find(
-                (item) => item.value === ele[0]?.villageId
-              )
-              console.log(selectVillage)
-              if (selectVillage != undefined) {
-                buildingAddArray.push(selectVillage?.name + '-' + ele[0].name)
-              }
-            })
-            transferBuildingArray.value = buildingAddArray
+            // let buildingAddTable = []
+            // formState.buildingIds.forEach((item) => {
+            //   const ele = setBuildingArray.filter(
+            //     (itemV) => itemV.value === item
+            //   )
+            //   const selectVillage = villageList.value.find(
+            //     (item) => item.value === ele[0]?.villageId
+            //   )
+            //   // console.log(ele, selectVillage)
+            //   if (selectVillage != undefined) {
+            //     buildingAddTable.push({
+            //       value: selectVillage?.name,
+            //       buildingValue: ele[0].name,
+            //     })
+            //   }
+            // })
+            // transferBuildingTable.value = buildingAddTable
           }
         } else {
           await createBuildingList(record.villageIds, false)
           formState.buildingIds = [].push(record.buildingIds)
         }
         continue
+      } else if (recordKey == 'startTime') {
+        startTimeAndEndTime.value[0] = record[recordKey]
+        continue
+      } else if (recordKey == 'endTime') {
+        startTimeAndEndTime.value[1] = record[recordKey]
+        continue
       }
       formState[recordKey] = record[recordKey]
     }
     setTimeout(() => {
+      record.changeLoading = false
       modalRef.value.open()
+      nextTick(() => {
+        let modalScroll = document.getElementById('modalScroll')
+        if (modalScroll) {
+          modalScroll.scrollTop = 0
+        }
+      })
     }, 100)
   }
 
+  const transferVillage = [
+    {
+      dataIndex: 'value',
+      title: '小区名',
+    },
+    {
+      dataIndex: 'edit',
+    },
+  ]
   // 用于小区多选时弹出transfer组件，使用的是transferArray来显示多选 选中之后的名字，使用a-tags显示
   // transferArray与formstate.villageIds区别: 从本质上他们是一致的，只不过对与a-tags和a-transfer显示数据的key不同，formstate.villageIds只存储了
   // 选中项的id/value值,transferArray是根据id/value筛选出的对应name的数组。
@@ -1616,14 +1708,20 @@
     // 将多选的选项回显到targetKey
     targetKeys.value = formState.villageIds
   }
-  let transferArray = ref([])
+  // let transferArray = ref([])
+  let transferTable = ref([])
   const transferSubmit = () => {
     formState.villageIds = targetKeys.value
-    transferArray.value = formState.villageIds.map((item) => {
-      const ele = villageList.value.filter((itemV) => itemV.value === item)
-      return ele[0].name
-    })
+    // transferArray.value = formState.villageIds.map((item) => {
+    //   const ele = villageList.value.filter((itemV) => itemV.value === item)
+    //   return ele[0].name
+    // })
     targetKeys.value = []
+    // console.log(transferArray.value)
+    transferTable.value = formState.villageIds.map((item) => {
+      const ele = villageList.value.filter((itemV) => itemV.value === item)
+      return { value: ele[0].name }
+    })
     transferVisible.value = false
     formState.villageId = formState.villageIds[formState.villageIds.length - 1]
   }
@@ -1632,6 +1730,20 @@
     transferVisible.value = false
   }
 
+  const transferBuilding = [
+    {
+      dataIndex: 'value',
+      title: '小区名',
+    },
+    {
+      dataIndex: 'buildingValue',
+      title: '楼栋名',
+    },
+    {
+      title: '',
+      dataIndex: 'edit',
+    },
+  ]
   const transferBuildingVisible = ref(false)
   let setBuildingArray = []
   // 右边选中
@@ -1652,23 +1764,36 @@
     // 将多选的选项回显到targetKey
     targetBuildingKeys.value = formState.buildingIds
   }
-  const transferBuildingArray = ref([])
-
+  // const transferBuildingArray = ref([])
+  const transferBuildingTable = ref([])
   const transferBuildingSubmit = () => {
     formState.buildingIds = targetBuildingKeys.value
     // 将targetBUildingKeys的每一项进行遍历 然后筛选，赋值给transferBuildingArray
-    let buildingAddArray = []
-    formState.buildingIds.forEach((item) => {
+    // let buildingAddArray = []
+    // formState.buildingIds.forEach((item) => {
+    //   const ele = setBuildingArray.filter((itemV) => itemV.value == item)
+    //   if (ele.length != 0) {
+    //     const selectVillage = villageList.value.find(
+    //       (item) => item.value === ele[0].villageId
+    //     )
+    //     buildingAddArray.push(selectVillage.name + '-' + ele[0].name)
+    //   }
+    // })
+    let buildingAddTable = formState.buildingIds.map((item) => {
       const ele = setBuildingArray.filter((itemV) => itemV.value == item)
-      console.log(ele)
       if (ele.length != 0) {
         const selectVillage = villageList.value.find(
           (item) => item.value === ele[0].villageId
         )
-        buildingAddArray.push(selectVillage.name + '-' + ele[0].name)
+        return {
+          value: selectVillage.name,
+          buildingValue: ele[0].name,
+        }
+        // buildingAddArray.push(selectVillage.name + '-' + ele[0].name)
       }
     })
-    transferBuildingArray.value = buildingAddArray
+    // transferBuildingArray.value = buildingAddArray
+    transferBuildingTable.value = buildingAddTable
     targetBuildingKeys.value = []
     transferBuildingVisible.value = false
     formState.buildingId =
@@ -1681,6 +1806,17 @@
   const advanced = ref(false)
   const toggleAdvanced = () => {
     advanced.value = !advanced.value
+  }
+  const distributeTime = () => {
+    formState.startTime = startTimeAndEndTime.value[0]
+    formState.endTime = startTimeAndEndTime.value[1]
+  }
+  const beforeUpload = (file) => {
+    formState.photoSrc = file
+    return false
+  }
+  const delItemImage = () => {
+    formState.identityGUrl = ''
   }
 </script>
 
@@ -1706,5 +1842,19 @@
   :deep(.ant-form-item-control-input) {
     //width: 1000px;
     //background-color: red;
+  }
+  .imageDel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+    //background-color: lightsteelblue;
   }
 </style>

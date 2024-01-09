@@ -4,70 +4,43 @@ const columns = ref([
   {
     title: '序号',
     dataIndex: 'No',
+    width: '50px',
   },
   {
     title: '用户名',
     dataIndex: 'username',
-    width: '10%',
   },
   {
     title: '姓名',
     dataIndex: 'realName',
-    width: '10%',
   },
   {
     title: '职位',
     dataIndex: 'roleName',
-    resizable: true,
-    width: 120,
-    minWidth: 120,
-    maxWidth: 200,
   },
   {
     title: '审核状态',
     dataIndex: 'isAuth',
-    width: '10%',
-  },
-  {
-    title: '推荐用户',
-    dataIndex: 'recommendUser',
-    width: '10%',
   },
   {
     title: '账号状态',
     dataIndex: 'status',
-    width: '10%',
-  },
-  {
-    title: '所管辖区域',
-    dataIndex: 'area',
-    resizable: true,
-
-    width: 110,
-    minWidth: 100,
-    maxWidth: 200,
-  },
-  {
-    title: '添加用户',
-    dataIndex: 'addUser',
-    width: '10%',
   },
   {
     title: '审核用户',
     dataIndex: 'updateUser',
-    width: '10%',
   },
   {
     title: '操作',
     dataIndex: 'operation',
     align: 'center',
+    width: '200px',
   },
 ])
 const formRef = ref()
 const formState = reactive({
   username: undefined,
   password: '',
-  chkpwd: '',
   realName: '',
   phone: '',
   identity: '',
@@ -77,8 +50,8 @@ const formState = reactive({
   recommendReason: '',
   startTime: undefined,
   endTime: undefined,
-  isAuth: undefined,
-  status: undefined,
+  isAuth: '1',
+  status: '0',
   roleGroupId: undefined,
   roleId: undefined,
   provieceCode: undefined,
@@ -96,6 +69,10 @@ const formState = reactive({
   createdTime: '',
   addUser: '',
   isShowStatis: undefined,
+  identityGUrl: '',
+  fileList: ref([]),
+  identityPUrl: '',
+  filePList: ref([]),
 })
 const authList = [
   {
@@ -243,7 +220,6 @@ const userListObj = {
 const rules = {
   username: [{ required: true, message: '请输入用户名' }],
   password: [{ required: true, message: '请输入密码' }],
-  chkpwd: [{ required: true, message: '请输入密码' }],
   roleGroupId: [{ required: true, message: '请选择角色分组' }],
   roleId: [{ required: true, message: '请选择角色' }],
   provieceCode: [{ required: true, message: '请选择省份' }],

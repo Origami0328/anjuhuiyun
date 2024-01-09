@@ -10,6 +10,9 @@
       :footer="footer"
       :width="width"
       :maskClosable="false"
+      :bodyStyle="{
+        height: '65vh',
+      }"
       style="font-size: 20px"
     >
       <slot></slot>

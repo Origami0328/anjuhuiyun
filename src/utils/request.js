@@ -24,7 +24,9 @@ const handleCode = async (code, msg) => {
     case 401:
       messageContent('error', msg || '登录失效')
       //只有token过期才清除token
-      // store.dispatch('user/resetAll').catch(() => {})
+      if (msg.includes('token')) {
+        store.dispatch('user/resetAll').catch(() => {})
+      }
       break
     case 403:
       router.push({ path: '/401' }).catch(() => {})

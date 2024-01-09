@@ -3,6 +3,7 @@ import Antd from 'ant-design-vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import 'dayjs/locale/zh-cn'
 import '@/vab'
 /**
  * @description 正式环境默认使用mock，正式项目记得注释后再打包

@@ -375,155 +375,674 @@
     >
       <div style="height: 450px; overflow: auto">
         <a-form :model="fromSettingInfo" layout="inline">
-          <a-divider>访客信息配置</a-divider>
-          <a-form-item label="小区名" style="width: 400px; padding-left: 100px">
-            {{ fromSettingInfo.name }}
-          </a-form-item>
-          <a-form-item label="访客权限" style="width: 500px">
-            <a-checkbox-group
-              v-model:value="fromSettingInfo.visitorPermission"
-              :options="visitorPermissionOptions"
-            />
-          </a-form-item>
-          <a-form-item label="小程序临时访客注册是否需要审核">
-            <a-select
-              :options="checkOptions"
-              style="width: 150px"
-              v-model:value="fromSettingInfo.unCheck"
-            ></a-select>
-          </a-form-item>
-          <a-divider>实名认证信息配置</a-divider>
-          <a-form-item label="是否需要身份认证" style="margin-left: 30px">
-            <a-select
-              v-model:value="fromSettingInfo.isReal"
-              :options="realOptions"
-              style="width: 150px"
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="身份认证是否需要上传证件照片"
-            v-if="fromSettingInfo.isReal === '1'"
-            :style="{ marginLeft: '100px' }"
-          >
-            <a-select
-              style="width: 150px"
-              v-model:value="fromSettingInfo.isIdentity"
-              :options="identityOptions"
-            ></a-select>
-          </a-form-item>
-          <a-form-item
-            label="是否需要身份认证是否需要人脸认证"
-            :style="{ marginLeft: '100px' }"
-          >
-            <a-select
-              v-model:value="fromSettingInfo.isNeedFace"
-              :options="needFaceOptions"
-              style="width: 150px"
-            ></a-select>
-          </a-form-item>
-          <a-divider>物业信息配置</a-divider>
-          <a-form-item label="物业电话" style="margin-left: 80px">
-            <a-input
-              placeholder="物业电话"
-              style="width: 150px"
-              v-model:value="fromSettingInfo.mobile"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="物业联系人" style="margin-left: 110px">
-            <a-input
-              placeholder="物业联系人"
-              style="width: 150px"
-              v-model:value="fromSettingInfo.contacts"
-            ></a-input>
-          </a-form-item>
-          <a-divider>用户默认有效期配置</a-divider>
-          <a-form-item
-            label="户主默认有效期(月)"
-            style="margin-left: 20px; margin-bottom: 10px"
-          >
-            <a-input
-              v-model:value="fromSettingInfo.validityHolder"
-              style="width: 150px"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="家人默认有效期(月)" style="margin-left: 30px">
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityFamily"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="租客默认有效期(月)" style="margin-left: 30px">
-            <a-input
-              v-model:value="fromSettingInfo.validityTenant"
-              style="width: 150px"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="雇主默认有效期(月)" style="margin-left: 30px">
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityEmployer"
-            ></a-input>
-          </a-form-item>
-          <a-form-item
-            label="雇员默认有效期(月)"
-            style="margin-bottom: 10px; margin-left: 20px"
-          >
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityServant"
-            ></a-input>
-          </a-form-item>
-          <a-form-item
-            label="保障房主申请人默认有效期(月)"
-            style="margin-left: 30px"
-          >
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityGuaranteeMain"
-            ></a-input>
-          </a-form-item>
-          <a-form-item
-            label="保障房共同申请人默认有效期(月)"
-            style="margin-left: 30px"
-          >
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityGuaranteeJointly"
-            ></a-input>
-          </a-form-item>
-          <a-form-item
-            label="保障房临时居住人员默认有效期(月)"
-            style="margin-bottom: 10px"
-          >
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityGuaranteeTemporary"
-            ></a-input>
-          </a-form-item>
-          <a-form-item
-            label="公租房主申请人默认有效期(月)"
-            style="margin-left: 30px"
-          >
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityPublicMain"
-            ></a-input>
-          </a-form-item>
-          <a-form-item
-            label="公租房共同申请人默认有效期(月)"
-            style="margin-left: 30px"
-          >
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityPublicJointly"
-            ></a-input>
-          </a-form-item>
-          <a-form-item label="公租房临时居住人员默认有效期(月)">
-            <a-input
-              style="width: 150px"
-              v-model:value="fromSettingInfo.validityPublicTemporary"
-            ></a-input>
-          </a-form-item>
+          <a-row :gutter="[48, 16]">
+            <a-divider>访客信息配置</a-divider>
+            <a-form-item
+              label="小区名"
+              style="width: 400px; padding-left: 100px"
+            >
+              {{ fromSettingInfo.name }}
+            </a-form-item>
+            <a-form-item label="访客权限" style="width: 500px">
+              <a-checkbox-group
+                v-model:value="fromSettingInfo.visitorPermission"
+                :options="visitorPermissionOptions"
+              />
+            </a-form-item>
+            <a-form-item label="小程序临时访客注册是否需要审核">
+              <a-select
+                :options="checkOptions"
+                style="width: 150px"
+                v-model:value="fromSettingInfo.unCheck"
+              ></a-select>
+            </a-form-item>
+            <a-divider>实名认证信息配置</a-divider>
+            <a-form-item label="是否需要身份认证" style="margin-left: 30px">
+              <a-select
+                v-model:value="fromSettingInfo.isReal"
+                :options="realOptions"
+                style="width: 150px"
+              ></a-select>
+            </a-form-item>
+            <a-form-item
+              label="身份认证是否需要上传证件照片"
+              v-if="fromSettingInfo.isReal === '1'"
+              :style="{ marginLeft: '100px' }"
+            >
+              <a-select
+                style="width: 150px"
+                v-model:value="fromSettingInfo.isIdentity"
+                :options="identityOptions"
+              ></a-select>
+            </a-form-item>
+            <a-form-item
+              label="是否需要身份认证是否需要人脸认证"
+              :style="{ marginLeft: '100px' }"
+            >
+              <a-select
+                v-model:value="fromSettingInfo.isNeedFace"
+                :options="needFaceOptions"
+                style="width: 150px"
+              ></a-select>
+            </a-form-item>
+            <a-divider>物业信息配置</a-divider>
+            <a-form-item label="物业电话" style="margin-left: 80px">
+              <a-input
+                placeholder="物业电话"
+                style="width: 150px"
+                v-model:value="fromSettingInfo.mobile"
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="物业联系人" style="margin-left: 110px">
+              <a-input
+                placeholder="物业联系人"
+                style="width: 150px"
+                v-model:value="fromSettingInfo.contacts"
+              ></a-input>
+            </a-form-item>
+            <a-divider>用户默认有效期配置</a-divider>
+            <a-form-item
+              label="户主默认有效期(月)"
+              style="margin-left: 20px; margin-bottom: 10px"
+            >
+              <a-input
+                v-model:value="fromSettingInfo.validityHolder"
+                style="width: 150px"
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="家人默认有效期(月)" style="margin-left: 30px">
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityFamily"
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="租客默认有效期(月)" style="margin-left: 30px">
+              <a-input
+                v-model:value="fromSettingInfo.validityTenant"
+                style="width: 150px"
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="雇主默认有效期(月)" style="margin-left: 30px">
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityEmployer"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              label="雇员默认有效期(月)"
+              style="margin-bottom: 10px; margin-left: 20px"
+            >
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityServant"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              label="保障房主申请人默认有效期(月)"
+              style="margin-left: 30px"
+            >
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityGuaranteeMain"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              label="保障房共同申请人默认有效期(月)"
+              style="margin-left: 30px"
+            >
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityGuaranteeJointly"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              label="保障房临时居住人员默认有效期(月)"
+              style="margin-bottom: 10px"
+            >
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityGuaranteeTemporary"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              label="公租房主申请人默认有效期(月)"
+              style="margin-left: 30px"
+            >
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityPublicMain"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              label="公租房共同申请人默认有效期(月)"
+              style="margin-left: 30px"
+            >
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityPublicJointly"
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="公租房临时居住人员默认有效期(月)">
+              <a-input
+                style="width: 150px"
+                v-model:value="fromSettingInfo.validityPublicTemporary"
+              ></a-input>
+            </a-form-item>
+            <a-divider>长时间未开门配置</a-divider>
+            <a-form-item
+              label="小区名"
+              style="width: 400px; padding-left: 100px; margin-bottom: 10px"
+            >
+              {{ fromSettingInfo.name }}
+            </a-form-item>
+            <a-form-item label="是否统计长期未开门人员">
+              <a-select
+                v-model:value="fromSettingInfo.countLongNoOpen"
+                :options="countLongNoOpenOptions"
+                style="width: 150px"
+              />
+            </a-form-item>
+            <a-form-item
+              label="长期未开门天数设置一档(天)"
+              style="margin-left: 40px"
+            >
+              <a-input
+                style="width: 150px"
+                placeholder="长期未开门天数设置一档(天)"
+                v-model:value="fromSettingInfo.noOpenTime1"
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="长期未开门天数设置二档(天)">
+              <a-input
+                style="width: 150px"
+                placeholder="长期未开门天数设置二档(天)"
+                v-model:value="fromSettingInfo.noOpenTime2"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              label="长期未开门天数设置三档(天)"
+              style="margin-left: 40px"
+            >
+              <a-input
+                style="width: 150px"
+                placeholder="长期未开门天数设置三档(天)"
+                v-model:value="fromSettingInfo.noOpenTime3"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              label="长期未开门天数设置四档(天)"
+              style="margin-left: 40px"
+            >
+              <a-input
+                style="width: 150px"
+                placeholder="长期未开门天数设置四档(天)"
+                v-model:value="fromSettingInfo.noOpenTime4"
+              ></a-input>
+            </a-form-item>
+            <a-divider>智慧安防小区预警配置</a-divider>
+            <a-form-item
+              label="多少天未开门"
+              style="margin-left: 60px; margin-bottom: 10px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="多少天未开门"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.noOpen"
+                ></a-input>
+                天
+              </div>
+            </a-form-item>
+            <a-form-item label="每日开门上限" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="每日开门上限"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.cardDayNum"
+                ></a-input>
+                次
+              </div>
+            </a-form-item>
+            <a-form-item label="每周开门上限" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="每周开门上限"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.weekOpenNum"
+                ></a-input>
+                次
+              </div>
+            </a-form-item>
+            <a-form-item label="单间周开门次数" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="单间周开门次数"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.houseWeekOpenNum"
+                ></a-input>
+                次
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="日访客数量"
+              style="margin-left: 75px; margin-bottom: 10px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="日访客数量"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.visitorDayNum"
+                ></a-input>
+                位
+              </div>
+            </a-form-item>
+            <a-form-item label="临时访客超时时间" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="临时访客超时时间"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.temporaryVisitorTime"
+                ></a-input>
+                <span style="width: 50px">小时</span>
+              </div>
+            </a-form-item>
+            <a-form-item label="长租房用户上限" style="margin-left: 0px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="长租房用户上限"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.longRentNum"
+                ></a-input>
+                人
+              </div>
+            </a-form-item>
+            <a-form-item label="公司用户上限" style="margin-left: 10px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="公司用户上限"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.companyNum"
+                ></a-input>
+                人
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="单个房屋用户上限"
+              style="margin-left: 30px; margin-bottom: 10px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="单个房屋用户上限"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.cardTotalNum"
+                ></a-input>
+                人
+              </div>
+            </a-form-item>
+            <a-form-item label="人脸不符次数" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="人脸不符次数"
+                  v-model:value="fromSettingInfo.faceUnknownNum"
+                  style="width: 150px"
+                ></a-input>
+                <span style="width: 75px">次/每周</span>
+              </div>
+            </a-form-item>
+            <a-form-item label="异地开门距离" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="异地开门距离"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.openRange"
+                ></a-input>
+                米
+              </div>
+            </a-form-item>
+            <a-form-item label="不同门连续刷卡间隔" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="不同门连续刷卡间隔"
+                  v-model:value="fromSettingInfo.diffTime"
+                ></a-input>
+                米
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="手机登录异常次数"
+              style="margin-left: 30px; margin-bottom: 10px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="天"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.changePhoneDay"
+                ></a-input>
+                天
+                <span
+                  style="
+                    margin-left: 20px;
+                    width: 200px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  更换
+                  <a-input
+                    v-model:value="fromSettingInfo.changePhoneNum"
+                    style="width: 150px"
+                  ></a-input>
+                  次
+                </span>
+              </div>
+            </a-form-item>
+            <a-form-item label="异常开门时间段" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-time-picker
+                  v-model:value="fromSettingInfo.abnormalStartTime"
+                  style="width: 150px"
+                  format="HH:mm"
+                  valueFormat="HH:mm"
+                />
+                <ArrowRightOutlined />
+                <a-time-picker
+                  v-model:value="fromSettingInfo.abnormalEndTime"
+                  style="width: 150px"
+                  format="HH:mm"
+                  valueFormat="HH:mm"
+                />
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="异常人脸"
+              style="margin-left: 85px; margin-bottom: 10px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  placeholder="天"
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.faceDay"
+                ></a-input>
+                天
+                <span
+                  style="
+                    margin-left: 20px;
+                    width: 200px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  进出
+                  <a-input
+                    v-model:value="fromSettingInfo.faceNum"
+                    style="width: 150px"
+                  ></a-input>
+                  次
+                </span>
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="房屋预警:网(用户每周更换手机登录app的次数，网约房判断依据)"
+              style="margin-left: 30px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.phoneWeekNum"
+                ></a-input>
+                台
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="房屋预警:黄（每周昼伏夜出的天数,涉黄判断依据）"
+              style="margin-left: 30px; margin-bottom: 10px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  v-model:value="fromSettingInfo.zfycWeekNum"
+                  style="width: 150px"
+                ></a-input>
+                天
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="房屋预警:诈（满足预警的连续周数）"
+              style="margin-left: 30px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  v-model:value="fromSettingInfo.cxWeekNum"
+                  style="width: 150px"
+                ></a-input>
+                周
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="房屋预警:诈（满足预警的时间段）"
+              style="margin-left: 30px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.cxTime"
+                ></a-input>
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="房屋预警：新(如果新增的用户来自这些区域，则产生一条房屋预警消息)"
+              style="margin-left: 30px; margin-bottom: 10px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.controlArea"
+                ></a-input>
+              </div>
+            </a-form-item>
+            <a-form-item label="周 开门频繁天数" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.lxKmpfDay"
+                ></a-input>
+                天
+              </div>
+            </a-form-item>
+            <a-form-item label="访客访问频繁" style="margin-left: 30px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.fkfwpfNum"
+                ></a-input>
+                次
+              </div>
+            </a-form-item>
+            <a-form-item
+              label="房屋预警:返(如果用户在最近一次开门之前连续天数内未开门，则产生一条房屋预警，协助疫情防控)"
+              style="margin-left: 30px"
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-input
+                  style="width: 150px"
+                  v-model:value="fromSettingInfo.goBackDay"
+                ></a-input>
+                天
+              </div>
+            </a-form-item>
+            <a-divider>其他配置</a-divider>
+            <a-form-item label="标准地址编号" style="margin-left: 50px">
+              <a-input
+                placeholder="标准地址编号"
+                style="width: 150px"
+                v-model:value="fromSettingInfo.qrCodeId"
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="备注" style="margin-left: 70px">
+              <a-input
+                placeholder="备注"
+                style="width: 150px"
+                v-model:value="fromSettingInfo.remark"
+              ></a-input>
+            </a-form-item>
+
+            <a-form-item
+              label="是否强制定位"
+              style="margin-left: 60px; margin-bottom: 10px"
+            >
+              <a-select
+                v-model:value="fromSettingInfo.openPosition"
+                :options="haveBuildingUserOptions"
+                style="width: 150px"
+              ></a-select>
+            </a-form-item>
+            <a-form-item label="是否有楼栋管理员" style="margin-left: 30px">
+              <a-select
+                v-model:value="fromSettingInfo.isHaveBuildingUser"
+                style="width: 150px"
+                :options="haveBuildingUserOptions"
+              ></a-select>
+            </a-form-item>
+          </a-row>
         </a-form>
       </div>
     </a-modal>
