@@ -9,6 +9,7 @@ import Account from './routerList/account.js'
 import EquipmentUse from './routerList/equipmentUse.js'
 import Operation from './routerList/operation.js'
 import Project from './routerList/project.js'
+import Agent from './routerList/agent.js'
 export const constantRoutes = [
   {
     path: '/login',
@@ -52,6 +53,7 @@ export const asyncRoutes = [
     ],
   },
   ...System,
+  ...Agent,
   // {
   //   path: '/community',
   //   component: Layout,

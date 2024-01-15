@@ -140,38 +140,6 @@ export function toEdit(data) {
     data,
   })
 }
-//获取省份
-export function getProvince(data) {
-  return request({
-    url: '/managerPC/address/getProvince',
-    method: 'post',
-    data,
-  })
-}
-//获取省份下面的城市
-export function getCity(data) {
-  return request({
-    url: '/managerPC/address/getCity',
-    method: 'post',
-    data,
-  })
-}
-//获取城市下面的区县
-export function getDistrict(data) {
-  return request({
-    url: '/managerPC/address/getDistrict',
-    method: 'post',
-    data,
-  })
-}
-//获取城市下面的街道
-export function getStreet(data) {
-  return request({
-    url: '/managerPC/address/getStreet',
-    method: 'post',
-    data,
-  })
-}
 
 //系统用户的用户列表接口
 export function getUserList(data) {
@@ -181,6 +149,7 @@ export function getUserList(data) {
     data,
   })
 }
+
 //系统用户的小区列表接口
 export function getVillageList(data) {
   return request({

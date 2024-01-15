@@ -72,7 +72,7 @@ instance.interceptors.request.use(
         config.headers['Content-Type'] = 'multipart/form-data'
       } else if (store.getters['user/accessToken']) {
         config.data = {
-          clientId: '111',
+          clientId: '62',
           os: 'pc',
           userId: '1',
           ...config.data,

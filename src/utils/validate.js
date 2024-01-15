@@ -79,7 +79,6 @@ export function isUpperCase(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否是大写字母开头
  * @param value
  * @returns {boolean}
@@ -90,7 +89,6 @@ export function isAlphabets(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否是字符串
  * @param value
  * @returns {boolean}
@@ -100,7 +98,6 @@ export function isString(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否是数组
  * @param arg
  * @returns {arg is any[]|boolean}
@@ -113,7 +110,6 @@ export function isArray(arg) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否是端口号
  * @param value
  * @returns {boolean}
@@ -125,18 +121,16 @@ export function isPort(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否是手机号
  * @param value
  * @returns {boolean}
  */
 export function isPhone(value) {
-  const reg = /^1\d{10}$/
+  const reg = /^1[3-9]\d{9}$/
   return reg.test(value)
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否是身份证号(第二代)
  * @param value
  * @returns {boolean}
@@ -146,9 +140,12 @@ export function isIdCard(value) {
     /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
   return reg.test(value)
 }
-
+export function checkMobile(value) {
+  const reg = /^1[3-9]\d{9}$/
+  const result = reg.test(value)
+  return result
+}
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否是邮箱
  * @param value
  * @returns {boolean}
@@ -159,7 +156,6 @@ export function isEmail(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否中文
  * @param value
  * @returns {boolean}
@@ -170,7 +166,6 @@ export function isChina(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否为空
  * @param value
  * @returns {boolean}
@@ -186,7 +181,6 @@ export function isBlank(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否为固话
  * @param value
  * @returns {boolean}
@@ -198,7 +192,6 @@ export function isTel(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否为数字且最多两位小数
  * @param value
  * @returns {boolean}
@@ -209,7 +202,6 @@ export function isNum(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断经度 -180.0～+180.0（整数部分为0～180，必须输入1到5位小数）
  * @param value
  * @returns {boolean}
@@ -220,7 +212,6 @@ export function isLongitude(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断纬度 -90.0～+90.0（整数部分为0～90，必须输入1到5位小数）
  * @param value
  * @returns {boolean}
@@ -231,7 +222,6 @@ export function isLatitude(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description rtsp校验，只要有rtsp://
  * @param value
  * @returns {boolean}
@@ -247,7 +237,6 @@ export function isRTSP(value) {
 }
 
 /**
- * @author chuzhixin 1204505056@qq.com
  * @description 判断是否为json
  * @param value
  * @returns {boolean}

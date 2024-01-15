@@ -47,6 +47,7 @@ export function useTableInit(opt = {}) {
         .then((res) => {
           dataSource.value = res.result.list
             ? res.result.list.map((item, index) => ({
+                ...item,
                 key: item.id,
                 No: index + 1, //序号字段
                 ...item,
@@ -58,7 +59,8 @@ export function useTableInit(opt = {}) {
                 key: item.id || index + 1,
                 ...item,
               }))
-          paginationInfo.total = res.result.page.totalResult
+          paginationInfo.total =
+            res.result.page?.totalResult || res.result.total
           if (res.result.provieceList) {
             const provinceArray = res.result.provieceList.map((item) => {
               return {
@@ -174,8 +176,16 @@ export function useTableInit(opt = {}) {
       messageContent('success', '删除表格项成功')
     }
   }
+  // 针对其他modal的提交
+  async function multipleSubmit(submitFun, submitObj, content, openModal) {
+    await submitFun(submitObj)
+    await getData(requestObj)
+    openModal.value = false
+    messageContent('success', content)
+  }
   return {
     getData,
+    multipleSubmit,
     multipleDel,
     requestObj,
     dataSource,
@@ -235,13 +245,12 @@ export function useInitFrom(opt = {}) {
     item.changeLoading = false
     modalRef.value.open()
   }
-  //使表单居中显示
   const formItemLayout = computed(() => {
     const layout = 'horizontal'
     return layout === 'horizontal'
       ? {
           labelCol: {
-            span: 10,
+            span: 24,
           },
           wrapperCol: {
             span: 16,
@@ -249,7 +258,6 @@ export function useInitFrom(opt = {}) {
         }
       : {}
   })
-
   const addOrEdit = async (submitState, onlyNameObj) => {
     let res = undefined
     if (opt.onlyName && typeof opt.onlyName == 'function' && onlyNameObj) {
@@ -303,8 +311,16 @@ export function useInitFrom(opt = {}) {
       await addOrEdit(submitState, onlyNameObj)
     }
   }
+  // 针对其他modal的提交
+  async function multipleSubmit(submitFun, submitObj, content, openModal) {
+    await submitFun(submitObj)
+    await opt.getData(opt.requestObj)
+    openModal.value = false
+    messageContent('success', content)
+  }
   return {
     submit,
+    multipleSubmit,
     titleValue,
     handleCreate,
     handleChange,

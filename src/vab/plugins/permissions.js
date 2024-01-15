@@ -30,6 +30,8 @@ router.beforeEach(async (to, from, next) => {
         store.getters['acl/role'].length > 0 ||
         store.getters['acl/ability'].length > 0
       if (hasRoles) {
+        console.log('空白页时，会显示吗？')
+        console.log(router.getRoutes())
         next()
       } else {
         try {
@@ -51,7 +53,7 @@ router.beforeEach(async (to, from, next) => {
           accessRoutes.forEach((item) => {
             router.addRoute(item)
           })
-
+          console.log(accessRoutes)
           next({ ...to, replace: true })
         } catch {
           await store.dispatch('user/resetAll')

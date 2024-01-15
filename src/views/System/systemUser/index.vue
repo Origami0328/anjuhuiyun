@@ -174,15 +174,7 @@
             </a-col>
           </template>
           <a-col class="gutter-row" :md="(!advanced && 4) || 4" :sm="24">
-            <div
-              style="
-                width: 150px;
-                display: flex;
-                margin-left: -10px;
-                justify-content: space-between;
-              "
-              :style="(advanced && { float: 'right' }) || {}"
-            >
+            <div style="width: 192px; display: flex">
               <a-space>
                 <a-button
                   @click="searchTableItem"
@@ -254,7 +246,9 @@
         :data-source="dataSource"
         :loading="tableLoading"
         style="width: 100%"
+        :pagination="paginationInfo"
         @resizeColumn="handleResizeColumn"
+        @change="handleTableChange"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'operation'">
@@ -290,7 +284,7 @@
                   : '正常'
                 : record.isAuth == '0'
                 ? '待审核'
-                : '审核失败'
+                : '异常'
             }}
           </template>
           <template v-else-if="column.dataIndex == 'isAuth'">
@@ -362,7 +356,7 @@
                   ></a-select>
                 </a-form-item>
               </a-col>
-              <a-col :md="6" :sm="2" v-if="editId != 0" :offset="3">
+              <a-col :md="6" :sm="2" :offset="editId == 0 ? 0 : 3">
                 <a-form-item label="审核状态" name="isAuth">
                   <a-select
                     placeholder="请选择审核状态"
@@ -372,7 +366,7 @@
                   ></a-select>
                 </a-form-item>
               </a-col>
-              <a-col :md="6" :sm="2">
+              <a-col :md="6" :sm="2" :offset="editId != 0 ? 0 : 3">
                 <a-form-item label="备注">
                   <a-input
                     placeholder="这里输入备注"
@@ -386,6 +380,7 @@
                 <a-form-item label="添加时间" name="time">
                   <a-input
                     v-model:value="formState.createdTime"
+                    style="width: 200px"
                     :disabled="true"
                   ></a-input>
                 </a-form-item>
@@ -399,12 +394,7 @@
                   ></a-input>
                 </a-form-item>
               </a-col>
-              <a-col
-                class="gutter-row"
-                :md="6"
-                :sm="2"
-                :offset="editId == '0' ? 3 : 0"
-              >
+              <a-col class="gutter-row" :md="6" :sm="2">
                 <a-form-item label="有效期" name="startTime">
                   <a-range-picker
                     v-model:value="startTimeAndEndTime"
@@ -462,70 +452,97 @@
                   ></a-input>
                 </a-form-item>
               </a-col>
-              <a-col class="gutter-row" :md="10" :sm="2" :offset="3">
-                <a-form-item label="身份证国徽面">
-                  <div style="display: flex">
-                    <div
-                      v-if="formState.identityGUrl != ''"
-                      style="position: relative"
-                    >
-                      <img
-                        :src="formState.identityGUrl"
-                        style="width: 100px; height: 100px"
-                      />
-                      <div class="imageDel" @click="delItemImage">
-                        <DeleteOutlined />
-                      </div>
-                    </div>
-                    <a-upload
-                      v-else
-                      accept="image/png, image/jpeg"
-                      list-type="picture-card"
-                      :maxCount="1"
-                      :beforeUpload="beforeUpload"
-                      :showUploadList="{
-                        showPreviewIcon: false,
-                        showRemoveIcon: true,
-                      }"
-                      v-model:file-list="formState.fileList"
-                    >
-                      <PlusOutlined style="font-size: 22px" />
-                    </a-upload>
-                  </div>
-                </a-form-item>
-              </a-col>
-              <a-col class="gutter-row" :md="10" :sm="2">
+              <a-col class="gutter-row" :md="10" :offset="3" :sm="2">
                 <a-form-item label="身份证人像面">
-                  <div style="display: flex">
+                  <div style="display: flex" v-if="editId != 0">
                     <div
                       v-if="formState.identityPUrl != ''"
                       style="position: relative"
                     >
                       <img
                         :src="formState.identityPUrl"
-                        style="width: 100px; height: 100px"
+                        @click="imgPreview('2')"
+                        style="width: 100px; height: 100px; cursor: pointer"
                       />
-                      <div class="imageDel" @click="delItemImage">
+                      <div class="imageDel" @click="delItemImage(2)">
                         <DeleteOutlined />
                       </div>
                     </div>
+                  </div>
+                  <div v-if="formState.identityPUrl == ''">
                     <a-upload
-                      v-else
-                      accept="image/png, image/jpeg"
+                      v-model:file-list="fileListP"
                       list-type="picture-card"
-                      :maxCount="1"
-                      :beforeUpload="beforeUpload"
+                      @preview="handlePreview"
+                      accept="image/png, image/jpeg,image/jpg"
+                      :customRequest="customRequest"
+                      :beforeUpload="beforeUploadP"
                       :showUploadList="{
-                        showPreviewIcon: false,
+                        showPreviewIcon: true,
                         showRemoveIcon: true,
                       }"
-                      v-model:file-list="formState.filePList"
                     >
-                      <PlusOutlined style="font-size: 22px" />
+                      <div v-if="fileListP.length < 1">
+                        <plus-outlined />
+                        <div style="margin-top: 8px">Upload</div>
+                      </div>
                     </a-upload>
                   </div>
                 </a-form-item>
               </a-col>
+              <a-col class="gutter-row" :md="10" :sm="2">
+                <a-form-item label="身份证国徽面">
+                  <div style="display: flex" v-if="editId != 0">
+                    <div
+                      v-if="formState.identityGUrl != ''"
+                      style="position: relative"
+                    >
+                      <img
+                        :src="formState.identityGUrl"
+                        @click="imgPreview('3')"
+                        style="width: 100px; height: 100px; cursor: pointer"
+                      />
+                      <div class="imageDel" @click="delItemImage(3)">
+                        <DeleteOutlined />
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="formState.identityGUrl == ''">
+                    <a-upload
+                      v-model:file-list="fileListG"
+                      list-type="picture-card"
+                      @preview="handlePreview"
+                      accept="image/png, image/jpeg,image/jpg"
+                      :beforeUpload="beforeUploadG"
+                      :showUploadList="{
+                        showPreviewIcon: true,
+                        showRemoveIcon: true,
+                      }"
+                    >
+                      <div v-if="fileListG.length < 1">
+                        <plus-outlined />
+                        <div style="margin-top: 8px">Upload</div>
+                      </div>
+                    </a-upload>
+                  </div>
+
+                  <a-modal
+                    :open="previewVisible"
+                    :title="previewTitle"
+                    :footer="null"
+                    @cancel="handleCancel"
+                  >
+                    <a-watermark content="安居慧云">
+                      <img
+                        alt="example"
+                        style="width: 100%"
+                        :src="previewImage"
+                      />
+                    </a-watermark>
+                  </a-modal>
+                </a-form-item>
+              </a-col>
+
               <!--              <a-col-->
               <!--                class="gutter-row"-->
               <!--                :md="6"-->
@@ -562,7 +579,6 @@
 
               <a-divider orientation="left">权限管理</a-divider>
 
-              <!--            <a-row :gutter="[48, 16]">-->
               <a-col class="gutter-row" :md="6" :sm="2" :offset="3">
                 <a-form-item label="角色分组" name="roleGroupId">
                   <a-select
@@ -955,9 +971,9 @@
   const { simpleRequest } = useSimpleRequest()
   import {
     SearchOutlined,
-    DeleteOutlined,
     DownOutlined,
     UpOutlined,
+    DeleteOutlined,
   } from '@ant-design/icons-vue'
   import {
     addU,
@@ -1011,6 +1027,7 @@
     formRoleGroup,
   } from './data'
   import { messageContent } from '@/utils/message'
+  import { getBase64 } from '@/utils'
   const { dataSource, tableLoading, requestObj } = useTableInit({
     tableObj: userListObj,
   })
@@ -1034,10 +1051,23 @@
   const openAdd = async () => {
     formState.identityGUrl = ''
     formState.identityPUrl = ''
+    formDistrictList.value = []
+    formPoDistrictList.value = []
+    formPoStreetList.value = []
+    formBuildingList.value = []
+    formCityList.value = []
+    formStreetList.value = []
+    formPoCityList.value = []
     editId.value = 0
     modalRef.value.open()
   }
-
+  const paginationInfo = reactive({
+    total: 20,
+    pageSize: 10,
+    current: 1,
+    showQuickJumper: true,
+    showSizeChanger: true,
+  })
   // 页面表格数据
   const getList = (tableObj) => {
     tableLoading.value = true
@@ -1115,6 +1145,7 @@
             label: item.groupName,
           }
         })
+        paginationInfo.total = res.result.page.totalResult
       })
       .finally(() => {
         tableLoading.value = false
@@ -1122,6 +1153,14 @@
   }
   getList(requestObj)
 
+  //分页的改变
+  function handleTableChange(pagination) {
+    paginationInfo.pageSize = pagination.pageSize
+    paginationInfo.current = pagination.current
+    requestObj.pageNum = pagination.current
+    requestObj.pageSize = pagination.pageSize
+    getList(requestObj)
+  }
   // 获取小区
   getVillageList().then((res) => {
     const village = res.result.map((item) => {
@@ -1155,6 +1194,9 @@
         requestObj[tableObjKey] = undefined
       }
     }
+    paginationInfo.current = 1
+    requestObj.pageNum = 1
+    requestObj.pageSize = 10
     getList(requestObj)
   }
 
@@ -1402,7 +1444,6 @@
     }
     nextTick(() => {
       let modalScroll = document.getElementById('modalScroll')
-      console.log(modalScroll)
       if (modalScroll) {
         // modalScroll.scrollTop = 0
         modalScroll.scrollTop = modalScroll.scrollHeight
@@ -1463,6 +1504,12 @@
     for (let tableObjKey in formState) {
       if (Array.isArray(formState[tableObjKey])) {
         formState[tableObjKey] = []
+      } else if (tableObjKey == 'isAuth' || tableObjKey == 'status') {
+        if (tableObjKey == 'isAuth') {
+          formState[tableObjKey] = '1'
+        } else {
+          formState[tableObjKey] = '0'
+        }
       } else {
         formState[tableObjKey] = undefined
       }
@@ -1474,18 +1521,45 @@
     transferBuildingTable.value = []
     // transferBuildingArray.value = []
     isMV.value = undefined
+    fileListG.value = []
+    fileListP.value = []
   }
   const addBuildingIds = (value) => {
     formState.buildingIds = value
   }
-  // const addBuildingId = (value) => {
-  //   formState.buildingId = value[value.length - 1]
-  // }
   //表单提交
   const submit = async () => {
     modalRef.value.showLoading()
     setBuildingArray = []
     const changeFun = editId.value == '0' ? addU : edit
+    // const formData = new FormData()
+    // for (let formStateKey in formState) {
+    //   if (formState[formStateKey] != undefined) {
+    //     if (formStateKey == 'villageIds') {
+    //       formData.append(
+    //         formStateKey,
+    //         Array.isArray(formState.villageIds)
+    //           ? formState.villageIds.join(',')
+    //           : formState.villageIds
+    //       )
+    //     } else if (formStateKey == 'buildingIds') {
+    //       formData.append(
+    //         formStateKey,
+    //         Array.isArray(formState.buildingIds)
+    //           ? formState.buildingIds.join(',')
+    //           : formState.buildingIds
+    //       )
+    //     } else if (formStateKey == 'photoSrc') {
+    //       formData.append(formStateKey, formState[formStateKey][0] || '')
+    //       formData.append(formStateKey, formState[formStateKey][1] || '')
+    //     } else {
+    //       console.log(formState)
+    //       formData.append(formStateKey, formState[formStateKey])
+    //     }
+    //   } else {
+    //     formData.append(formStateKey, '')
+    //   }
+    // }
     if (editId.value == '0') {
       formRef.value.validate().then(async () => {
         let res = await hasU({ username: formState.username })
@@ -1495,12 +1569,12 @@
         } else if (res.code == '200') {
           await changeFun({
             ...formState,
-            villageIds: Array.isArray(formState.villageIds)
-              ? formState.villageIds.join(',')
-              : formState.villageIds,
             buildingIds: Array.isArray(formState.buildingIds)
               ? formState.buildingIds.join(',')
               : formState.buildingIds,
+            villageIds: Array.isArray(formState.villageIds)
+              ? formState.villageIds.join(',')
+              : formState.villageIds,
           }).then((res) => {
             if (res.code == '200') {
               getList(requestObj)
@@ -1520,20 +1594,21 @@
         }
       })
     } else {
+      // console.log(formState.photoSrc)
+      // formData.append()
       await changeFun({
         ...formState,
-        villageIds: Array.isArray(formState.villageIds)
-          ? formState.villageIds.join(',')
-          : formState.villageIds,
         buildingIds: Array.isArray(formState.buildingIds)
           ? formState.buildingIds.join(',')
           : formState.buildingIds,
+        villageIds: Array.isArray(formState.villageIds)
+          ? formState.villageIds.join(',')
+          : formState.villageIds,
       }).then((res) => {
         if (res.code == '200') {
           getList(requestObj)
           modalRef.value.close()
           clearFormItem()
-
           messageContent('success', '表格项修改成功')
         } else if (res.code == '400') {
           messageContent('error', '输入项有误，请检查输入项')
@@ -1546,12 +1621,14 @@
       })
     }
     await modalRef.value.hideLoading()
+    startTimeAndEndTime.value = []
   }
   const close = () => {
     if (formRef.value) {
       formRef.value.clearValidate()
     }
     clearFormItem()
+    startTimeAndEndTime.value = []
     setBuildingArray = []
   }
   const delTableItem = async (record) => {
@@ -1564,7 +1641,24 @@
     formState.identityPUrl = ''
     editId.value = record.id
     record.changeLoading = true
-
+    let buildingList_ = []
+    let zjImageList = []
+    await toEdit({
+      id: record.id,
+      identityImage: '',
+    }).then((res) => {
+      buildingList_ = res.result.buildingList_
+      zjImageList = res.result.zjImageList
+    })
+    if (zjImageList.length != 0) {
+      zjImageList.forEach((item) => {
+        if (item.type == '2') {
+          formState.identityPUrl = item.originalImage
+        } else if (item.type == '3') {
+          formState.identityGUrl = item.originalImage
+        }
+      })
+    }
     await createRole(record.groupType, formState, false, false)
     await roleChange(record.roleId)
     for (let recordKey in record) {
@@ -1624,19 +1718,26 @@
           formState.buildingIds = completeArray
 
           if (transferBuildingTable.value.length === 0) {
-            await toEdit({
-              id: record.id,
-              identityImage: '',
-            }).then((res) => {
-              const buildingList_ = res.result.buildingList_
-              transferBuildingTable.value = buildingList_.map((item) => {
-                return {
-                  ...item,
-                  value: item.villageName,
-                  buildingValue: item.name,
-                }
-              })
+            transferBuildingTable.value = buildingList_.map((item) => {
+              return {
+                ...item,
+                value: item.villageName,
+                buildingValue: item.name,
+              }
             })
+            // await toEdit({
+            //   id: record.id,
+            //   identityImage: '',
+            // }).then((res) => {
+            //   const buildingList_ = res.result.buildingList_
+            //   transferBuildingTable.value = buildingList_.map((item) => {
+            //     return {
+            //       ...item,
+            //       value: item.villageName,
+            //       buildingValue: item.name,
+            //     }
+            //   })
+            // })
             // let buildingAddTable = []
             // formState.buildingIds.forEach((item) => {
             //   const ele = setBuildingArray.filter(
@@ -1811,12 +1912,52 @@
     formState.startTime = startTimeAndEndTime.value[0]
     formState.endTime = startTimeAndEndTime.value[1]
   }
-  const beforeUpload = (file) => {
-    formState.photoSrc = file
+  const beforeUploadG = (file) => {
+    getBase64(file).then((res) => {
+      formState.base64Img1 = res.replace(/.*;base64,/, '')
+    })
     return false
   }
-  const delItemImage = () => {
-    formState.identityGUrl = ''
+  const beforeUploadP = (file) => {
+    getBase64(file).then((res) => {
+      // console.log(res)
+      formState.base64Img2 = res.replace(/.*;base64,/, '')
+    })
+    return false
+  }
+  const previewVisible = ref(false)
+  const previewImage = ref('')
+  const previewTitle = ref('')
+  const fileListG = ref([])
+  const fileListP = ref([])
+  const handleCancel = () => {
+    previewVisible.value = false
+    previewTitle.value = ''
+  }
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj)
+    }
+    previewImage.value = file.url || file.preview
+    previewVisible.value = true
+    previewTitle.value =
+      file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
+  }
+  const delItemImage = (type) => {
+    if (type == '3') {
+      formState.identityGUrl = ''
+    } else {
+      formState.identityPUrl = ''
+    }
+  }
+  const imgPreview = (type) => {
+    previewVisible.value = true
+    previewTitle.value = type == 3 ? '国徽面' : '人像面'
+    previewImage.value =
+      type == 3 ? formState.identityGUrl : formState.identityPUrl
+  }
+  const customRequest = (data) => {
+    console.log(data.file)
   }
 </script>
 

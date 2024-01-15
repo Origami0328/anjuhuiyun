@@ -1,14 +1,19 @@
 <template>
   <div class="">
     <a-space direction="vertical">
-      <a-space>
-        <a-input placeholder="输入关键词" v-model:value="requestObj.searchName">
-          <template #prefix>
-            <SearchOutlined />
-          </template>
-        </a-input>
-
-        <a-space>
+      <a-row :gutter="[48, 16]">
+        <a-col :md="4" :sm="2">
+          <a-input
+            placeholder="输入关键词"
+            v-model:value="requestObj.searchName"
+            style="width: 150px"
+          >
+            <template #prefix>
+              <SearchOutlined />
+            </template>
+          </a-input>
+        </a-col>
+        <a-col :md="4" :sm="2">
           <a-select
             v-model:value="requestObj.provieceCode"
             placeholder="选择省份"
@@ -18,6 +23,8 @@
             :options="provinceList"
             @change="(value, options) => cityToStreet(value, options, 'city')"
           ></a-select>
+        </a-col>
+        <a-col :md="4" :sm="2">
           <a-select
             v-model:value="requestObj.cityCode"
             show-search
@@ -30,6 +37,8 @@
               (value, options) => cityToStreet(value, options, 'district')
             "
           ></a-select>
+        </a-col>
+        <a-col :md="4" :sm="2">
           <a-select
             v-model:value="requestObj.districtCode"
             show-search
@@ -39,6 +48,8 @@
             :filter-option="filterOption"
             @change="(value, options) => cityToStreet(value, options, 'street')"
           ></a-select>
+        </a-col>
+        <a-col :md="4" :sm="2">
           <a-select
             v-model:value="requestObj.streetCode"
             show-search
@@ -48,88 +59,141 @@
             :filter-option="filterOption"
             :not-found-content="null"
           ></a-select>
-        </a-space>
-      </a-space>
-      <a-space>
-        <a-select
-          v-model:value="requestObj.villageId"
-          style="width: 150px"
-          show-search
-          :filter-option="filterOption"
-          placeholder="选择小区"
-          :not-found-content="null"
-          :options="villageList"
-          @change="createBuilding"
-        ></a-select>
-        <a-select
-          v-model:value="requestObj.buildingId"
-          placeholder="请选择楼栋"
-          show-search
-          :filter-option="filterOption"
-          :options="buildingList"
-          style="width: 150px"
-          @change="createUnit"
-        ></a-select>
-        <a-select
-          v-model:value="requestObj.unitId"
-          placeholder="请选择单元"
-          show-search
-          :filter-option="filterOption"
-          style="width: 150px"
-          :options="unitList"
-        ></a-select>
-      </a-space>
-      <a-space>
-        <a-select
-          v-model:value="requestObj.poProvieceCode"
-          placeholder="请选择省厅"
-          show-search
-          :filter-option="filterOption"
-          style="width: 150px"
-          :options="poProvinceList"
-          @change="(value, options) => cityToStreet(value, options, 'city')"
-        ></a-select>
-        <a-select
-          v-model:value="requestObj.poCityCode"
-          placeholder="请选择市局"
-          show-search
-          :filter-option="filterOption"
-          style="width: 150px"
-          :options="poCityList"
-          @change="(value, options) => cityToStreet(value, options, 'district')"
-        ></a-select>
-        <a-select
-          v-model:value="requestObj.poDistrictCode"
-          placeholder="请选择分局"
-          show-search
-          :filter-option="filterOption"
-          style="width: 100%"
-          :options="poDistrictList"
-          @change="(value, options) => cityToStreet(value, options, 'street')"
-        ></a-select>
-        <a-select
-          v-model:value="requestObj.poStreetCode"
-          placeholder="请选择派出所"
-          show-search
-          :filter-option="filterOption"
-          style="width: 100%"
-          :options="poStreetList"
-        ></a-select>
-      </a-space>
-      <a-space>
-        <a-button type="primary" @click="searchTableItem">
-          <SearchOutlined />
-        </a-button>
-        <a-button
-          class="button"
-          type="primary"
-          @click="resetSearchObj"
-          style="width: 50px"
-        >
-          <template #icon><sync-outlined /></template>
-        </a-button>
-        <a-button type="primary" @click="handleCreate">新增</a-button>
+        </a-col>
+        <template v-if="advanced">
+          <a-col :md="4" :sm="2">
+            <a-select
+              v-model:value="requestObj.villageId"
+              style="width: 150px"
+              show-search
+              :filter-option="filterOption"
+              placeholder="选择小区"
+              :not-found-content="null"
+              :options="villageList"
+              @change="createBuilding"
+            ></a-select>
+          </a-col>
+          <a-col :md="4" :sm="2">
+            <a-select
+              v-model:value="requestObj.buildingId"
+              placeholder="请选择楼栋"
+              show-search
+              :filter-option="filterOption"
+              :options="buildingList"
+              style="width: 150px"
+              @change="createUnit"
+            ></a-select>
+          </a-col>
+          <a-col :md="4" :sm="2">
+            <a-select
+              v-model:value="requestObj.unitId"
+              placeholder="请选择单元"
+              show-search
+              :filter-option="filterOption"
+              style="width: 150px"
+              :options="unitList"
+            ></a-select>
+          </a-col>
+          <a-col :md="4" :sm="2">
+            <a-select
+              v-model:value="requestObj.poProvieceCode"
+              placeholder="请选择省厅"
+              show-search
+              :filter-option="filterOption"
+              style="width: 150px"
+              :options="poProvinceList"
+              @change="(value, options) => cityToStreet(value, options, 'city')"
+            ></a-select>
+          </a-col>
+          <a-col :md="4" :sm="2">
+            <a-select
+              v-model:value="requestObj.poCityCode"
+              placeholder="请选择市局"
+              show-search
+              :filter-option="filterOption"
+              style="width: 150px"
+              :options="poCityList"
+              @change="
+                (value, options) => cityToStreet(value, options, 'district')
+              "
+            ></a-select>
+          </a-col>
+          <a-col :md="4" :sm="2">
+            <a-select
+              v-model:value="requestObj.poDistrictCode"
+              placeholder="请选择分局"
+              show-search
+              :filter-option="filterOption"
+              style="width: 150px"
+              :options="poDistrictList"
+              @change="
+                (value, options) => cityToStreet(value, options, 'street')
+              "
+            ></a-select>
+          </a-col>
+          <a-col :md="4" :sm="2">
+            <a-select
+              v-model:value="requestObj.poStreetCode"
+              placeholder="请选择派出所"
+              show-search
+              :filter-option="filterOption"
+              style="width: 150px"
+              :options="poStreetList"
+            ></a-select>
+          </a-col>
+        </template>
+        <a-col class="gutter-row" :md="(!advanced && 4) || 4" :sm="24">
+          <div style="width: 192px; display: flex">
+            <a-space>
+              <a-button
+                @click="searchTableItem"
+                style="
+                  background-color: cornflowerblue;
+                  width: 60px;
+                  color: white;
+                "
+              >
+                搜索
+              </a-button>
+            </a-space>
+            <a-space>
+              <a-button
+                class="button"
+                @click="resetSearchObj"
+                style="
+                  background-color: cornflowerblue;
+                  width: 60px;
+                  color: white;
+                  margin-left: 10px;
+                "
+              >
+                重置
+              </a-button>
+            </a-space>
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+              "
+            >
+              <span @click="toggleAdvanced" style="width: 60px; color: #1890ff">
+                {{ advanced ? '收起' : '展开' }}
 
+                <span v-if="advanced">
+                  <UpOutlined style="color: #1890ff" />
+                </span>
+                <span v-else>
+                  <DownOutlined style="color: #1890ff" />
+                </span>
+              </span>
+            </div>
+          </div>
+        </a-col>
+      </a-row>
+      <a-space>
+        <a-button type="primary" @click="handleCreate">新增</a-button>
         <a-popconfirm
           title="确定要删除选中项吗?"
           ok-text="确定"
@@ -190,6 +254,7 @@
       ref="modalRef"
       @handleOk="submit"
       @closeModal="close"
+      :body-style="false"
     >
       <a-form
         :model="formState"
@@ -215,12 +280,14 @@
           <a-input
             v-model:value="formState.qrCodeId"
             placeholder="标准地址编号"
+            style="width: 200px"
           />
         </a-form-item>
         <a-form-item label="房屋类型">
           <a-select
             v-model:value="formState.houseType"
             placeholder="请选择房屋类型"
+            style="width: 200px"
             option-label-prop="children"
           >
             <a-select-option
@@ -236,6 +303,7 @@
         <a-form-item label="备注">
           <a-input
             v-model:value="formState.houseName"
+            style="width: 200px"
             placeholder="公司型房屋填写公司名称"
           />
         </a-form-item>
@@ -244,6 +312,7 @@
             v-model:value="formState.villageId"
             :filter-option="filterOption"
             placeholder="请选择小区"
+            style="width: 200px"
             show-search
             :options="formVillageList"
             @change="(value, options) => createBuilding(value, options, true)"
@@ -253,6 +322,7 @@
           <a-select
             v-model:value="formState.buildingId"
             :options="formBuildingList"
+            style="width: 200px"
             placeholder="请选择楼号"
             @change="(value, options) => createUnit(value, options, true)"
           />
@@ -262,6 +332,7 @@
             v-model:value="formState.unitId"
             :options="formUnitList"
             placeholder="请选择单元"
+            style="width: 200px"
           />
         </a-form-item>
       </a-form>
@@ -273,11 +344,12 @@
   import Modal from '@/components/Modal.vue'
   import {
     SearchOutlined,
-    SyncOutlined,
     DeleteOutlined,
+    UpOutlined,
+    DownOutlined,
   } from '@ant-design/icons-vue'
   import { useTableInit, useInitFrom } from '@/hooks/useTableComponent'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   import {
     addHouseList,
@@ -350,7 +422,6 @@
   const {
     handleCreate,
     modalRef,
-    formItemLayout,
     editId,
     formState,
     titleValue,
@@ -358,7 +429,19 @@
   } = useInitFrom({
     form,
   })
-
+  const formItemLayout = computed(() => {
+    const layout = 'horizontal'
+    return layout === 'horizontal'
+      ? {
+          labelCol: {
+            span: 8,
+          },
+          wrapperCol: {
+            span: 16,
+          },
+        }
+      : {}
+  })
   const cityList = ref([])
   const districtList = ref([])
   const streetList = ref([])
@@ -763,6 +846,10 @@
     if (formRef.value) {
       formRef.value.clearValidate()
     }
+  }
+  const advanced = ref(false)
+  const toggleAdvanced = () => {
+    advanced.value = !advanced.value
   }
 </script>
 

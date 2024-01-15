@@ -59,7 +59,8 @@ module.exports = {
     // 注释掉的地方是前端配置代理访问后端的示例
     proxy: {
       [baseURL]: {
-        target: `http://192.168.1.142`,
+        // target: `http://192.168.1.142`,
+        target: `http://192.168.1.172`,
         ws: true,
         changeOrigin: true,
         pathRewrite: {
@@ -121,14 +122,14 @@ module.exports = {
         .plugin('banner')
         .use(Webpack.BannerPlugin, [`${webpackBanner}${time}`])
         .end()
-      config.module
-        .rule('images')
-        .use('image-webpack-loader')
-        .loader('image-webpack-loader')
-        .options({
-          bypassOnDebug: true,
-        })
-        .end()
+      // config.module
+      //   .rule('images')
+      //   .use('image-webpack-loader')
+      //   .loader('image-webpack-loader')
+      //   .options({
+      //     bypassOnDebug: true,
+      //   })
+      //   .end()
     })
 
     if (build7z) {

@@ -1,15 +1,17 @@
 <template>
-  <a-layout-content class="vab-content">
-    <a-watermark :content="$store.state.user.username">
-      <router-view v-slot="{ Component }">
-        <transition mode="out-in" name="fade-transform">
-          <keep-alive>
-            <component :is="Component" />
-          </keep-alive>
-        </transition>
-      </router-view>
-    </a-watermark>
-  </a-layout-content>
+  <div>
+    <a-layout-content class="vab-content">
+      <a-watermark :content="$store.state.user.username">
+        <router-view v-slot="{ Component }">
+          <transition name="fade-transform">
+            <keep-alive>
+              <component :is="Component" />
+            </keep-alive>
+          </transition>
+        </router-view>
+      </a-watermark>
+    </a-layout-content>
+  </div>
 </template>
 
 <script>

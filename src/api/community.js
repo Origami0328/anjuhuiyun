@@ -267,6 +267,14 @@ export function getHouseList(data) {
     data,
   })
 }
+// 获取房号
+export function getHouse(data) {
+  return request({
+    url: '/managerPC/villageUnit/getHouse',
+    method: 'post',
+    data,
+  })
+}
 
 // 房屋下的验证房屋名唯一
 export function onlyHouseName(data) {

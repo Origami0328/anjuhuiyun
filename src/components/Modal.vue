@@ -10,9 +10,13 @@
       :footer="footer"
       :width="width"
       :maskClosable="false"
-      :bodyStyle="{
-        height: '65vh',
-      }"
+      :bodyStyle="
+        bodyStyle
+          ? {
+              height: '65vh',
+            }
+          : {}
+      "
       style="font-size: 20px"
     >
       <slot></slot>
@@ -35,6 +39,10 @@
     },
     width: {
       type: [Number, String],
+    },
+    bodyStyle: {
+      type: Boolean,
+      default: true,
     },
   })
   import { ref } from 'vue'

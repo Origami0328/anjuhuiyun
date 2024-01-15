@@ -68,7 +68,7 @@
         </template>
       </a-table>
     </div>
-    <a-modal v-model:open="open" :title="title">
+    <a-modal v-model:open="open" :title="title" :maskClosable="false">
       <a-form
         :model="formState"
         v-bind="formItemLayout"
@@ -82,6 +82,7 @@
             style="width: 150px"
           />
         </a-form-item>
+
         <a-form-item label="编码" name="code">
           <a-input
             v-model:value="formState.code"
@@ -89,10 +90,11 @@
             style="width: 150px"
           />
         </a-form-item>
+
         <a-form-item label="图标">
           <div style="display: flex">
             <div v-if="formState.imageUrl !== ''" style="position: relative">
-              <img
+              <a-image
                 :src="formState.imageUrl"
                 style="width: 100px; height: 100px"
               />
@@ -106,13 +108,17 @@
               list-type="picture-card"
               :maxCount="1"
               :beforeUpload="beforeUpload"
-              :showUploadList="{ showPreviewIcon: false, showRemoveIcon: true }"
+              :showUploadList="{
+                showPreviewIcon: false,
+                showRemoveIcon: true,
+              }"
               v-model:file-list="formState.fileList"
             >
               <PlusOutlined style="font-size: 22px" />
             </a-upload>
           </div>
         </a-form-item>
+
         <a-form-item label="排序" name="sort">
           <a-input-number
             v-model:value="formState.sort"
@@ -140,7 +146,7 @@
   const searchObj = {
     searchName: '',
   }
-  import { reactive, ref, toRaw } from 'vue'
+  import { computed, reactive, ref, toRaw } from 'vue'
   import {
     addVillageItem,
     delAllVillageItem,
@@ -149,7 +155,7 @@
     getvillageFunction,
   } from '@/api/community'
   import { messageContent } from '@/utils/message'
-  import { useInitFrom, useTableInit } from '@/hooks/useTableComponent'
+  import { useTableInit } from '@/hooks/useTableComponent'
   const {
     tableLoading,
     dataSource,
@@ -168,7 +174,19 @@
     delTableEle: delVillageItem,
     allDel: delAllVillageItem,
   })
-  const { formItemLayout } = useInitFrom({})
+  const formItemLayout = computed(() => {
+    const layout = 'horizontal'
+    return layout === 'horizontal'
+      ? {
+          labelCol: {
+            span: 8,
+          },
+          wrapperCol: {
+            span: 16,
+          },
+        }
+      : {}
+  })
   const columns = [
     {
       title: '编号',
