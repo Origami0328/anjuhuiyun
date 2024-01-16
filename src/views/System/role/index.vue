@@ -42,7 +42,7 @@
           <a-popconfirm
             title="确定删除该表格项吗?"
             ok-text="确认"
-            cancel-text="删除"
+            cancel-text="取消"
             @confirm="delRoleItem(record)"
           >
             <a-button type="link" :loading="record.delLoading">删除</a-button>

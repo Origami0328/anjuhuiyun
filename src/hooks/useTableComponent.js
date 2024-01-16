@@ -27,7 +27,7 @@ export function useTableInit(opt = {}) {
           requestObj[tableObjKey] = []
         } else if (tableObjKey == 'pageSize') {
           requestObj[tableObjKey] = 10
-        } else if (tableObjKey == 'pageNum') {
+        } else if (tableObjKey == 'pageNum' || tableObjKey == 'pageNo') {
           requestObj[tableObjKey] = 1
         } else {
           requestObj[tableObjKey] = undefined
@@ -123,6 +123,10 @@ export function useTableInit(opt = {}) {
     paginationInfo.current = pagination.current
     if ('pageNum' in requestObj) {
       requestObj.pageNum = pagination.current
+    }
+    // pageNo出现在代理商列表页面
+    if ('pageNo' in requestObj) {
+      requestObj.pageNo = pagination.current
     }
     if ('pageSize' in requestObj) {
       requestObj.pageSize = pagination.pageSize
@@ -293,6 +297,21 @@ export function useInitFrom(opt = {}) {
       messageContent('error', '名称已存在')
       modalRef.value.hideLoading()
       return
+    } else if (opt.addList.name == 'addAgent') {
+      //这个else if是一个补丁，专门针对于代理商页面的新增里面的级别不为1的情况，因为res.result不为0或1 所以有了该补丁
+      if (editId.value == '0') {
+        // 新增接口
+        await opt
+          .addList(submitState)
+          .then(() => {
+            modalRef.value.hideLoading()
+            modalRef.value.close()
+            messageContent('success', '新增表单项成功')
+          })
+          .catch(() => {
+            modalRef.value.hideLoading()
+          })
+      }
     }
     await opt.getData(opt.requestObj)
   }

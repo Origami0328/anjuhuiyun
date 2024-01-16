@@ -255,3 +255,19 @@ export function isJson(value) {
     }
   }
 }
+// 防抖函数
+export function debounce(func, wait) {
+  let timeout
+
+  return function (...args) {
+    const context = this
+
+    // 清除上一次的延时调用
+    clearTimeout(timeout)
+
+    // 设置新的延时调用
+    timeout = setTimeout(() => {
+      func.apply(context, args)
+    }, wait)
+  }
+}
