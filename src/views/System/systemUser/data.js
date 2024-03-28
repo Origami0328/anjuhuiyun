@@ -4,15 +4,11 @@ const columns = ref([
   {
     title: '序号',
     dataIndex: 'No',
-    width: '50px',
+    width: '60px',
   },
   {
     title: '用户名',
     dataIndex: 'username',
-  },
-  {
-    title: '真实姓名',
-    dataIndex: 'realName',
   },
   {
     title: '职位',
@@ -20,11 +16,11 @@ const columns = ref([
   },
   {
     title: '账号状态',
-    dataIndex: 'status',
+    dataIndex: 'isAuth',
   },
   {
-    title: '审核用户',
-    dataIndex: 'updateUser',
+    title: '添加时间',
+    dataIndex: 'createdTime',
   },
   {
     title: '操作',
@@ -50,19 +46,16 @@ const formState = reactive({
   status: '0',
   roleGroupId: null,
   roleId: null,
-  provieceCode: undefined,
   villageIds: undefined,
-  cityCode: undefined,
-  streetCode: undefined,
-  districtCode: undefined,
-  poProvieceCode: undefined,
+  roleGroupType: undefined,
+  poProvinceCode: undefined,
   poCityCode: undefined,
   poDistrictCode: undefined,
   poStreetCode: undefined,
   villageId: undefined,
   buildingIds: undefined,
   buildingId: undefined,
-  createdTime: undefined,
+  addTime: undefined,
   addUser: '',
   identityGUrl: '',
   identityPUrl: '',
@@ -104,11 +97,33 @@ const showStatisOptions = [
 const statusOptions = [
   {
     value: '0',
-    label: '正常',
+    label: '待审核',
   },
   {
     value: '1',
-    label: '异常',
+    label: '审核通过',
+  },
+  {
+    value: '2',
+    label: '审核未通过',
+  },
+  {
+    value: '3',
+    label: '账号异常',
+  },
+]
+const addStatusOptions = [
+  {
+    value: '0',
+    label: '待审核',
+  },
+  {
+    value: '1',
+    label: '审核通过',
+  },
+  {
+    value: '2',
+    label: '审核未通过',
   },
 ]
 const dateFormat = 'YYYY-MM-DD'
@@ -144,7 +159,7 @@ const streetList = ref([
   },
 ])
 // 省
-const provieceList = ref([
+const provinceList = ref([
   {
     value: '',
     label: '全部',
@@ -160,7 +175,7 @@ const villageList = ref([
   },
 ])
 //省厅
-const poProvieceList = ref([
+const poProvinceList = ref([
   {
     value: '',
     label: '全部',
@@ -198,16 +213,12 @@ const buildingList = ref([
 ])
 const userListObj = {
   searchName: '',
-  provieceCode: undefined,
-  cityCode: undefined,
-  districtCode: undefined,
-  streetCode: undefined,
   villageId: undefined,
-  poProvieceCode: undefined,
+  poProvinceCode: undefined,
   poCityCode: undefined,
   poDistrictCode: undefined,
   poStreetCode: undefined,
-  roleGroup: undefined,
+  roleGroupId: undefined,
   buildingId: undefined,
   roleId: undefined,
   isAuth: undefined,
@@ -216,14 +227,18 @@ const userListObj = {
 }
 const rules = {
   username: [{ required: true, message: '请输入用户名' }],
-  password: [{ required: true, message: '请输入密码' }],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    {
+      min: 6,
+      max: 12,
+      message: '密码长度6-12位',
+      trigger: 'blur',
+    },
+  ],
   roleGroupId: [{ required: true, message: '请选择角色分组' }],
   roleId: [{ required: true, message: '请选择角色' }],
-  provieceCode: [{ required: true, message: '请选择省份' }],
-  villageId: [{ required: true, message: '请选择小区' }],
-  villageIds: [{ required: true, message: '请选择小区' }],
-  cityCode: [{ required: true, message: '请选择城市' }],
-  poProvieceCode: [{ required: true, message: '请选择省厅' }],
+  poProvinceCode: [{ required: true, message: '请选择省厅' }],
   poCityCode: [{ required: true, message: '请选择市局' }],
   poDistrictCode: [{ required: true, message: '请选择分局' }],
   poStreetCode: [{ required: true, message: '请选择派出所' }],
@@ -235,77 +250,24 @@ const rules = {
   phone: [{ required: true, message: '请输入手机号' }],
   endTime: [{ required: true, message: '请选择结束时间' }],
   realName: [{ required: true, message: '请输入姓名' }],
-  status: [{ required: true, message: '请选择状态' }],
   isAuth: [{ required: true, message: '请选择审核状态' }],
 }
 const rulesEdit = {
   roleGroupId: [{ required: true, message: '请选择角色分组' }],
   roleId: [{ required: true, message: '请选择角色' }],
-  provieceCode: [{ required: true, message: '请选择省份' }],
-  villageId: [{ required: true, message: '请选择小区' }],
+  provinceCode: [{ required: true, message: '请选择省份' }],
   villageIds: [{ required: true, message: '请选择小区' }],
   cityCode: [{ required: true, message: '请选择城市' }],
-  poProvieceCode: [{ required: true, message: '请选择省厅' }],
-  poCityCode: [{ required: true, message: '请选择市局' }],
-  poDistrictCode: [{ required: true, message: '请选择分局' }],
   poStreetCode: [{ required: true, message: '请选择派出所' }],
   buildingIds: [{ required: true, message: '请选择楼栋' }],
   buildingId: [{ required: true, message: '请选择楼栋' }],
-  districtCode: [{ required: true, message: '请选择区县' }],
-  streetCode: [{ required: true, message: '请选择楼栋' }],
   startTime: [{ required: true, message: '请选择开始时间' }],
   phone: [{ required: true, message: '请输入手机号' }],
   endTime: [{ required: true, message: '请选择结束时间' }],
   realName: [{ required: true, message: '请输入姓名' }],
-  status: [{ required: true, message: '请选择状态' }],
   isAuth: [{ required: true, message: '请选择审核状态' }],
 }
-const formRoleGroup = [
-  {
-    value: '0',
-    label: '系统管理员',
-  },
-  {
-    value: '1',
-    label: '省份管理员',
-  },
-  {
-    value: '2',
-    label: '市级管理员',
-  },
-  {
-    value: '3',
-    label: '县级管理员',
-  },
-  {
-    value: '4',
-    label: '街道管理员',
-  },
-  {
-    value: '5',
-    label: '小区管理组',
-  },
-  {
-    value: '6',
-    label: '楼栋管理组',
-  },
-  {
-    value: '7',
-    label: '市局',
-  },
-  {
-    value: '9',
-    label: '分局',
-  },
-  {
-    value: '8',
-    label: '派出所',
-  },
-  {
-    value: '11',
-    label: '管理员',
-  },
-]
+let formRoleGroup = ref([])
 export {
   columns,
   formRef,
@@ -315,8 +277,8 @@ export {
   poStreetList,
   poCityList,
   formState,
-  poProvieceList,
-  provieceList,
+  poProvinceList,
+  provinceList,
   authList,
   streetList,
   dateFormat,
@@ -332,4 +294,5 @@ export {
   rulesEdit,
   formRoleGroup,
   showStatisOptions,
+  addStatusOptions,
 }

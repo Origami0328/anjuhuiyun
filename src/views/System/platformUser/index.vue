@@ -165,7 +165,11 @@
     </Modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'platformUser',
+  }
+</script>
 <script setup>
   import { computed, reactive, ref, toRaw } from 'vue'
   import Modal from '@/components/Modal.vue'

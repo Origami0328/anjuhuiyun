@@ -18,6 +18,7 @@
       :data-source="dataSource"
       :loading="tableLoading"
       :pagination="false"
+      bordered
     >
       <template v-slot:emptyText>
         <div style="text-align: center; padding: 20px; font-size: 30px">
@@ -53,62 +54,73 @@
     <Modal
       :title="titleValue"
       ref="modalRef"
+      width="70%"
       @handleOk="submit"
       @closeModal="clear"
     >
-      <a-form
-        :model="formState"
-        v-bind="formItemLayout"
-        :rules="rules"
-        ref="formRef"
+      <div
+        style="overflow: auto; overflow-x: hidden; height: 100%"
+        id="modalScroll"
       >
-        <a-form-item label="角色名称" name="name">
-          <a-input
-            v-model:value="formState.name"
-            placeholder="请输入角色名称"
-          />
-        </a-form-item>
-        <a-form-item label="角色类型">
-          <a-select
-            v-model:value="formState.type"
-            :disabled="disabled"
-            :options="typeOptions"
-            placeholder="请输入角色类型"
-          />
-        </a-form-item>
-        <a-form-item label="分组" name="groupId">
-          <a-select
-            v-model:value="formState.groupId"
-            style="width: 200px"
-            :disabled="disabled"
-            :options="selectOptions"
-            placeholder="请选择分组"
-          ></a-select>
-        </a-form-item>
-        <a-form-item label="排序" name="sort">
-          <a-input-number
-            v-model:value="formState.sort"
-            placeholder="排序越小越靠前"
-            :min="1"
-            style="width: 200px"
-          />
-        </a-form-item>
-        <a-form-item label="菜单权限">
-          <a-tree
-            show-line
-            v-model:expandedKeys="expandedKeys"
-            v-model:checkedKeys="formState.checkedKeys"
-            checkable
-            v-if="treeData.length > 0"
-            :defaultExpandAll="false"
-            :tree-data="treeData"
-            @check="onCheck"
-          />
-        </a-form-item>
-      </a-form>
+        <a-form
+          :model="formState"
+          v-bind="formItemLayout"
+          :rules="rules"
+          ref="formRef"
+        >
+          <a-form-item label="角色名称" name="name">
+            <a-input
+              v-model:value="formState.name"
+              placeholder="请输入角色名称"
+            />
+          </a-form-item>
+          <a-form-item label="角色类型">
+            <a-select
+              v-model:value="formState.type"
+              :disabled="disabled"
+              :options="typeOptions"
+              placeholder="请输入角色类型"
+            />
+          </a-form-item>
+          <a-form-item label="分组" name="groupId">
+            <a-select
+              v-model:value="formState.groupId"
+              style="width: 200px"
+              :disabled="disabled"
+              :options="selectOptions"
+              placeholder="请选择分组"
+            ></a-select>
+          </a-form-item>
+          <a-form-item label="排序" name="sort">
+            <a-input-number
+              v-model:value="formState.sort"
+              placeholder="排序越小越靠前"
+              :min="1"
+              style="width: 200px"
+            />
+          </a-form-item>
+          <a-form-item label="菜单权限">
+            <a-tree
+              show-line
+              v-model:expandedKeys="expandedKeys"
+              v-model:checkedKeys="formState.checkedKeys"
+              checkable
+              v-if="treeData.length > 0"
+              :defaultExpandAll="false"
+              :tree-data="treeData"
+              @check="onCheck"
+            />
+          </a-form-item>
+        </a-form>
+      </div>
     </Modal>
   </div>
 </template>
+<script>
+  export default {
+    name: 'role',
+  }
+</script>
 <script setup>
   import { PlusOutlined } from '@ant-design/icons-vue'
   import { message } from 'ant-design-vue'
@@ -122,8 +134,10 @@
     saveRoleRight,
     getRoleRight,
     delRole,
+    // getRole,
+    // getRoleInfo,
   } from '@/api/system'
-  import { reactive, ref, toRaw } from 'vue'
+  import { computed, reactive, ref, toRaw } from 'vue'
   // import { generateUniqueValue } from '@/utils/uniqueKey'
   import { useStore } from 'vuex'
   const store = useStore()
@@ -175,13 +189,26 @@
   }
   getUserMenuList(menuObj)
 
-  const { titleValue, modalRef, editId, formItemLayout } = useInitFrom()
+  const { titleValue, modalRef, editId } = useInitFrom()
   const formState = reactive({
     groupId: undefined,
     sort: '',
     name: '',
     type: undefined,
     checkedKeys: [],
+  })
+  const formItemLayout = computed(() => {
+    const layout = 'horizontal'
+    return layout === 'horizontal'
+      ? {
+          labelCol: {
+            span: 6,
+          },
+          wrapperCol: {
+            span: 16,
+          },
+        }
+      : {}
   })
   const disabled = ref(false)
   const treeData = ref([])
@@ -276,32 +303,13 @@
     await getAllMenu({ roleId: store.getters['user/roleId'] }).then((res) => {
       let treeDataValue = []
       treeDataValue = transformArray(res.result)
-      // for (let k in res.result.menu) {
-      //   // console.log('属性名为',k)
-      //   const obj = {}
-      //   obj.rightName = k
-      //   obj.child = []
-      //   obj.rightId = generateUniqueValue()
-      //   obj.disableCheckbox = true
-      //   for (let j in res.result.menu[k]) {
-      //     // console.log('第二级的属性为',j)
-      //     const secObj = {}
-      //     secObj.rightName = j
-      //     secObj.child = res.result.menu[k][j]
-      //     console.log(res.result.menu[k][j])
-      //     secObj.rightId = generateUniqueValue()
-      //     // expandedKeys.value.push(secObj.rightId)
-      //     secObj.disableCheckbox = true
-      //     obj.child.push(secObj)
-      //   }
-      //   treeDataValue.push(obj)
-      // }
+      console.log(treeDataValue)
       treeData.value = treeDataValue
     })
     await getGroup().then((res) => {
       selectOptions.value = res.result?.map((item) => ({
-        label: item.groupName,
-        value: item.groupId,
+        label: item.name,
+        value: item.id,
       }))
     })
   }
@@ -329,11 +337,20 @@
     if (formRef.value) {
       formRef.value.clearValidate()
     }
+    // await getRoleInfo({
+    //   groupId: record.groupId,
+    // }).then((res) => {
+    //   const { result } = res
+    //   formState.type = result.type
+    //   formState.name = result.name
+    //   formState.sort = result.sort
+    //   formState.groupId = result.groupId
+    // })
     record.loading = true
     disabled.value = true
     editId.value = 12
     await getAllmenuAndGroup()
-    record.groupId = Number(record.groupId)
+    // record.groupId = Number(record.groupId)
     //填充表单的内容，菜单权限暂时清空
     for (let formStateKey in formState) {
       if (formStateKey == 'checkedKeys') {

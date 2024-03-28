@@ -640,6 +640,11 @@
     </a-modal>
   </div>
 </template>
+<script>
+  export default {
+    name: 'masterAccount',
+  }
+</script>
 <script setup>
   import Modal from '@/components/Modal.vue'
   import { useInitFrom, useTableInit } from '@/hooks/useTableComponent'

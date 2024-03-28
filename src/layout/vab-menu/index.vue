@@ -38,10 +38,13 @@
       if (showChildren.length === 0) {
         this.menuComponent = 'MenuItem'
         this.routeChildren = this.item
-      } else if (showChildren.length === 1 && this.item.alwaysShow !== true) {
-        this.menuComponent = 'MenuItem'
-        this.routeChildren = showChildren[0]
-      } else {
+        // console.log(this.routeChildren)
+      }
+      // } else if (showChildren.length === 1) {
+      //   this.menuComponent = 'MenuItem'
+      //   this.routeChildren = showChildren[0]
+      // }
+      else {
         this.menuComponent = 'Submenu'
       }
     },

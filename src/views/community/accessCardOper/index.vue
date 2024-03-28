@@ -15,7 +15,11 @@
     <a-table :data-source="dataSource"></a-table>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'accessCardOper',
+  }
+</script>
 <script setup>
   import { reactive } from 'vue'
   import { SearchOutlined } from '@ant-design/icons-vue'

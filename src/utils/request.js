@@ -34,7 +34,7 @@ const handleCode = async (code, msg) => {
     case 501:
       await store.dispatch('user/logout').catch(() => {})
       await router.push('/login')
-      messageContent('error', 'token过期了，请重新登录')
+      // messageContent('error', 'token过期了，请重新登录')
       break
     default:
       messageContent('error', msg || `后端接口${code}异常`)
@@ -97,7 +97,7 @@ instance.interceptors.response.use(
   (response) => {
     if (loadingInstance) loadingInstance.close()
 
-    const { data, config } = response
+    const { data } = response
     const { code, desc } = data
     // 操作正常Code数组
     const codeVerificationArray = isArray(successCode)
@@ -107,11 +107,11 @@ instance.interceptors.response.use(
     if (codeVerificationArray.includes(Number(code))) {
       return data
     } else {
-      handleCode(Number(code), desc).then(() => {})
-      return Promise.reject(
-        '请求异常拦截:' + JSON.stringify({ url: config.url, code, desc }) ||
-          'Error'
-      )
+      if (code) {
+        handleCode(Number(code), desc).then(() => {})
+      }
+
+      return Promise.reject(response.data)
     }
   },
   (error) => {

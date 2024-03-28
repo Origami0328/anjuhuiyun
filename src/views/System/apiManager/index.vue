@@ -12,6 +12,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="tableLoading"
+      bordered
     >
       <template v-slot:emptyText>
         <div style="text-align: center; padding: 20px; font-size: 30px">
@@ -88,7 +89,11 @@
     </Modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'apiManager',
+  }
+</script>
 <script setup>
   import { PlusOutlined } from '@ant-design/icons-vue'
   import { addApi, delApi, getApi } from '@/api/system'

@@ -4,7 +4,6 @@ const Account = [
     path: '/account',
     component: Layout,
     redirect: '/account/alipay',
-    alwaysShow: true,
     meta: {
       title: '账户管理',
       icon: 'account-box-line',

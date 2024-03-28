@@ -339,7 +339,11 @@
     </Modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'house',
+  }
+</script>
 <script setup>
   import Modal from '@/components/Modal.vue'
   import {
@@ -823,11 +827,14 @@
         })
         .finally(() => {
           modalRef.value.hideLoading()
+          modalRef.value.disabledCancelFalse()
         })
     } else {
-      await addOrEdit()
+      await addOrEdit().finally(() => {
+        modalRef.value.hideLoading()
+        modalRef.value.disabledCancelFalse()
+      })
       modalRef.value.close()
-      modalRef.value.hideLoading()
       messageContent('success', '修改表单项成功')
     }
   }

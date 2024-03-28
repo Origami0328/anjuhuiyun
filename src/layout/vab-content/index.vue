@@ -4,7 +4,7 @@
       <a-watermark :content="$store.state.user.username">
         <router-view v-slot="{ Component }">
           <transition name="fade-transform">
-            <keep-alive>
+            <keep-alive :include="returnList">
               <component :is="Component" />
             </keep-alive>
           </transition>
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
   export default {
     name: 'VabContent',
     watch: {
@@ -26,6 +28,11 @@
         },
         immediate: true,
       },
+    },
+    computed: {
+      ...mapGetters({
+        returnList: 'keepComponent/returnList',
+      }),
     },
   }
 </script>

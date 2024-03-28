@@ -12,7 +12,7 @@ const System = [
     children: [
       {
         path: 'role',
-        name: 'Role',
+        name: '角色管理',
         component: () => import('@/views/System/role'),
         meta: {
           title: '角色管理',
@@ -21,7 +21,7 @@ const System = [
       },
       {
         path: 'platformUser',
-        name: 'PlatformUser',
+        name: '平台用户',
         component: () => import('@/views/System/platformUser'),
         meta: {
           title: '平台用户',
@@ -30,7 +30,7 @@ const System = [
       },
       {
         path: 'systemUser',
-        name: 'SystemUser',
+        name: '系统用户',
         component: () => import('@/views/System/systemUser'),
         meta: {
           title: '系统用户',
@@ -39,7 +39,7 @@ const System = [
       },
       {
         path: 'menuManager',
-        name: 'MenuManager',
+        name: '菜单管理',
         component: () => import('@/views/System/menuManager'),
         meta: {
           title: '菜单管理',
@@ -47,8 +47,8 @@ const System = [
         },
       },
       {
-        path: 'api',
-        name: 'Api',
+        path: 'apiManager',
+        name: 'api管理',
         component: () => import('@/views/System/apiManager'),
         meta: {
           title: 'api管理',
@@ -57,7 +57,7 @@ const System = [
       },
       {
         path: 'testAccount',
-        name: 'TestAccount',
+        name: '测试账号管理',
         component: () => import('@/views/System/testAccount'),
         meta: {
           title: '测试账号管理',
@@ -66,7 +66,7 @@ const System = [
       },
       {
         path: 'type',
-        name: 'Type',
+        name: '类型管理',
         component: () => import('@/views/System/type'),
         meta: {
           title: '类型管理',
@@ -75,7 +75,7 @@ const System = [
       },
       {
         path: 'openPush',
-        name: 'OpenPush',
+        name: '小兔开门推送',
         component: () => import('@/views/System/openPush'),
         meta: {
           title: '小兔开门推送',
@@ -84,7 +84,7 @@ const System = [
       },
       {
         path: 'closePush',
-        name: 'ClosePush',
+        name: '小兔关门推送',
         component: () => import('@/views/System/closePush'),
         meta: {
           title: '小兔关门推送',
@@ -93,7 +93,7 @@ const System = [
       },
       {
         path: 'policeDistrict',
-        name: 'PoliceDistrict',
+        name: '警区编码',
         component: () => import('@/views/System/policeDistrict'),
         meta: {
           title: '警区编码',
@@ -102,7 +102,7 @@ const System = [
       },
       {
         path: 'whiteList',
-        name: 'WhiteList',
+        name: '白名单',
         component: () => import('@/views/System/whiteList'),
         meta: {
           title: '白名单',

@@ -9,20 +9,28 @@ import {
   setAccessToken,
 } from '@/utils/accessToken'
 import { message } from 'ant-design-vue'
+import { convertRouter, filterRoutes } from '@/utils/routes'
+import { asyncRoutes, constantRoutes } from '@/router'
 const state = () => ({
   accessToken: getAccessToken(),
   username: '',
   avatar: '',
   menu: [],
   roleId: '',
+  routes: [],
 })
 const getters = {
   accessToken: (state) => state.accessToken,
   username: (state) => state.username,
   avatar: (state) => state.avatar,
   roleId: (state) => state.roleId,
+  menu: (state) => state.menu,
+  routes: (state) => state.routes,
 }
 const mutations = {
+  setRoutes(state, routes) {
+    state.routes = routes
+  },
   /**
 
    * @description 设置accessToken
@@ -30,12 +38,10 @@ const mutations = {
    * @param {*} accessToken
    */
   setAccessToken(state, accessToken) {
-    console.log(accessToken)
     state.accessToken = accessToken
     setAccessToken(accessToken)
   },
   /**
-   * @author chuzhixin 1204505056@qq.com
    * @description 设置用户名
    * @param {*} state
    * @param {*} username
@@ -111,7 +117,6 @@ const actions = {
       return false
     }
     let { systemUserPd, menu } = data.result
-    console.log(menu, systemUserPd)
     // if (username && roles && Array.isArray(roles)) {
     //   dispatch('acl/setRole', roles, { root: true })
     //   if (ability && ability.length > 0)
@@ -123,11 +128,32 @@ const actions = {
     // }
 
     dispatch('acl/setFull', true, { root: true })
-    commit('setAvatar', 'https://i.gtimg.cn/club/item/face/img/2/15922_100.gif')
     commit('setUsername', systemUserPd.username)
     commit('setRoleId', systemUserPd.roleId)
-  },
 
+    // 未验证
+    commit('setMenu', menu)
+  },
+  /**
+   * @description all模式设置路由
+   * @param {*} { commit }
+   * @returns
+   */
+  async setAllRoutes({ commit, getters }) {
+    let res = getters.menu
+    const data = res || []
+    // if (data[data.length - 1].path !== '*')
+    //   data.push({ path: '*', redirect: '/404', hidden: true })
+    let newAsyncRoutes = await convertRouter(data)
+    const finallyRoutes = filterRoutes([
+      ...constantRoutes,
+      ...asyncRoutes,
+      ...newAsyncRoutes,
+    ])
+    // const finallyRoutes = filterRoutes([...constantRoutes, ...data])
+    commit('setRoutes', finallyRoutes)
+    return [...finallyRoutes]
+  },
   /**
    * @description 退出登录
    * @param {*} { dispatch }
@@ -135,6 +161,7 @@ const actions = {
   async logout({ dispatch }) {
     // await logout(state.accessToken)
     await dispatch('resetAll')
+    // await store.commit('keepComponent/removeAllKeepAliveList')
   },
   /**
    * @description 重置accessToken、roles、ability、router等

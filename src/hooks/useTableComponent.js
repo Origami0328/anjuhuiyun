@@ -45,11 +45,19 @@ export function useTableInit(opt = {}) {
       opt
         .getTableList(tableObj)
         .then((res) => {
+          paginationInfo.total =
+            res.result.page?.totalResult ||
+            // res.result.page?.showCount ||
+            res.result.total
           dataSource.value = res.result.list
             ? res.result.list.map((item, index) => ({
                 ...item,
                 key: item.id,
-                No: index + 1, //序号字段
+                // No: index + 1, //序号字段
+                No:
+                  paginationInfo.pageSize * (paginationInfo.current - 1) +
+                  index +
+                  1,
                 ...item,
                 delLoading: false,
                 changeLoading: false,
@@ -59,8 +67,7 @@ export function useTableInit(opt = {}) {
                 key: item.id || index + 1,
                 ...item,
               }))
-          paginationInfo.total =
-            res.result.page?.totalResult || res.result.total
+
           if (res.result.provieceList) {
             const provinceArray = res.result.provieceList.map((item) => {
               return {
@@ -135,17 +142,27 @@ export function useTableInit(opt = {}) {
   }
   // 搜索
   function searchTableItem() {
+    console.log(requestObj)
+    if ('timeArr' in requestObj) {
+      requestObj.startTime = requestObj.timeArr[0]
+      requestObj.endTime = requestObj.timeArr[1]
+      delete requestObj.timeArr
+    }
     getData({
       ...requestObj,
     })
   }
   //删除
   async function delTableItem(record) {
+    console.log(dataSource)
     record.delLoading = true
     const itemId = record.id
     let res = await opt.delTableEle({ id: itemId })
     if (res.result && res.result == '0') {
       record.delLoading = false
+      if (dataSource.value.length == 1 && paginationInfo.current > 1) {
+        requestObj.pageNum-- || requestObj.pageNo--
+      }
       await getData(requestObj)
       messageContent('success', '删除表单项成功')
     } else if (res.result && res.result == '1') {
@@ -153,6 +170,9 @@ export function useTableInit(opt = {}) {
       messageContent('error', '删除失败，可能该小区还有楼栋/房屋/单元关联')
     } else {
       record.delLoading = false
+      if (dataSource.value.length == 1 && paginationInfo.current > 1) {
+        requestObj.pageNum-- || requestObj.pageNo--
+      }
       await getData(requestObj)
       messageContent('success', '删除表单项成功')
     }
@@ -277,8 +297,9 @@ export function useInitFrom(opt = {}) {
             modalRef.value.close()
             messageContent('success', '新增表单项成功')
           })
-          .catch(() => {
+          .catch((err) => {
             modalRef.value.hideLoading()
+            return Promise.reject(err)
           })
       } else {
         // 修改接口
@@ -320,9 +341,16 @@ export function useInitFrom(opt = {}) {
     if (editId.value == '0') {
       formRef.value
         .validate()
-        .then(async () => {
-          await addOrEdit(submitState, onlyNameObj)
-        })
+        .then(
+          async () => {
+            await addOrEdit(submitState, onlyNameObj)
+          },
+          (err) => {
+            console.log(err)
+            messageContent('error', '信息填写不完善，请您完善信息后提交')
+          }
+        )
+        .catch(() => {})
         .finally(() => {
           modalRef.value.hideLoading()
         })

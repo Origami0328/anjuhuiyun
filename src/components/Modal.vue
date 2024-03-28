@@ -3,10 +3,12 @@
     <a-modal
       v-model:open="visible"
       :title="title"
+      :closable="false"
       :confirm-loading="confirmLoading"
       :okText="okText"
       @ok="handleOk"
       @cancel="closeModal"
+      :cancel-button-props="{ disabled: disabledCancelButton }"
       :footer="footer"
       :width="width"
       :maskClosable="false"
@@ -46,12 +48,14 @@
     },
   })
   import { ref } from 'vue'
-  // import { useRouter } from 'vue-router'
-  // import { useStore } from 'vuex'
-
-  // const router = useRouter()
   const visible = ref(false)
-  // const store = useStore()
+  const disabledCancelButton = ref(false)
+  const disabledCancelTrue = () => {
+    disabledCancelButton.value = true
+  }
+  const disabledCancelFalse = () => {
+    disabledCancelButton.value = false
+  }
   const confirmLoading = ref(false)
   const showLoading = () => {
     confirmLoading.value = true
@@ -61,15 +65,18 @@
   }
   const emit = defineEmits(['handleOk', 'closeModal'])
   const handleOk = () => {
+    disabledCancelTrue()
     emit('handleOk')
   }
   const open = () => {
     visible.value = true
   }
   const close = () => {
+    disabledCancelFalse()
     visible.value = false
   }
   const closeModal = () => {
+    disabledCancelFalse()
     emit('closeModal')
   }
   defineExpose({
@@ -77,6 +84,8 @@
     close,
     showLoading,
     hideLoading,
+    disabledCancelTrue,
+    disabledCancelFalse,
   })
 </script>
 

@@ -1,6 +1,11 @@
 <template>
   <div class="vab-logo">
-    <vab-icon v-if="logo" :icon="logo"></vab-icon>
+    <!--    <vab-icon v-if="logo" :icon="logo"></vab-icon>-->
+    <img
+      src="../../assets/favicon.png"
+      alt=""
+      style="width: 30px; height: 30px"
+    />
     <span class="anticon"></span>
     <span>{{ title }}</span>
   </div>
@@ -8,12 +13,12 @@
 
 <script>
   import { computed } from 'vue'
-  import VabIcon from '@/layout/vab-icon'
+  // import VabIcon from '@/layout/vab-icon'
   import { useStore } from 'vuex'
 
   export default {
     name: 'VabLogo',
-    components: { VabIcon },
+    // components: { VabIcon },
     setup() {
       const store = useStore()
       return {

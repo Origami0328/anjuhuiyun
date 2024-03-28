@@ -18,7 +18,7 @@ export function getAllMenu(data) {
 // 获取角色管理的新增角色的分组
 export function getGroup(data) {
   return request({
-    url: '/managerPC/systemRole/getGroup',
+    url: '/managerPC/user/getGroup',
     method: 'post',
     data,
   })
@@ -27,6 +27,14 @@ export function getGroup(data) {
 export function addRole(data) {
   return request({
     url: '/managerPC/systemRole/addRole',
+    method: 'post',
+    data,
+  })
+}
+// 角色管理的查询分组角色
+export function getRoleInfo(data) {
+  return request({
+    url: '/managerPC/systemRole/getRole',
     method: 'post',
     data,
   })
@@ -118,7 +126,7 @@ export function delApi(data) {
 //系统用户的获取角色权限组
 export function getRoleGroup(data) {
   return request({
-    url: '/managerPC/user/toAdd',
+    url: '/managerPC/user/getGroup',
     method: 'post',
     data,
   })
@@ -153,7 +161,7 @@ export function getUserList(data) {
 //系统用户的小区列表接口
 export function getVillageList(data) {
   return request({
-    url: '/managerPC/user/getVillage',
+    url: '/managerPC/village/getVillage',
     method: 'post',
     data,
   })
@@ -166,7 +174,7 @@ export function getCityDic(data) {
     data,
   })
 }
-//系统用户的获取地区/省厅等
+// //系统用户的获取地区/省厅等
 export function getDictionary(data) {
   return request({
     url: '/managerPC/dic/getCity',
@@ -177,7 +185,7 @@ export function getDictionary(data) {
 //系统用户的获取楼栋
 export function getBuilding(data) {
   return request({
-    url: '/managerPC/user/getBuilding',
+    url: '/managerPC/villageBuilding/getBuilding',
     method: 'post',
     data,
   })

@@ -298,7 +298,11 @@
     </Modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'unit',
+  }
+</script>
 <script setup>
   import {
     SearchOutlined,
@@ -505,7 +509,9 @@
       buildingId: submitState.buildingId,
       onlyId: submitState.id ? submitState.id : undefined,
     }
-    submit(submitState, onlyNameObj)
+    submit(submitState, onlyNameObj).finally(() => {
+      modalRef.value.disabledCancelFalse()
+    })
   }
   const cityToStreet = (value, options, type, isForm = false) => {
     let changeList

@@ -1,7 +1,10 @@
 <template>
   <a-menu-item :key="routeChildren.path" @click.capture="handleLink">
     <span class="anticon">
-      <vab-icon :icon="routeChildren.meta.icon"></vab-icon>
+      <vab-icon
+        :icon="routeChildren.meta.icon"
+        v-if="routeChildren.meta.icon"
+      ></vab-icon>
     </span>
     <span>{{ routeChildren.meta.title }}</span>
   </a-menu-item>
@@ -25,7 +28,9 @@
         default: () => null,
       },
     },
+
     methods: {
+      // ...mapMutations(['keepComponent/addKeepALiveList']),
       handleLink() {
         const routePath = this.routeChildren.fullPath
         const target = this.routeChildren.meta.target

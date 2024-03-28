@@ -6,9 +6,9 @@
         <div class="login-container-form">
           <div class="login-container-hello">hello!</div>
           <div class="login-container-title">欢迎来到 {{ title }}</div>
-          <a-form :model="form" @submit.prevent="showVaptcha">
+          <a-form :model="form" @submit.prevent="handleSubmit">
             <a-form-item>
-              <a-input v-model:value="form.username" placeholder="Username">
+              <a-input v-model:value="form.username" placeholder="输入用户名">
                 <template v-slot:prefix>
                   <UserOutlined style="color: rgba(0, 0, 0, 0.25)" />
                 </template>
@@ -17,7 +17,7 @@
             <a-form-item>
               <a-input-password
                 v-model:value="form.password"
-                placeholder="Password"
+                placeholder="输入密码"
               >
                 <template v-slot:prefix>
                   <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
@@ -35,22 +35,17 @@
               </a-button>
             </a-form-item>
           </a-form>
-          <div id="vaptchaContainer" style="width: 300px; height: 36px"></div>
         </div>
       </a-col>
     </a-row>
   </div>
-  <a-alert message="Error" type="error" show-icon />
 </template>
 <script>
-  import { tempLogin } from '@/api/user'
-
-  let vaptchaobj = undefined
+  // import { tempLogin } from '@/api/user'
   import { mapActions, mapGetters } from 'vuex'
   import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
   import { encrypt } from '@/utils/loginEncrypt'
-  import { vaptcha } from '@/utils/vaptcha'
-  import { message } from 'ant-design-vue'
+  // import { message } from 'ant-design-vue'
 
   export default {
     name: 'Login',
@@ -80,7 +75,7 @@
       $route: {
         handler(route) {
           console.log(route)
-          this.redirect = (route.query && route.query.redirect) || '/'
+          this.redirect = (route.query && route.query.redirect) || '/index'
         },
         immediate: true,
       },
@@ -88,7 +83,7 @@
     mounted() {
       this.form.username = 'admin'
       this.form.password = '1'
-      this.initVaptcha()
+      // this.initVaptcha()
     },
     methods: {
       ...mapActions({
@@ -102,46 +97,50 @@
       async handleSubmit(data = {}) {
         this.btnLoading = true
         const password = encrypt(this.form.password)
-        await this.login({ ...this.form, password, ...data })
-        await this.$router.push(this.handleRoute())
-        this.btnLoading = false
-      },
-      initVaptcha() {
-        const that = this
-        vaptcha().then(() => {
-          window
-            .vaptcha({
-              vid: '6572cc76d3784602950e68eb', // 验证单元id
-              mode: 'invisible',
-              scene: 0, // 场景值 默认0
-              container: '#vaptcha-container', // 容器，可为Element 或者 selector
-            })
-            .then((VAPTCHAObj) => {
-              vaptchaobj = VAPTCHAObj
-              VAPTCHAObj.reset()
-              VAPTCHAObj.listen('pass', function () {
-                let serverToken = VAPTCHAObj.getServerToken()
-                let data = {
-                  verServer: serverToken.server,
-                  verToken: serverToken.token,
-                }
-                that.handleSubmit(data)
-                VAPTCHAObj.reset()
-              })
-            })
+        await this.login({ ...this.form, password, ...data }).finally(() => {
+          this.btnLoading = false
         })
+        await this.$router.push(this.handleRoute())
       },
-      async showVaptcha() {
-        const password = encrypt(this.form.password)
-        const res = await tempLogin({ ...this.form, password })
-        if (res.code == '552') {
-          vaptchaobj.validate()
-        } else if (res.code == '200') {
-          await this.handleSubmit()
-        } else if (res.code == '409') {
-          message.error(res.desc)
-        }
-      },
+      // initVaptcha() {
+      //   const that = this
+      //   vaptcha().then(() => {
+      //     window
+      //       .vaptcha({
+      //         vid: '6572cc76d3784602950e68eb', // 验证单元id
+      //         mode: 'invisible',
+      //         scene: 0, // 场景值 默认0
+      //       })
+      //       .then((VAPTCHAObj) => {
+      //         vaptchaobj = VAPTCHAObj
+      //         VAPTCHAObj.reset()
+      //         VAPTCHAObj.listen('pass', function () {
+      //           let serverToken = VAPTCHAObj.getServerToken()
+      //           let data = {
+      //             verServer: serverToken.server,
+      //             verToken: serverToken.token,
+      //           }
+      //           that.handleSubmit(data)
+      //         })
+      //         // VAPTCHAObj.listen('close', () => {
+      //         //   VAPTCHAObj.reset()
+      //         // })
+      //         // VAPTCHAObj.render()
+      //       })
+      //   })
+      // },
+      // async showVaptcha() {
+      //   const password = encrypt(this.form.password)
+      //   const res = await tempLogin({ ...this.form, password })
+      //   // if (res.code == '552') {
+      //   //   vaptchaobj.validate()
+      //   // } else
+      //   if (res.code == '200') {
+      //     await this.handleSubmit()
+      //   } else if (res.code == '409') {
+      //     message.error(res.desc)
+      //   }
+      // },
     },
   }
 </script>
@@ -192,5 +191,31 @@
       height: 45px;
       border-radius: 99px;
     }
+  }
+  .vaptcha-init-main {
+    display: table;
+    width: 100%;
+    height: 100%;
+    background-color: #eeeeee;
+  }
+  .vaptcha-init-loading {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+  .vaptcha-init-loading > a {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: none;
+  }
+  .vaptcha-init-loading > a img {
+    vertical-align: middle;
+  }
+  .vaptcha-init-loading .vaptcha-text {
+    font-family: sans-serif;
+    font-size: 12px;
+    color: #cccccc;
+    vertical-align: middle;
   }
 </style>

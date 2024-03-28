@@ -57,7 +57,7 @@
     computed: {
       ...mapGetters({
         collapse: 'settings/collapse',
-        routes: 'routes/routes',
+        routes: 'user/routes',
         device: 'settings/device',
       }),
       classObj() {

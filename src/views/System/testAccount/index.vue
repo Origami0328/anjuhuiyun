@@ -21,7 +21,11 @@
     </a-space>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'testAccount',
+  }
+</script>
 <script setup>
   import { SearchOutlined } from '@ant-design/icons-vue'
   import { ref } from 'vue'

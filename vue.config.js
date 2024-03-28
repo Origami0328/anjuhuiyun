@@ -21,6 +21,7 @@ const { version, author } = require('./package.json')
 const Webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin');
 const dayjs = require('dayjs')
 const date = dayjs().format('YYYY_M_D')
 const time = dayjs().format('YYYY-M-D HH:mm:ss')
@@ -29,6 +30,7 @@ process.env.VUE_APP_AUTHOR = author || 'anjuhuiyun'
 process.env.VUE_APP_UPDATE_TIME = time
 process.env.VUE_APP_VERSION = version
 
+const isProd = process.env.NODE_ENV === 'production'
 const resolve = (dir) => {
   return path.join(__dirname, dir)
 }
@@ -84,6 +86,17 @@ module.exports = {
           name: webpackBarName,
         }),
       ],
+      // isProd ? config.plugins.push(new CompressionWebpackPlugin({
+      //   test: /\.js$|\.html$|\.css$/u,
+      //   threshold: 4096, // 超过 4kb 压缩
+      // })):''
+      // if (isProd) {
+      //   // 启用 gzip 压缩插件
+      //   config.plugins.push(new CompressionWebpackPlugin({
+      //     test: /\.js$|\.html$|\.css$/u,
+      //     threshold: 4096, // 超过 4kb 压缩
+      //   }))
+      // }
     }
   },
   chainWebpack(config) {

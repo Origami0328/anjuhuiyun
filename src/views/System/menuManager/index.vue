@@ -14,6 +14,7 @@
           :loading="tableLoading"
           :pagination="false"
           empty-text="No Data"
+          bordered
         >
           <template v-slot:emptyText>
             <div style="text-align: center; padding: 20px; font-size: 30px">
@@ -28,7 +29,11 @@
                 cancel-text="取消"
                 @confirm="confirm(record)"
               >
-                <a-button type="link" :loading="record.delLoading">
+                <a-button
+                  type="link"
+                  :loading="record.delLoading"
+                  style="color: red"
+                >
                   删除
                 </a-button>
               </a-popconfirm>
@@ -42,78 +47,87 @@
       ref="modalRef"
       @handleOk="submit"
       @closeModal="clear"
+      :bodyStyle="false"
     >
-      <a-form
-        :model="formState"
-        v-bind="formItemLayout"
-        :rules="rules"
-        ref="formRef"
-      >
-        <a-form-item label="菜单名称" name="name">
-          <a-input
-            v-model:value="formState.name"
-            placeholder="请输入菜单名称"
-            style="width: 200px"
-          />
-        </a-form-item>
-        <a-form-item label="code" name="code">
-          <a-input
-            v-model:value="formState.code"
-            placeholder="请输入code"
-            style="width: 200px"
-          ></a-input>
-        </a-form-item>
-        <a-form-item label="菜单级别" name="level">
-          <a-select
-            v-model:value="formState.level"
-            style="width: 200px"
-            :options="menuLevel"
-            @select="showLevel"
-          ></a-select>
-        </a-form-item>
-        <a-form-item
-          label="顶级菜单"
-          name="topLevel"
-          v-if="formState.level && formState.level != 1"
+      <div style="height: 100%; overflow: auto; overflow-x: hidden">
+        <a-form
+          :model="formState"
+          v-bind="formItemLayout"
+          :rules="rules"
+          ref="formRef"
         >
-          <a-select
-            v-model:value="formState.topLevel"
-            style="width: 200px"
-            :options="topLevel"
-            @change="topLevelFn"
-          ></a-select>
-        </a-form-item>
-        <a-form-item
-          label="二级菜单"
-          name="secondLevel"
-          v-if="formState.level && formState.level == 3"
-        >
-          <a-select
-            v-model:value="formState.secondLevel"
-            style="width: 200px"
-            :options="secondLevel"
-            @change="secondLevelFn"
-          ></a-select>
-        </a-form-item>
-        <a-form-item label="排序" name="sort">
-          <a-input
-            v-model:value="formState.sort"
-            placeholder="排序越小越靠前"
-            :min="1"
-            style="width: 200px"
-          />
-        </a-form-item>
-      </a-form>
+          <a-form-item label="菜单名称" name="name">
+            <a-input
+              v-model:value="formState.name"
+              placeholder="请输入菜单名称"
+              style="width: 200px"
+            />
+          </a-form-item>
+          <a-form-item label="code" name="code">
+            <a-input
+              v-model:value="formState.code"
+              placeholder="请输入code"
+              style="width: 200px"
+            ></a-input>
+          </a-form-item>
+          <a-form-item label="菜单级别" name="level">
+            <a-select
+              v-model:value="formState.level"
+              style="width: 200px"
+              :options="menuLevel"
+              @select="showLevel"
+            ></a-select>
+          </a-form-item>
+          <a-form-item
+            label="顶级菜单"
+            name="topLevel"
+            v-if="formState.level && formState.level != 1"
+          >
+            <a-select
+              v-model:value="formState.topLevel"
+              style="width: 200px"
+              :options="topLevel"
+              @change="topLevelFn"
+            ></a-select>
+          </a-form-item>
+          <a-form-item
+            label="二级菜单"
+            name="secondLevel"
+            v-if="formState.level && formState.level == 3"
+          >
+            <a-select
+              v-model:value="formState.secondLevel"
+              style="width: 200px"
+              :options="secondLevel"
+              @change="secondLevelFn"
+            ></a-select>
+          </a-form-item>
+          <a-form-item label="排序" name="sort">
+            <a-input
+              v-model:value="formState.sort"
+              placeholder="排序越小越靠前"
+              :min="1"
+              style="width: 200px"
+            />
+          </a-form-item>
+        </a-form>
+      </div>
     </Modal>
   </div>
 </template>
+<script>
+  export default {
+    name: 'menuManager',
+  }
+</script>
 <script setup>
   import { PlusOutlined } from '@ant-design/icons-vue'
   import Modal from '@/components/Modal.vue'
   import { useInitFrom } from '@/hooks/useTableComponent'
-  import { reactive, ref } from 'vue'
+  import { computed, reactive, ref } from 'vue'
   import { addMenu, delMenu, getMenu, getMenuTree } from '@/api/system'
-  import { message } from 'ant-design-vue'
+  // import { message } from 'ant-design-vue'
+  import { messageContent } from '@/utils/message'
 
   const formRef = ref()
   const columns = [
@@ -188,8 +202,20 @@
     tableLoading.value = false
   }
   getUserMenuList(menuObj)
-
-  const { titleValue, modalRef, formItemLayout } = useInitFrom({})
+  const formItemLayout = computed(() => {
+    const layout = 'horizontal'
+    return layout === 'horizontal'
+      ? {
+          labelCol: {
+            span: 10,
+          },
+          wrapperCol: {
+            span: 16,
+          },
+        }
+      : {}
+  })
+  const { titleValue, modalRef } = useInitFrom({})
   const formState = reactive({
     level: '',
     topLevel: '',
@@ -234,11 +260,13 @@
         await addMenu({
           ...formState,
         })
+        messageContent('success', '添加成功')
         await getUserMenuList(menuObj)
         clear()
       })
       .finally(() => {
         modalRef.value.hideLoading()
+        modalRef.value.disabledCancelFalse()
       })
   }
   const clear = () => {
@@ -255,22 +283,25 @@
   }
   const confirm = async (record) => {
     record.delLoading = true
-    console.log(record.delLoading)
-    await delMenu({ menuId: record.id }).then((res) => {
-      if (res.code == '401') {
-        message.error(res.desc)
-      } else {
-        getUserMenuList(menuObj)
-      }
-    })
-    record.delLoading = false
+    await delMenu({ menuId: record.id })
+      .then((res) => {
+        if (res.code == '401') {
+          // message.error(res.desc)
+          messageContent('error', res.desc)
+        } else {
+          getUserMenuList(menuObj)
+          messageContent('success', '删除成功')
+        }
+      })
+      .finally(() => {
+        record.delLoading = false
+      })
   }
 
   const showLevel = (value) => {
     if (value != 1) {
       // 二级菜单
       getMenu({ level: 1 }).then((res) => {
-        console.log(res.result)
         topLevel.value = res.result.map((item) => {
           return {
             value: item.id,

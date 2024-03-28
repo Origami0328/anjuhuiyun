@@ -278,7 +278,11 @@
     </Modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'build',
+  }
+</script>
 <script setup>
   import {
     SearchOutlined,

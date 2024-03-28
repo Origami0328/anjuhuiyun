@@ -14,7 +14,11 @@
     </div>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'whiteList',
+  }
+</script>
 <script setup>
   const searchObj = {
     searchName: '',

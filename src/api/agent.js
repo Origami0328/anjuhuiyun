@@ -76,7 +76,7 @@ export function editAgentVillage(data) {
   })
 }
 
-// 删除代理商
+// 获取代理商详情
 export function getAgentDetail(data) {
   return request({
     url: '/managerPC/agent/getAgentDetail',
@@ -84,7 +84,7 @@ export function getAgentDetail(data) {
     data,
   })
 }
-// 删除代理商
+// 根据代理商名称搜索代理商
 export function getAgentByName(data) {
   return request({
     url: '/managerPC/agent/getAgentByName',
@@ -92,7 +92,14 @@ export function getAgentByName(data) {
     data,
   })
 }
-
+// 代理商类别
+export function getAgentType(data) {
+  return request({
+    url: '/managerPC/agent/getAgentType',
+    method: 'post',
+    data,
+  })
+}
 // 查找系统用户名称
 export function findUserByUserName(data) {
   return request({

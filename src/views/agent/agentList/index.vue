@@ -58,33 +58,84 @@
               :filter-option="filterOption"
             ></a-select>
           </a-col>
-          <a-col :md="4">
-            <a-button
-              @click="searchTableItem"
-              style="
-                background-color: cornflowerblue;
-                width: 60px;
-                color: white;
-              "
-            >
-              搜索
-            </a-button>
-            <a-button
-              class="button"
-              @click="resetSearchObj"
-              style="
-                background-color: cornflowerblue;
-                width: 60px;
-                color: white;
-                margin-left: 10px;
-              "
-            >
-              重置
-            </a-button>
+          <template v-if="advanced">
+            <a-col :md="4" :sm="2">
+              <a-select
+                v-model:value="requestObj.level"
+                style="width: 150px"
+                show-search
+                :options="levelList"
+                placeholder="选择级别"
+                :filter-option="filterOption"
+              ></a-select>
+            </a-col>
+            <a-col :md="4" :sm="2">
+              <a-select
+                v-model:value="requestObj.type"
+                :options="typeList"
+                show-search
+                placeholder="选择类别"
+                style="width: 150px"
+                :filter-option="filterOption"
+              ></a-select>
+            </a-col>
+          </template>
+
+          <a-col :md="(!advanced && 4) || 4">
+            <div style="width: 192px; display: flex">
+              <a-space>
+                <a-button
+                  @click="searchTableItem"
+                  style="
+                    background-color: cornflowerblue;
+                    width: 60px;
+                    color: white;
+                  "
+                >
+                  搜索
+                </a-button>
+              </a-space>
+              <a-space>
+                <a-button
+                  class="button"
+                  @click="resetSearchObj"
+                  style="
+                    background-color: cornflowerblue;
+                    width: 60px;
+                    color: white;
+                    margin-left: 10px;
+                  "
+                >
+                  重置
+                </a-button>
+              </a-space>
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  cursor: pointer;
+                  margin-left: 10px;
+                "
+              >
+                <span
+                  @click="toggleAdvanced"
+                  style="width: 60px; color: #1890ff"
+                >
+                  {{ advanced ? '收起' : '展开' }}
+
+                  <span v-if="advanced">
+                    <UpOutlined style="color: #1890ff" />
+                  </span>
+                  <span v-else>
+                    <DownOutlined style="color: #1890ff" />
+                  </span>
+                </span>
+              </div>
+            </div>
           </a-col>
         </a-row>
       </a-space>
-      <a-space></a-space>
       <a-space>
         <a-button type="primary" @click="addTableItem">新增</a-button>
       </a-space>
@@ -95,6 +146,7 @@
       :columns="columns"
       :loading="tableLoading"
       @change="handleTableChange"
+      bordered
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'operation'">
@@ -108,18 +160,19 @@
           <a-button type="link" @click="agentChild(record)">
             下级代理商
           </a-button>
-          <!--          <a-popconfirm-->
-          <!--            title="确定要删除该表格项吗?"-->
-          <!--            ok-text="确认"-->
-          <!--            cancel-text="取消"-->
-          <!--            @confirm="delTableItem(record)"-->
-          <!--          >-->
-          <!--            <a-button type="link">删除</a-button>-->
-          <!--          </a-popconfirm>-->
-          <a-button @click="showConfirm(record)" type="link">删除</a-button>
+          <a-button @click="showConfirm(record)" type="link" style="color: red">
+            删除
+          </a-button>
         </template>
         <template v-else-if="column.dataIndex == 'level'">
           {{ record.level }}级
+        </template>
+        <template v-else-if="column.dataIndex == 'area'">
+          <span>
+            {{ record.provinceName }}
+          </span>
+          <span v-if="record.cityName">-{{ record.cityName }}</span>
+          <span v-if="record.areaName">-{{ record.areaName }}</span>
         </template>
       </template>
     </a-table>
@@ -192,25 +245,8 @@
                 </a-input-search>
               </a-form-item>
             </a-col>
+
             <a-col :md="6" :sm="2" :offset="3" v-if="editId">
-              <a-form-item label="添加时间">
-                <a-input
-                  style="width: 150px"
-                  placeholder="添加时间"
-                  v-model:value="formState.addTime"
-                ></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="2" v-if="editId">
-              <a-form-item label="最后更新时间">
-                <a-input
-                  style="width: 150px"
-                  placeholder="最后更新时间"
-                  v-model:value="formState.updateTime"
-                ></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="2" v-if="editId">
               <a-form-item label="父代理名称">
                 <a-input
                   style="width: 150px"
@@ -219,7 +255,7 @@
                 ></a-input>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="2" :offset="3">
+            <a-col :md="6" :sm="2" :offset="editId != 0 ? 0 : 3">
               <a-form-item label="备注">
                 <a-input
                   style="width: 150px"
@@ -229,6 +265,15 @@
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="2">
+              <a-form-item label="类别">
+                <a-input
+                  placeholder="请输入类别"
+                  style="width: 150px"
+                  v-model:value="formState.type"
+                ></a-input>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="2" :offset="editId == 0 ? 0 : 3">
               <a-form-item label="级别" name="level">
                 <a-select
                   :disabled="editId ? true : false"
@@ -240,9 +285,30 @@
                 ></a-select>
               </a-form-item>
             </a-col>
+            <a-col :md="6" :sm="2" v-if="editId">
+              <a-form-item label="添加时间">
+                <a-input
+                  :disabled="editId != 0"
+                  style="width: 150px"
+                  placeholder="添加时间"
+                  v-model:value="formState.addTime"
+                ></a-input>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="2" v-if="editId">
+              <a-form-item label="最后更新时间">
+                <a-input
+                  :disabled="editId != 0"
+                  style="width: 150px"
+                  placeholder="最后更新时间"
+                  v-model:value="formState.updateTime"
+                ></a-input>
+              </a-form-item>
+            </a-col>
             <a-col
               :md="6"
               :sm="2"
+              :offset="3"
               v-if="formState.level != undefined && formState.level != 1"
             >
               <a-form-item
@@ -260,23 +326,25 @@
                   :options="state.frontAgentData"
                   @change="chooseFrontAgentOptions"
                 ></a-select>
-                <a-input-search
-                  v-model:value="formState.parentId"
-                  placeholder="输入代理商名称"
-                  :loading="state.frontAgentLoading"
-                  :disabled="editId ? true : false"
-                  style="width: 200px; position: absolute; top: 0"
-                  @search="searchFrontAgent"
-                  @change="frontAgentShowSuccessSelect = false"
-                >
-                  <template #prefix v-if="editId == 0">
-                    <check-circle-two-tone
-                      two-tone-color="#52c41a"
-                      v-if="frontAgentShowSuccessSelect"
-                    />
-                    <CloseCircleTwoTone v-else two-tone-color="red" />
-                  </template>
-                </a-input-search>
+                <a-form-item-rest>
+                  <a-input-search
+                    v-model:value="formState.parentId"
+                    placeholder="输入代理商名称"
+                    :loading="state.frontAgentLoading"
+                    :disabled="editId ? true : false"
+                    style="width: 200px; position: absolute; top: 0"
+                    @search="searchFrontAgent"
+                    @change="frontAgentShowSuccessSelect = false"
+                  >
+                    <template #prefix v-if="editId == 0">
+                      <check-circle-two-tone
+                        two-tone-color="#52c41a"
+                        v-if="frontAgentShowSuccessSelect"
+                      />
+                      <CloseCircleTwoTone v-else two-tone-color="red" />
+                    </template>
+                  </a-input-search>
+                </a-form-item-rest>
               </a-form-item>
             </a-col>
             <a-divider orientation="left">位置信息</a-divider>
@@ -286,6 +354,8 @@
                   :options="formProvinceList"
                   style="width: 150px"
                   placeholder="选择省份"
+                  show-search
+                  :filter-option="filterOption"
                   v-model:value="formState.provinceCode"
                   @change="
                     (value, options) =>
@@ -300,6 +370,8 @@
                   :options="formCityList"
                   style="width: 150px"
                   placeholder="选择城市"
+                  show-search
+                  :filter-option="filterOption"
                   v-model:value="formState.cityCode"
                   @change="
                     (value, options) =>
@@ -314,6 +386,8 @@
                   :options="formDistrictList"
                   style="width: 150px"
                   placeholder="选择区县"
+                  show-search
+                  :filter-option="filterOption"
                   v-model:value="formState.areaCode"
                 ></a-select>
               </a-form-item>
@@ -402,13 +476,19 @@
     </a-modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'agentList',
+  }
+</script>
 <script setup>
   import {
     ExclamationCircleOutlined,
     SearchOutlined,
     CloseCircleTwoTone,
     CheckCircleTwoTone,
+    UpOutlined,
+    DownOutlined,
   } from '@ant-design/icons-vue'
   import { createVNode } from 'vue'
   import { Modal } from 'ant-design-vue'
@@ -422,6 +502,7 @@
     formVillageList,
     formLevelList,
     formProvinceList,
+    levelList,
     formDistrictList,
     formCityList,
     agentVillageColumns,
@@ -441,6 +522,7 @@
     getAgentByName,
     getAgentChild,
     getAgentDetail,
+    getAgentType,
     getAgentVillage,
     getCity,
     getDistrict,
@@ -500,6 +582,7 @@
       updateTime: '',
       villageList: '',
       agentId: '',
+      type: '',
     },
     getData,
     requestObj,
@@ -514,7 +597,6 @@
     unitId: [{ required: true, message: '请选择单元' }],
     houseId: [{ required: true, message: '请选择房号' }],
     phone: [
-      { required: true, message: '请输入手机号' },
       {
         trigger: 'blur',
         validator: (rules, value) => {
@@ -561,7 +643,26 @@
     labelString: 'name',
     formList: formVillageList,
   })
-  // getUserList({})
+  const typeList = ref([])
+  const agentType = () => {
+    getAgentType().then((res) => {
+      typeList.value = res.result.map((item) => {
+        return {
+          value: item,
+          label: item,
+        }
+      })
+      typeList.value.splice(0, 0, {
+        value: '',
+        label: '全部',
+      })
+    })
+  }
+  agentType()
+  const advanced = ref(false)
+  const toggleAdvanced = () => {
+    advanced.value = !advanced.value
+  }
   const cityToStreet = (value, options, type, isForm = false) => {
     let changeList, requestFun, requestInputObj, valueString
     if (type == 'city') {
@@ -640,18 +741,35 @@
     handleCreate()
   }
   const modalSubmit = () => {
-    console.log(formState)
-    // if (editId.value == 0) {
-    //   if (formState.parentId != '') {
-    //     submit(formState, { name: formState.parentId || '' })
-    //   } else {
-    //     submit(formState)
-    //   }
-    // } else {
-    //   submit(formState)
-    // }
-    submit(formState)
-    emitModal()
+    if (editId.value == 0) {
+      submit({
+        name: formState.name,
+        phone: formState.phone,
+        level: formState.level,
+        cityCode: formState.cityCode,
+        parentId: formState.parentId || '',
+        areaCode: formState.areaCode,
+        provinceCode: formState.provinceCode,
+        remark: formState.remark,
+        linkUserId: formState.linkUserId,
+        type: formState.type,
+      })
+        .then(() => {
+          agentType()
+        })
+        .finally(() => {
+          modalRef.value.disabledCancelFalse()
+        })
+      // emitModal()
+    } else {
+      submit(formState)
+        .then(() => {
+          agentType()
+        })
+        .finally(() => {
+          modalRef.value.disabledCancelFalse()
+        })
+    }
   }
   const emitModal = () => {
     formCityList.value = []
@@ -828,25 +946,29 @@
     systemUserSelectOpen.value = false
     formState.linkUserId = ''
 
-    findUserByUserName({ username: value }).then((res) => {
-      if ('id' in res.result) {
-        const data = {
-          ...res.result,
-          value: res.result.id,
-          label: res.result.username,
+    findUserByUserName({ username: value })
+      .then((res) => {
+        if ('id' in res.result) {
+          const data = {
+            ...res.result,
+            value: res.result.id,
+            label: res.result.username,
+          }
+          state.data = [data]
+        } else {
+          state.data = [
+            {
+              value: '5',
+              label: '未能检索到系统用户哦.',
+            },
+          ]
         }
-        state.data = [data]
-      } else {
-        state.data = [
-          {
-            value: '5',
-            label: '未能检索到系统用户哦.',
-          },
-        ]
-      }
-      systemUserSelectOpen.value = true
-      state.loading = false
-    })
+        systemUserSelectOpen.value = true
+        state.loading = false
+      })
+      .finally(() => {
+        state.loading = false
+      })
   }, 300)
 
   const searchFrontAgent = debounce((value) => {

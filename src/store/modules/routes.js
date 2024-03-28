@@ -3,21 +3,28 @@
  * @description 路由拦截状态管理，目前两种模式：all模式与intelligence模式，其中partialRoutes是菜单暂未使用
  */
 import { asyncRoutes, constantRoutes } from '@/router'
-import { getRouterList } from '@/api/router'
+// import { getUserInfo } from '@/api/user'
 import { convertRouter, filterRoutes } from '@/utils/routes'
+import { getUserInfo } from '@/api/user'
+// import store from '@/store'
 
 const state = () => ({
   routes: [],
   partialRoutes: [],
+  menu: [],
 })
 const getters = {
   routes: (state) => state.routes,
   partialRoutes: (state) => state.partialRoutes,
+  menu: (state) => state.menu,
 }
 const mutations = {
   setRoutes(state, routes) {
     state.routes = routes
   },
+  // setMenu(state, menu) {
+  //   state.menu = menu
+  // },
   setPartialRoutes(state, routes) {
     state.partialRoutes = routes
   },
@@ -30,8 +37,8 @@ const actions = {
    */
   async setRoutes({ commit }) {
     const finallyRoutes = filterRoutes([...constantRoutes, ...asyncRoutes])
-    console.log(finallyRoutes)
     commit('setRoutes', finallyRoutes)
+
     return [...finallyRoutes]
   },
   /**
@@ -40,14 +47,20 @@ const actions = {
    * @returns
    */
   async setAllRoutes({ commit }) {
-    console.log('不设置')
-    let { data } = await getRouterList()
-    if (data[data.length - 1].path !== '*')
-      data.push({ path: '*', redirect: '/404', hidden: true })
-    const asyncRoutes = convertRouter(data)
-    const finallyRoutes = filterRoutes([...constantRoutes, ...asyncRoutes])
+    let res = await getUserInfo()
+    const data = res.result.menu || []
+    // if (data[data.length - 1].path !== '*')
+    //   data.push({ path: '*', redirect: '/404', hidden: true })
+    let newAsyncRoutes = await convertRouter(data)
+    const finallyRoutes = filterRoutes([
+      ...constantRoutes,
+      ...asyncRoutes,
+      ...newAsyncRoutes,
+    ])
+    // const finallyRoutes = filterRoutes([...constantRoutes, ...data])
     commit('setRoutes', finallyRoutes)
-    return [...asyncRoutes]
+    console.log(finallyRoutes)
+    return [...finallyRoutes]
   },
   /**
    * @description 画廊布局、综合布局设置路由

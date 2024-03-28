@@ -10,18 +10,57 @@ export function getVillageInformList(data) {
 }
 
 //小区信息管理的新增获取省份接口
-export function getProvinceToStreet(data) {
+// export function getProvinceToStreet(data) {
+//   return request({
+//     url: '/managerPC/village/toAdd',
+//     method: 'post',
+//     data,
+//   })
+// }
+//小区信息管理的新增获取省份接口
+export function getProvince(data) {
   return request({
-    url: '/managerPC/village/toAdd',
+    url: '/managerPC/address/getProvince',
     method: 'post',
     data,
   })
 }
-
-//小区信息管理的修改接口--只用于获取addUser
-export function editTableItem(data) {
+//小区信息管理的新增获取城市接口
+export function getAddressCity(data) {
   return request({
-    url: '/managerPC/village/toEdit',
+    url: '/managerPC/address/getCity',
+    method: 'post',
+    data,
+  })
+}
+//小区信息管理的新增获取城市接口
+export function getDistrict(data) {
+  return request({
+    url: '/managerPC/address/getDistrict',
+    method: 'post',
+    data,
+  })
+}
+//小区信息管理的获取街道接口
+export function getStreet(data) {
+  return request({
+    url: '/managerPC/address/getStreet',
+    method: 'post',
+    data,
+  })
+}
+//小区信息管理的新增获取省厅等接口
+export function getCity(data) {
+  return request({
+    url: '/managerPC/dic/getCity',
+    method: 'post',
+    data,
+  })
+}
+//小区信息管理的修改接口
+export function getVillageInfo(data) {
+  return request({
+    url: '/managerPC/village/getVillageInfo',
     method: 'post',
     data,
   })
@@ -69,10 +108,18 @@ export function addVillage(data) {
   })
 }
 
-//小区信息管理的新增接口
+//小区信息管理的编辑接口
 export function editVillage(data) {
   return request({
     url: '/managerPC/village/edit',
+    method: 'post',
+    data,
+  })
+}
+//小区信息管理的获取表格项详情接口
+export function getSetting(data) {
+  return request({
+    url: '/managerPC/village/getSetting',
     method: 'post',
     data,
   })
@@ -217,7 +264,7 @@ export function delUnitItem(data) {
     data,
   })
 }
-// 单元的删除
+// 多个单元的删除
 export function delAllUnitItem(data) {
   return request({
     url: '/managerPC/villageUnit/delAll',

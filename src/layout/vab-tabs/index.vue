@@ -23,12 +23,6 @@
             <a-menu-item key="closeOthersTabs">
               <a>关闭其他</a>
             </a-menu-item>
-            <a-menu-item key="closeLeftTabs">
-              <a>关闭左侧</a>
-            </a-menu-item>
-            <a-menu-item key="closeRightTabs">
-              <a>关闭右侧</a>
-            </a-menu-item>
             <a-menu-item key="closeAllTabs">
               <a>关闭全部</a>
             </a-menu-item>
@@ -125,6 +119,7 @@
         const view = this.visitedRoutes.find((item) => {
           return fullPath === item.fullPath
         })
+        this.$store.commit('keepComponent/removeKeepAliveList', view.name)
         await this.delVisitedRoute(view)
         if (this.isActive(view)) this.toLastTag()
       },
@@ -133,12 +128,12 @@
           case 'closeOthersTabs':
             this.closeOthersTabs()
             break
-          case 'closeLeftTabs':
-            this.closeLeftTabs()
-            break
-          case 'closeRightTabs':
-            this.closeRightTabs()
-            break
+          // case 'closeLeftTabs':
+          //   this.closeLeftTabs()
+          //   break
+          // case 'closeRightTabs':
+          //   this.closeRightTabs()
+          //   break
           case 'closeAllTabs':
             this.closeAllTabs()
             break
@@ -151,6 +146,10 @@
         }
       },
       async closeOthersTabs() {
+        this.$store.commit(
+          'keepComponent/removeOtherKeepAliveList',
+          this.toThisTag()
+        )
         await this.delOthersVisitedRoutes(this.toThisTag())
       },
       async closeLeftTabs() {
@@ -160,6 +159,7 @@
         await this.delRightVisitedRoutes(this.toThisTag())
       },
       async closeAllTabs() {
+        this.$store.commit('keepComponent/removeAllKeepAliveList')
         await this.delAllVisitedRoutes()
         if (this.affixTabs.some((tag) => tag.path === this.toThisTag().path))
           return

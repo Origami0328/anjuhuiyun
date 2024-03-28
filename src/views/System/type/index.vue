@@ -16,7 +16,11 @@
     </div>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'type',
+  }
+</script>
 <script setup>
   import { useTableInit } from '@/hooks/useTableComponent'
 

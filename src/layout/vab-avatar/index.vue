@@ -2,14 +2,13 @@
   <div class="vab-avatar">
     <a-dropdown placement="top" class="dropdown">
       <span class="ant-dropdown-link">
-        <a-avatar :src="avatar" />
         {{ $store.state.user.username }}
         <DownOutlined />
       </span>
       <template v-slot:overlay>
         <a-menu
           class="dropdown12"
-          style="position: fixed; top: 52px; width: 120px"
+          style="position: fixed; top: 52px; width: 120px; right: 10px"
         >
           <a-menu-item @click="changePsw">
             <template #icon>
@@ -17,20 +16,6 @@
             </template>
 
             修改密码
-          </a-menu-item>
-          <a-menu-item @click="logout">
-            <template #icon>
-              <setting-outlined />
-            </template>
-
-            系统设置
-          </a-menu-item>
-          <a-menu-item @click="logout">
-            <template #icon>
-              <CodepenOutlined />
-            </template>
-
-            代码生成
           </a-menu-item>
           <a-menu-item @click="logout">
             <template #icon>
@@ -85,12 +70,10 @@
     DownOutlined,
     UserOutlined,
     PoweroffOutlined,
-    SettingOutlined,
-    CodepenOutlined,
   } from '@ant-design/icons-vue'
   import Modal from '@/components/Modal.vue'
   import { useStore } from 'vuex'
-  import { computed, reactive, ref } from 'vue'
+  import { reactive, ref } from 'vue'
   import { useRouter } from 'vue-router'
   const store = useStore()
   const router = useRouter()
@@ -103,9 +86,10 @@
     // } else {
     //   router.push('/login')
     // }
+    await store.commit('tagsBar/delAllVisitedRoutes')
+
     router.push('/login')
   }
-  const avatar = computed(() => store.getters['user/avatar'])
   // const username = computed(() => store.getters['user/username'])
   const ModalRef = ref('')
   const changePsw = () => {
@@ -140,5 +124,6 @@
     display: flex;
     align-items: center;
     color: white;
+    margin-right: 20px;
   }
 </style>

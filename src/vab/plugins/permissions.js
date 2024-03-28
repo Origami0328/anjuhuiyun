@@ -30,8 +30,8 @@ router.beforeEach(async (to, from, next) => {
         store.getters['acl/role'].length > 0 ||
         store.getters['acl/ability'].length > 0
       if (hasRoles) {
-        console.log('空白页时，会显示吗？')
-        console.log(router.getRoutes())
+        // console.log(router.getRoutes())
+        store.commit('keepComponent/addKeepALiveList', to.name)
         next()
       } else {
         try {
@@ -48,14 +48,14 @@ router.beforeEach(async (to, from, next) => {
           if (authentication === 'intelligence') {
             accessRoutes = await store.dispatch('routes/setRoutes')
           } else if (authentication === 'all') {
-            accessRoutes = await store.dispatch('routes/setAllRoutes')
+            accessRoutes = await store.dispatch('user/setAllRoutes')
           }
           accessRoutes.forEach((item) => {
             router.addRoute(item)
           })
-          console.log(accessRoutes)
           next({ ...to, replace: true })
-        } catch {
+        } catch (err) {
+          console.log(err)
           await store.dispatch('user/resetAll')
           if (recordRoute)
             next({

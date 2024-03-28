@@ -25,7 +25,6 @@ const mutations = {
     state.visitedRoutes.push(Object.assign({}, route))
   },
   /**
-   * @author chuzhixin 1204505056@qq.com
    * @description 删除当前标签页
    * @param {*} state
    * @param {*} route
@@ -37,7 +36,6 @@ const mutations = {
     })
   },
   /**
-   * @author chuzhixin 1204505056@qq.com
    * @description 删除当前标签页以外其它全部多标签页
    * @param {*} state
    * @param {*} route
@@ -49,7 +47,6 @@ const mutations = {
     )
   },
   /**
-   * @author chuzhixin 1204505056@qq.com
    * @description 删除当前标签页左边全部多标签页
    * @param {*} state
    * @param {*} route
@@ -63,7 +60,6 @@ const mutations = {
     })
   },
   /**
-   * @author chuzhixin 1204505056@qq.com
    * @description 删除当前标签页右边全部多标签页
    * @param {*} state
    * @param {*} route
@@ -77,7 +73,6 @@ const mutations = {
     })
   },
   /**
-   * @author chuzhixin 1204505056@qq.com
    * @description 删除全部多标签页
    * @param {*} state
    * @param {*} route

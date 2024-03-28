@@ -38,7 +38,7 @@ const User = [
         },
       },
       {
-        path: 'myhome',
+        path: 'myHome',
         name: 'Myhome',
         component: () => import('@/views/user/myHome'),
         meta: {

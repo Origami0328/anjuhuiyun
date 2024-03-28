@@ -104,7 +104,7 @@
             </div>
             <a-upload
               v-else
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg,image/jpg"
               list-type="picture-card"
               :maxCount="1"
               :beforeUpload="beforeUpload"
@@ -136,7 +136,11 @@
     </a-modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'capability',
+  }
+</script>
 <script setup>
   import {
     SearchOutlined,
@@ -188,12 +192,12 @@
       : {}
   })
   const columns = [
-    {
-      title: '编号',
-      dataIndex: 'No',
-      align: 'center',
-      width: '10%',
-    },
+    // {
+    //   title: '编号',
+    //   dataIndex: 'No',
+    //   align: 'center',
+    //   width: '10%',
+    // },
     {
       title: '名称',
       dataIndex: 'name',

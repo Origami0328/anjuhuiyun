@@ -88,7 +88,11 @@
     </Modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'accessCardAd',
+  }
+</script>
 <script setup>
   import { message } from 'ant-design-vue'
   import { reactive, ref } from 'vue'

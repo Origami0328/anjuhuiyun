@@ -16,17 +16,6 @@
           </a-col>
           <a-col class="gutter-row" :md="4" :sm="2">
             <a-select
-              placeholder="请选择分组"
-              style="width: 180px"
-              show-search
-              :filter-option="filterOption"
-              v-model:value="requestObj.roleGroup"
-              :options="roleGroupList"
-              @change="createRole"
-            ></a-select>
-          </a-col>
-          <a-col class="gutter-row" :md="4" :sm="2">
-            <a-select
               v-model:value="requestObj.villageId"
               show-search
               style="width: 180px"
@@ -49,18 +38,41 @@
           </a-col>
           <a-col class="gutter-row" :md="4" :sm="2">
             <a-select
-              placeholder="请选择省厅"
+              placeholder="请选择分组"
               style="width: 180px"
-              v-model:value="requestObj.poProvieceCode"
               show-search
-              :options="poProvieceList"
-              :not-found-content="null"
               :filter-option="filterOption"
-              @change="(value, options) => cityToStreet(value, options, 'city')"
+              v-model:value="requestObj.roleGroupId"
+              :options="roleGroupList"
+              @change="createRole"
+            ></a-select>
+          </a-col>
+          <a-col :md="4" :sm="2">
+            <a-select
+              placeholder="请选择职位"
+              style="width: 180px"
+              show-search
+              :filter-option="filterOption"
+              v-model:value="requestObj.roleId"
+              :options="roleList"
             ></a-select>
           </a-col>
 
           <template v-if="advanced">
+            <a-col class="gutter-row" :md="4" :sm="2">
+              <a-select
+                placeholder="请选择省厅"
+                style="width: 180px"
+                v-model:value="requestObj.poProvinceCode"
+                show-search
+                :options="poProvinceList"
+                :not-found-content="null"
+                :filter-option="filterOption"
+                @change="
+                  (value, options) => cityToStreet(value, options, 'city')
+                "
+              ></a-select>
+            </a-col>
             <a-col :md="4" :sm="2">
               <a-select
                 placeholder="请选择市局"
@@ -101,69 +113,58 @@
               ></a-select>
             </a-col>
 
-            <a-col :md="4" :sm="2">
-              <a-select
-                placeholder="请选择职位"
-                style="width: 180px"
-                show-search
-                :filter-option="filterOption"
-                v-model:value="requestObj.roleId"
-                :options="roleList"
-              ></a-select>
-            </a-col>
+            <!--            <a-col :md="4" :sm="2">-->
+            <!--              <a-select-->
+            <!--                v-model:value="requestObj.provieceCode"-->
+            <!--                placeholder="选择省份"-->
+            <!--                show-search-->
+            <!--                :options="provieceList"-->
+            <!--                style="width: 180px"-->
+            <!--                :filter-option="filterOption"-->
+            <!--                @change="-->
+            <!--                  (value, options) => cityToStreet(value, options, 'city')-->
+            <!--                "-->
+            <!--              ></a-select>-->
+            <!--            </a-col>-->
+            <!--            <a-col :md="4" :sm="2">-->
+            <!--              <a-select-->
+            <!--                v-model:value="requestObj.cityCode"-->
+            <!--                show-search-->
+            <!--                style="width: 180px"-->
+            <!--                placeholder="选择城市"-->
+            <!--                :options="cityList"-->
+            <!--                :not-found-content="null"-->
+            <!--                :filter-option="filterOption"-->
+            <!--                @change="-->
+            <!--                  (value, options) => cityToStreet(value, options, 'district')-->
+            <!--                "-->
+            <!--              ></a-select>-->
+            <!--            </a-col>-->
 
-            <a-col :md="4" :sm="2">
-              <a-select
-                v-model:value="requestObj.provieceCode"
-                placeholder="选择省份"
-                show-search
-                :options="provieceList"
-                style="width: 180px"
-                :filter-option="filterOption"
-                @change="
-                  (value, options) => cityToStreet(value, options, 'city')
-                "
-              ></a-select>
-            </a-col>
-            <a-col :md="4" :sm="2">
-              <a-select
-                v-model:value="requestObj.cityCode"
-                show-search
-                style="width: 180px"
-                placeholder="选择城市"
-                :options="cityList"
-                :not-found-content="null"
-                :filter-option="filterOption"
-                @change="
-                  (value, options) => cityToStreet(value, options, 'district')
-                "
-              ></a-select>
-            </a-col>
-
-            <a-col :md="4" :sm="2">
-              <a-select
-                v-model:value="requestObj.districtCode"
-                show-search
-                placeholder="选择区县"
-                :options="districtList"
-                style="width: 180px"
-                :filter-option="filterOption"
-                @change="
-                  (value, options) => cityToStreet(value, options, 'street')
-                "
-              ></a-select>
-            </a-col>
-            <a-col :md="4" :sm="2">
-              <a-select
-                v-model:value="requestObj.streetCode"
-                show-search
-                style="width: 180px"
-                placeholder="选择街道"
-                :options="streetList"
-                :filter-option="filterOption"
-                :not-found-content="null"
-              ></a-select>
-            </a-col>
+            <!--            <a-col :md="4" :sm="2">-->
+            <!--              <a-select-->
+            <!--                v-model:value="requestObj.districtCode"-->
+            <!--                show-search-->
+            <!--                placeholder="选择区县"-->
+            <!--                :options="districtList"-->
+            <!--                style="width: 180px"-->
+            <!--                :filter-option="filterOption"-->
+            <!--                @change="-->
+            <!--                  (value, options) => cityToStreet(value, options, 'street')-->
+            <!--                "-->
+            <!--              ></a-select>-->
+            <!--            </a-col>-->
+            <!--            <a-col :md="4" :sm="2">-->
+            <!--              <a-select-->
+            <!--                v-model:value="requestObj.streetCode"-->
+            <!--                show-search-->
+            <!--                style="width: 180px"-->
+            <!--                placeholder="选择街道"-->
+            <!--                :options="streetList"-->
+            <!--                :filter-option="filterOption"-->
+            <!--                :not-found-content="null"-->
+            <!--              ></a-select>-->
+            <!--            </a-col>-->
             <a-col :md="4" :sm="2">
               <a-select
                 placeholder="请选择审核状态"
@@ -243,6 +244,7 @@
           getCheckboxProps: getCheckboxProps,
         }"
         :columns="columns"
+        bordered
         :data-source="dataSource"
         :loading="tableLoading"
         style="width: 100%"
@@ -260,12 +262,7 @@
               >
                 编辑
               </a-button>
-              <!--                  <a-tooltip>-->
-              <!--                    <template #title>分配房屋</template>-->
-              <!--                    <div @click="show" style="cursor: pointer">-->
-              <!--                      <SettingOutlined />-->
-              <!--                    </div>-->
-              <!--                  </a-tooltip>-->
+
               <a-popconfirm
                 title="确定删除该表格项吗?"
                 ok-text="确认"
@@ -276,21 +273,11 @@
               </a-popconfirm>
             </span>
           </template>
-          <template v-else-if="column.dataIndex == 'status'">
-            {{
-              record.isAuth == '1'
-                ? record.status == '1'
-                  ? '冻结'
-                  : '正常'
-                : record.isAuth == '0'
-                ? '待审核'
-                : '异常'
-            }}
-          </template>
           <template v-else-if="column.dataIndex == 'isAuth'">
             <span v-if="record.isAuth == '0'">待审核</span>
             <span v-else-if="record.isAuth == '1'">审核通过</span>
-            <span v-else-if="record.isAuth == '2'">审核失败</span>
+            <span v-else-if="record.isAuth == '2'">审核未通过</span>
+            <span v-else-if="record.isAuth == '3'">账号异常</span>
           </template>
           <template v-else-if="column.dataIndex == 'area'">
             {{
@@ -340,33 +327,23 @@
                   name="password"
                 >
                   <a-input-password
-                    placeholder="输入密码"
+                    placeholder="输入6-12位密码"
                     v-model:value="formState.password"
                     style="width: 200px"
                   ></a-input-password>
                 </a-form-item>
               </a-col>
-              <a-col :md="6" :sm="2" v-if="editId != 0">
-                <a-form-item label="状态" name="status">
-                  <a-select
-                    placeholder="请选择状态"
-                    :options="statusOptions"
-                    style="width: 200px"
-                    v-model:value="formState.status"
-                  ></a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="6" :sm="2" :offset="editId == 0 ? 0 : 3">
+              <a-col :md="6" :sm="2">
                 <a-form-item label="审核状态" name="isAuth">
                   <a-select
                     placeholder="请选择审核状态"
-                    :options="formAuthList"
+                    :options="editId != 0 ? statusOptions : addStatusOptions"
                     style="width: 200px"
                     v-model:value="formState.isAuth"
                   ></a-select>
                 </a-form-item>
               </a-col>
-              <a-col :md="6" :sm="2" :offset="editId != 0 ? 0 : 3">
+              <a-col :md="6" :sm="2" :offset="3">
                 <a-form-item label="备注">
                   <a-input
                     placeholder="这里输入备注"
@@ -379,13 +356,13 @@
               <a-col :md="6" :sm="2" v-if="editId != 0">
                 <a-form-item label="添加时间" name="time">
                   <a-input
-                    v-model:value="formState.createdTime"
+                    v-model:value="formState.addTime"
                     style="width: 200px"
                     :disabled="true"
                   ></a-input>
                 </a-form-item>
               </a-col>
-              <a-col :md="6" :sm="2" :offset="3" v-if="editId != 0">
+              <a-col :md="6" :sm="2" v-if="editId != 0">
                 <a-form-item label="审核人员" name="user">
                   <a-input
                     v-model:value="formState.addUser"
@@ -394,7 +371,12 @@
                   ></a-input>
                 </a-form-item>
               </a-col>
-              <a-col class="gutter-row" :md="6" :sm="2">
+              <a-col
+                class="gutter-row"
+                :md="6"
+                :sm="2"
+                :offset="editId != 0 ? 3 : 0"
+              >
                 <a-form-item label="有效期" name="startTime">
                   <a-range-picker
                     v-model:value="startTimeAndEndTime"
@@ -452,83 +434,115 @@
                   ></a-input>
                 </a-form-item>
               </a-col>
-              <a-col class="gutter-row" :md="10" :offset="3" :sm="2">
+              <a-col class="gutter-row" :md="6" :offset="3" :sm="2">
                 <a-form-item label="身份证人像面">
-                  <div style="display: flex" v-if="editId != 0">
-                    <div
-                      v-if="formState.identityPUrl != ''"
-                      style="position: relative"
-                    >
-                      <img
-                        :src="formState.identityPUrl"
-                        @click="imgPreview('2')"
-                        style="width: 100px; height: 100px; cursor: pointer"
-                      />
-                      <div class="imageDel" @click="delItemImage(2)">
-                        <DeleteOutlined />
-                      </div>
+                  <a-upload
+                    v-model:file-list="fileListP"
+                    list-type="picture-card"
+                    @preview="handlePreview"
+                    accept="image/png, image/jpeg,image/jpg"
+                    :customRequest="customRequest"
+                    :beforeUpload="beforeUploadP"
+                    :showUploadList="{
+                      showPreviewIcon: true,
+                      showRemoveIcon: true,
+                    }"
+                  >
+                    <div v-if="fileListP.length < 1">
+                      <plus-outlined />
+                      <div style="margin-top: 8px">Upload</div>
                     </div>
-                  </div>
-                  <div v-if="formState.identityPUrl == ''">
-                    <a-upload
-                      v-model:file-list="fileListP"
-                      list-type="picture-card"
-                      @preview="handlePreview"
-                      accept="image/png, image/jpeg,image/jpg"
-                      :customRequest="customRequest"
-                      :beforeUpload="beforeUploadP"
-                      :showUploadList="{
-                        showPreviewIcon: true,
-                        showRemoveIcon: true,
-                      }"
-                    >
-                      <div v-if="fileListP.length < 1">
-                        <plus-outlined />
-                        <div style="margin-top: 8px">Upload</div>
-                      </div>
-                    </a-upload>
-                  </div>
+                  </a-upload>
+                  <!--                  <div style="display: flex" v-if="editId != 0">-->
+                  <!--                    <div-->
+                  <!--                      v-if="formState.identityPUrl != ''"-->
+                  <!--                      style="position: relative"-->
+                  <!--                    >-->
+                  <!--                      <img-->
+                  <!--                        :src="formState.identityPUrl"-->
+                  <!--                        @click="imgPreview('2')"-->
+                  <!--                        style="width: 100px; height: 100px; cursor: pointer"-->
+                  <!--                      />-->
+                  <!--                      <div class="imageDel" @click="delItemImage(2)">-->
+                  <!--                        <DeleteOutlined />-->
+                  <!--                      </div>-->
+                  <!--                    </div>-->
+                  <!--                  </div>-->
+                  <!--                  <div v-if="formState.identityPUrl == ''">-->
+                  <!--                    <a-upload-->
+                  <!--                      v-model:file-list="fileListP"-->
+                  <!--                      list-type="picture-card"-->
+                  <!--                      @preview="handlePreview"-->
+                  <!--                      accept="image/png, image/jpeg,image/jpg"-->
+                  <!--                      :customRequest="customRequest"-->
+                  <!--                      :beforeUpload="beforeUploadP"-->
+                  <!--                      :showUploadList="{-->
+                  <!--                        showPreviewIcon: true,-->
+                  <!--                        showRemoveIcon: true,-->
+                  <!--                      }"-->
+                  <!--                    >-->
+                  <!--                      <div v-if="fileListP.length < 1">-->
+                  <!--                        <plus-outlined />-->
+                  <!--                        <div style="margin-top: 8px">Upload</div>-->
+                  <!--                      </div>-->
+                  <!--                    </a-upload>-->
+                  <!--                  </div>-->
                 </a-form-item>
               </a-col>
-              <a-col class="gutter-row" :md="10" :sm="2">
+              <a-col class="gutter-row" :md="6" :sm="2">
                 <a-form-item label="身份证国徽面">
-                  <div style="display: flex" v-if="editId != 0">
-                    <div
-                      v-if="formState.identityGUrl != ''"
-                      style="position: relative"
-                    >
-                      <img
-                        :src="formState.identityGUrl"
-                        @click="imgPreview('3')"
-                        style="width: 100px; height: 100px; cursor: pointer"
-                      />
-                      <div class="imageDel" @click="delItemImage(3)">
-                        <DeleteOutlined />
-                      </div>
+                  <!--                  <div style="display: flex" v-if="editId != 0">-->
+                  <!--                    <div-->
+                  <!--                      v-if="formState.identityGUrl != ''"-->
+                  <!--                      style="position: relative"-->
+                  <!--                    >-->
+                  <!--                      <img-->
+                  <!--                        :src="formState.identityGUrl"-->
+                  <!--                        @click="imgPreview('3')"-->
+                  <!--                        style="width: 100px; height: 100px; cursor: pointer"-->
+                  <!--                      />-->
+                  <!--                      <div class="imageDel" @click="delItemImage(3)">-->
+                  <!--                        <DeleteOutlined />-->
+                  <!--                      </div>-->
+                  <!--                    </div>-->
+                  <!--                  </div>-->
+                  <a-upload
+                    v-model:file-list="fileListG"
+                    list-type="picture-card"
+                    @preview="handlePreview"
+                    accept="image/png, image/jpeg,image/jpg"
+                    :beforeUpload="beforeUploadG"
+                    :showUploadList="{
+                      showPreviewIcon: true,
+                      showRemoveIcon: true,
+                    }"
+                  >
+                    <div v-if="fileListG.length < 1">
+                      <plus-outlined />
+                      <div style="margin-top: 8px">Upload</div>
                     </div>
-                  </div>
-                  <div v-if="formState.identityGUrl == ''">
-                    <a-upload
-                      v-model:file-list="fileListG"
-                      list-type="picture-card"
-                      @preview="handlePreview"
-                      accept="image/png, image/jpeg,image/jpg"
-                      :beforeUpload="beforeUploadG"
-                      :showUploadList="{
-                        showPreviewIcon: true,
-                        showRemoveIcon: true,
-                      }"
-                    >
-                      <div v-if="fileListG.length < 1">
-                        <plus-outlined />
-                        <div style="margin-top: 8px">Upload</div>
-                      </div>
-                    </a-upload>
-                  </div>
+                  </a-upload>
+                  <!--                  <div v-if="formState.identityGUrl == ''">-->
+                  <!--                    <a-upload-->
+                  <!--                      v-model:file-list="fileListG"-->
+                  <!--                      list-type="picture-card"-->
+                  <!--                      @preview="handlePreview"-->
+                  <!--                      accept="image/png, image/jpeg,image/jpg"-->
+                  <!--                      :beforeUpload="beforeUploadG"-->
+                  <!--                      :showUploadList="{-->
+                  <!--                        showPreviewIcon: true,-->
+                  <!--                        showRemoveIcon: true,-->
+                  <!--                      }"-->
+                  <!--                    >-->
+                  <!--                      <div v-if="fileListG.length < 1">-->
+                  <!--                        <plus-outlined />-->
+                  <!--                        <div style="margin-top: 8px">Upload</div>-->
+                  <!--                      </div>-->
+                  <!--                    </a-upload>-->
+                  <!--                  </div>-->
 
                   <a-modal
                     :open="previewVisible"
-                    :title="previewTitle"
                     :footer="null"
                     @cancel="handleCancel"
                   >
@@ -598,7 +612,7 @@
               <a-col class="gutter-row" :md="6" :sm="2">
                 <a-form-item label="角色" name="roleId">
                   <a-select
-                    :options="roleList"
+                    :options="formRoleList"
                     show-search
                     style="width: 200px"
                     placeholder="请选择角色"
@@ -608,111 +622,104 @@
                   ></a-select>
                 </a-form-item>
               </a-col>
+              <!--              <a-col-->
+              <!--                class="gutter-row"-->
+              <!--                :md="6"-->
+              <!--                :sm="2"-->
+              <!--                v-if="-->
+              <!--                  ['1', '2', '3', '4', '7', '8', '9'].includes(-->
+              <!--                    formState.roleGroupId-->
+              <!--                  )-->
+              <!--                "-->
+              <!--              >-->
+              <!--                <a-form-item label="省份" name="provieceCode">-->
+              <!--                  <a-select-->
+              <!--                    :options="formProvieceList"-->
+              <!--                    show-search-->
+              <!--                    style="width: 200px"-->
+              <!--                    placeholder="请选择省份"-->
+              <!--                    :filter-option="filterOption"-->
+              <!--                    v-model:value="formState.provieceCode"-->
+              <!--                    @change="-->
+              <!--                      (value, options) =>-->
+              <!--                        formCityToStreet(value, options, 'city')-->
+              <!--                    "-->
+              <!--                  ></a-select>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--              <a-col-->
+              <!--                class="gutter-row"-->
+              <!--                :md="6"-->
+              <!--                :sm="2"-->
+              <!--                :offset="3"-->
+              <!--                v-if="-->
+              <!--                  ['2', '3', '4', '7', '8', '9'].includes(formState.roleGroupId)-->
+              <!--                "-->
+              <!--              >-->
+              <!--                <a-form-item label="市" name="cityCode">-->
+              <!--                  <a-select-->
+              <!--                    placeholder="选择市"-->
+              <!--                    v-model:value="formState.cityCode"-->
+              <!--                    :options="formCityList"-->
+              <!--                    style="width: 200px"-->
+              <!--                    :filter-option="filterOption"-->
+              <!--                    show-search-->
+              <!--                    @change="-->
+              <!--                      (value, options) =>-->
+              <!--                        formCityToStreet(value, options, 'district')-->
+              <!--                    "-->
+              <!--                  ></a-select>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--              <a-col-->
+              <!--                :md="6"-->
+              <!--                :sm="2"-->
+              <!--                v-if="['3', '4', '8', '9'].includes(formState.roleGroupId)"-->
+              <!--              >-->
+              <!--                <a-form-item label="区县" name="districtCode">-->
+              <!--                  <a-select-->
+              <!--                    placeholder="选择区县"-->
+              <!--                    v-model:value="formState.districtCode"-->
+              <!--                    :options="formDistrictList"-->
+              <!--                    :filter-option="filterOption"-->
+              <!--                    show-search-->
+              <!--                    style="width: 200px"-->
+              <!--                    @change="-->
+              <!--                      (value, options) =>-->
+              <!--                        formCityToStreet(value, options, 'street')-->
+              <!--                    "-->
+              <!--                  ></a-select>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--              <a-col-->
+              <!--                :md="6"-->
+              <!--                :sm="2"-->
+              <!--                v-if="['4', '8'].includes(formState.roleGroupId)"-->
+              <!--              >-->
+              <!--                <a-form-item label="街道" name="streetCode">-->
+              <!--                  <a-select-->
+              <!--                    placeholder="选择街道"-->
+              <!--                    :filter-option="filterOption"-->
+              <!--                    :options="formStreetList"-->
+              <!--                    style="width: 200px"-->
+              <!--                    show-search-->
+              <!--                    v-model:value="formState.streetCode"-->
+              <!--                  ></a-select>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
               <a-col
-                class="gutter-row"
                 :md="6"
                 :sm="2"
-                v-if="
-                  ['1', '2', '3', '4', '7', '8', '9'].includes(
-                    formState.roleGroupId
-                  )
-                "
+                v-if="[7, 8, 9].includes(formState.roleGroupType)"
               >
-                <a-form-item label="省份" name="provieceCode">
+                <a-form-item label="省厅" name="poProvinceCode">
                   <a-select
-                    :options="formProvieceList"
-                    show-search
-                    style="width: 200px"
-                    placeholder="请选择省份"
-                    :filter-option="filterOption"
-                    v-model:value="formState.provieceCode"
-                    @change="
-                      (value, options) =>
-                        formCityToStreet(value, options, 'city')
-                    "
-                  ></a-select>
-                </a-form-item>
-              </a-col>
-              <a-col
-                class="gutter-row"
-                :md="6"
-                :sm="2"
-                :offset="3"
-                v-if="
-                  ['2', '3', '4', '7', '8', '9'].includes(formState.roleGroupId)
-                "
-              >
-                <a-form-item label="市" name="cityCode">
-                  <a-select
-                    placeholder="选择市"
-                    v-model:value="formState.cityCode"
-                    :options="formCityList"
-                    style="width: 200px"
-                    :filter-option="filterOption"
-                    show-search
-                    @change="
-                      (value, options) =>
-                        formCityToStreet(value, options, 'district')
-                    "
-                  ></a-select>
-                </a-form-item>
-              </a-col>
-              <a-col
-                :md="6"
-                :sm="2"
-                v-if="['3', '4', '8', '9'].includes(formState.roleGroupId)"
-              >
-                <a-form-item label="区县" name="districtCode">
-                  <a-select
-                    placeholder="选择区县"
-                    v-model:value="formState.districtCode"
-                    :options="formDistrictList"
-                    :filter-option="filterOption"
-                    show-search
-                    style="width: 200px"
-                    @change="
-                      (value, options) =>
-                        formCityToStreet(value, options, 'street')
-                    "
-                  ></a-select>
-                </a-form-item>
-              </a-col>
-              <a-col
-                :md="6"
-                :sm="2"
-                v-if="['4', '8'].includes(formState.roleGroupId)"
-              >
-                <a-form-item label="街道" name="streetCode">
-                  <a-select
-                    placeholder="选择街道"
-                    :filter-option="filterOption"
-                    :options="formStreetList"
-                    style="width: 200px"
-                    show-search
-                    v-model:value="formState.streetCode"
-                  ></a-select>
-                </a-form-item>
-              </a-col>
-              <a-col
-                :md="6"
-                :sm="2"
-                :offset="
-                  !['2', '3', '7', '9'].includes(formState.roleGroupId) ? 3 : 0
-                "
-                v-if="
-                  ['1', '2', '3', '4', '7', '8', '9'].includes(
-                    formState.roleGroupId
-                  )
-                "
-              >
-                <a-form-item label="省厅" name="poProvieceCode">
-                  <a-select
-                    :options="formPoProvieceList"
+                    :options="formPoProvinceList"
                     show-search
                     placeholder="请选择省厅"
                     :filter-option="filterOption"
                     style="width: 200px"
-                    v-model:value="formState.poProvieceCode"
+                    v-model:value="formState.poProvinceCode"
                     @change="
                       (value, options) =>
                         formCityToStreet(value, options, 'city')
@@ -723,12 +730,8 @@
               <a-col
                 :md="6"
                 :sm="2"
-                :offset="
-                  !['2', '4', '7', '8'].includes(formState.roleGroupId) ? 3 : 0
-                "
-                v-if="
-                  ['2', '3', '4', '7', '8', '9'].includes(formState.roleGroupId)
-                "
+                :offset="3"
+                v-if="[7, 8, 9].includes(formState.roleGroupType)"
               >
                 <a-form-item label="市局" name="poCityCode">
                   <a-select
@@ -748,7 +751,7 @@
               <a-col
                 :md="6"
                 :sm="2"
-                v-if="['3', '4', '8', '9'].includes(formState.roleGroupId)"
+                v-if="[8, 9].includes(formState.roleGroupType)"
               >
                 <a-form-item label="分局" name="poDistrictCode">
                   <a-select
@@ -768,8 +771,7 @@
               <a-col
                 :md="6"
                 :sm="2"
-                :offset="3"
-                v-if="['4', '8'].includes(formState.roleGroupId)"
+                v-if="[8].includes(formState.roleGroupType)"
               >
                 <a-form-item label="派出所" name="poStreetCode">
                   <a-select
@@ -782,37 +784,10 @@
                   ></a-select>
                 </a-form-item>
               </a-col>
-              <!--              <a-col-->
-              <!--                :md="6"-->
-              <!--                :sm="2"-->
-              <!--                v-if="['5', '6'].includes(formState.roleGroupId) && isMV == '1'"-->
-              <!--              >-->
-              <!--                <a-form-item-->
-              <!--                  label="小区"-->
-              <!--                  name="villageIds"-->
-              <!--                  style="position: relative"-->
-              <!--                >-->
-              <!--                  <template v-if="isMV == '1'">-->
-              <!--                    <span style="display: block; width: 500px">-->
-              <!--                      <PlusOutlined-->
-              <!--                        style="-->
-              <!--                          position: absolute;-->
-              <!--                          left: 50px;-->
-              <!--                          top: -31px;-->
-              <!--                          cursor: pointer;-->
-              <!--                          border: 1px deepskyblue dashed;-->
-              <!--                          border-radius: 50%;-->
-              <!--                        "-->
-              <!--                        @click="openTransfer"-->
-              <!--                      />-->
-              <!--                    </span>-->
-              <!--                  </template>-->
-              <!--                </a-form-item>-->
-              <!--              </a-col>-->
               <a-col
                 :md="6"
                 :sm="2"
-                v-if="['5', '6'].includes(formState.roleGroupId) && isMV != '1'"
+                v-if="[6].includes(formState.roleGroupType)"
               >
                 <a-form-item label="小区" name="villageId">
                   <a-select
@@ -826,51 +801,33 @@
                   ></a-select>
                 </a-form-item>
               </a-col>
-              <a-col
-                :md="6"
-                :sm="2"
-                :offset="3"
-                v-if="['6'].includes(formState.roleGroupId) && isMV == '2'"
-              >
-                <a-form-item
-                  label="楼栋"
-                  style="position: relative"
-                  :name="isMV == '3' ? 'buildingIds' : 'buildingId'"
-                >
-                  <template v-if="isMV == '3'">
-                    <!--                    <span style="width: 500px; display: block" class="building">-->
-                    <!--                      <span>-->
-                    <!--                        <PlusOutlined-->
-                    <!--                          style="-->
-                    <!--                            position: absolute;-->
-                    <!--                            left: 50px;-->
-                    <!--                            top: -31px;-->
-                    <!--                            cursor: pointer;-->
-                    <!--                            border: 1px deepskyblue dashed;-->
-                    <!--                            border-radius: 50%;-->
-                    <!--                          "-->
-                    <!--                          @click="openBuildingTransfer"-->
-                    <!--                        />-->
-                    <!--                      </span>-->
-                    <!--                    </span>-->
-                  </template>
-                  <a-select
-                    placeholder="选择楼栋"
-                    v-else
-                    style="width: 200px"
-                    :options="formBuildingList"
-                    v-model:value="formState.buildingId"
-                    :filter-option="filterOption"
-                    show-search
-                    @change="addBuildingIds"
-                  ></a-select>
-                </a-form-item>
-              </a-col>
+              <!--              <a-col-->
+              <!--                :md="6"-->
+              <!--                :sm="2"-->
+              <!--                :offset="3"-->
+              <!--                v-if="[6].includes(formState.roleGroupType)"-->
+              <!--              >-->
+              <!--                <a-form-item-->
+              <!--                  label="楼栋"-->
+              <!--                  style="position: relative"-->
+              <!--                  name="buildingIds"-->
+              <!--                >-->
+              <!--                  <a-select-->
+              <!--                    placeholder="选择楼栋"-->
+              <!--                    style="width: 200px"-->
+              <!--                    :options="formBuildingList"-->
+              <!--                    v-model:value="formState.buildingId"-->
+              <!--                    :filter-option="filterOption"-->
+              <!--                    show-search-->
+              <!--                    @change="addBuildingIds"-->
+              <!--                  ></a-select>-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
               <a-col
                 :md="24"
                 :sm="2"
                 :offset="3"
-                v-if="['5', '6'].includes(formState.roleGroupId) && isMV == '1'"
+                v-if="[5].includes(formState.roleGroupType)"
               >
                 <a-form-item style="position: relative">
                   <a-button
@@ -896,7 +853,7 @@
                 :md="24"
                 :sm="2"
                 :offset="3"
-                v-if="['6'].includes(formState.roleGroupId) && isMV == '3'"
+                v-if="[6].includes(formState.roleGroupType)"
               >
                 <a-form-item style="position: relative">
                   <a-button
@@ -927,8 +884,11 @@
       v-model:open="transferVisible"
       title="选择小区"
       width="800px"
+      :mask-closable="false"
       @ok="transferSubmit"
+      :confirm-loading="villageLoading"
       @cancel="closeTransfer"
+      :cancel-button-props="{ disabled: disabledCancelButton }"
     >
       <div class="transfer">
         <a-transfer
@@ -938,6 +898,8 @@
           :operationStyle="{ height: '200px', marginTop: '50px' }"
           :filter-option="filterOption"
           :render="(item) => item.title"
+          pagination
+          @change="handleChange"
         />
       </div>
     </a-modal>
@@ -961,7 +923,11 @@
     </a-modal>
   </div>
 </template>
-
+<script>
+  export default {
+    name: 'systemUser',
+  }
+</script>
 <script setup>
   import { computed, nextTick, reactive, ref } from 'vue'
   import { PlusOutlined } from '@ant-design/icons-vue'
@@ -973,7 +939,6 @@
     SearchOutlined,
     DownOutlined,
     UpOutlined,
-    DeleteOutlined,
   } from '@ant-design/icons-vue'
   import {
     addU,
@@ -982,9 +947,9 @@
     getBuilding,
     getDictionary,
     getRole,
+    getRoleGroup,
     getUserList,
     getVillageList,
-    hasU,
     toEdit,
   } from '@/api/system'
   const formItemLayout = computed(() => {
@@ -1008,19 +973,17 @@
     poStreetList,
     poCityList,
     formState,
-    poProvieceList,
-    provieceList,
+    poProvinceList,
     authList,
     streetList,
     dateFormat,
     villageList,
-    formRoleGroupList,
     cityList,
     roleList,
     roleGroupList,
     statusOptions,
+    addStatusOptions,
     districtList,
-    formAuthList,
     formRef,
     rules,
     rulesEdit,
@@ -1028,25 +991,24 @@
   } from './data'
   import { messageContent } from '@/utils/message'
   import { getBase64 } from '@/utils'
+  import { getCity } from '@/api/community'
   const { dataSource, tableLoading, requestObj } = useTableInit({
     tableObj: userListObj,
   })
   const { modalRef, titleValue, editId } = useInitFrom()
   const startTimeAndEndTime = ref([])
-  // 表单的省
-  let formProvieceList = []
+  // // 表单的省
+  // let formProvieceList = []
   // 表单的省厅
-  let formPoProvieceList = []
-  const formCityList = ref([])
-  const formStreetList = ref([])
+  let formPoProvinceList = ref([])
+  // const formCityList = ref([])
+  // const formStreetList = ref([])
   const formPoCityList = ref([])
   const formVillageId = ref([])
   const formDistrictList = ref([])
   const formPoDistrictList = ref([])
   const formPoStreetList = ref([])
   const formBuildingList = ref([])
-  //未处理的主页面的角色组（由list接口返回）
-  let role = []
   // 新增
   const openAdd = async () => {
     formState.identityGUrl = ''
@@ -1055,8 +1017,8 @@
     formPoDistrictList.value = []
     formPoStreetList.value = []
     formBuildingList.value = []
-    formCityList.value = []
-    formStreetList.value = []
+    // formCityList.value = []
+    // formStreetList.value = []
     formPoCityList.value = []
     editId.value = 0
     modalRef.value.open()
@@ -1073,79 +1035,19 @@
     tableLoading.value = true
     getUserList(tableObj)
       .then((res) => {
-        dataSource.value = res.result.userList.map((item, index) => {
+        dataSource.value = res.result.list.map((item, index) => {
           return {
             ...item,
             changeLoading: false,
-            No: index + 1,
+            No:
+              index +
+              1 +
+              paginationInfo.pageSize * (paginationInfo.current - 1),
             operation: '',
             key: item.id,
           }
         })
-
-        const poProviece = res.result.poProvieceList.map((item) => {
-          return {
-            ...item,
-            value: item.dicCode,
-            label: item.dicName,
-          }
-        })
-        poProviece.splice(0, 0, {
-          value: '',
-          label: '全部',
-          childCode: 'PO',
-        })
-        poProvieceList.value = poProviece
-        formPoProvieceList = poProvieceList.value.slice(1)
-        const proviece = res.result.provieceList.map((item) => {
-          return {
-            ...item,
-            value: item.dicCode,
-            label: item.dicName,
-          }
-        })
-        proviece.splice(0, 0, {
-          value: '',
-          label: '全部',
-          childCode: 'DQ',
-        })
-        provieceList.value = proviece
-        formProvieceList = provieceList.value.slice(1)
-        role = res.result.roleGroupList
-        const roleB = []
-        role.forEach((item) => {
-          let isUnique = false
-          roleB.forEach((itemRole) => {
-            if (item.groupName == itemRole.groupName) {
-              isUnique = true
-            } else {
-              isUnique = false
-            }
-          })
-          if (!isUnique) {
-            roleB.push(item)
-          }
-        })
-        const roleC = roleB.map((item) => {
-          return {
-            ...item,
-            value: item.groupType,
-            label: item.groupName,
-          }
-        })
-        roleC.unshift({
-          value: '',
-          label: '全部',
-        })
-        roleGroupList.value = roleC
-        formRoleGroupList.value = roleB.map((item) => {
-          return {
-            ...item,
-            value: item.groupType,
-            label: item.groupName,
-          }
-        })
-        paginationInfo.total = res.result.page.totalResult
+        paginationInfo.total = res.result.totalResult
       })
       .finally(() => {
         tableLoading.value = false
@@ -1153,6 +1055,32 @@
   }
   getList(requestObj)
 
+  getRoleGroup({}).then((res) => {
+    const roleGroup = res.result.map((item) => {
+      return {
+        ...item,
+        label: item.name,
+        value: item.id,
+      }
+    })
+    formRoleGroup.value = roleGroup
+    roleGroupList.value = [
+      {
+        value: '',
+        label: '全部',
+      },
+    ].concat(roleGroup)
+  })
+  simpleRequest({
+    requestObj: { grade: 'province' },
+    requestFun: getCity,
+    isComplete: true,
+    isForm: true,
+    formList: formPoProvinceList,
+    tableList: poProvinceList,
+    valueString: 'dicCode',
+    labelString: 'dicName',
+  })
   //分页的改变
   function handleTableChange(pagination) {
     paginationInfo.pageSize = pagination.pageSize
@@ -1346,13 +1274,13 @@
             formState.cityCode = undefined
             formState.streetCode = undefined
             formState.districtCode = undefined
-            formCityList.value = res.result.map((item) => {
-              return {
-                ...item,
-                value: item.dicCode,
-                label: item.dicName,
-              }
-            })
+            // formCityList.value = res.result.map((item) => {
+            //   return {
+            //     ...item,
+            //     value: item.dicCode,
+            //     label: item.dicName,
+            //   }
+            // })
           } else if (type == 'district') {
             formState.streetCode = undefined
             formState.districtCode = undefined
@@ -1365,13 +1293,13 @@
             })
           } else if (type == 'street') {
             formState.streetCode = undefined
-            formStreetList.value = res.result.map((item) => {
-              return {
-                ...item,
-                value: item.dicCode,
-                label: item.dicName,
-              }
-            })
+            // formStreetList.value = res.result.map((item) => {
+            //   return {
+            //     ...item,
+            //     value: item.dicCode,
+            //     label: item.dicName,
+            //   }
+            // })
           }
         } else if (options.childCode == 'PO') {
           if (type == 'city') {
@@ -1413,8 +1341,8 @@
         formState.cityCode = undefined
         formState.streetCode = undefined
         formState.districtCode = undefined
-        formCityList.value = []
-        formStreetList.value = []
+        // formCityList.value = []
+        // formStreetList.value = []
         formDistrictList.value = []
       } else if (options.childCode == 'PO' && type == 'city') {
         formState.poCityCode = undefined
@@ -1426,10 +1354,7 @@
       }
     }
   }
-
-  // const changeVillageId = (value) => {
-  //   formState.villageId = value[value.length - 1]
-  // }
+  const formRoleList = ref([])
   // 创建角色 通常用于选中角色分组之后再调用
   const createRole = (value, options, controlAdd = true, page = true) => {
     if (page) {
@@ -1441,7 +1366,9 @@
       formState.villageIds = []
       // transferArray.value = []
       transferTable.value = []
+      formState.roleGroupType = options.type
     }
+
     nextTick(() => {
       let modalScroll = document.getElementById('modalScroll')
       if (modalScroll) {
@@ -1451,10 +1378,24 @@
     })
     if (value !== '') {
       getRole({ roleGroupId: value }).then((res) => {
-        roleList.value = res.result.map((item) => {
+        roleList.value = [
+          {
+            value: '',
+            label: '全部',
+          },
+        ].concat(
+          res.result.map((item) => {
+            return {
+              ...item,
+              value: controlAdd ? item.id : item.id,
+              label: item.name,
+            }
+          })
+        )
+        formRoleList.value = res.result.map((item) => {
           return {
             ...item,
-            value: controlAdd ? item.id : item.id + '#' + item.isMV,
+            value: controlAdd ? item.id : item.id,
             label: item.name,
           }
         })
@@ -1468,6 +1409,7 @@
       ]
     }
   }
+
   // 楼栋列表
   const createBuildingList = (value, isRequest = true) => {
     if (isRequest) {
@@ -1488,7 +1430,12 @@
           }
         })
         if (isRequest) {
-          buildingList.value = build
+          buildingList.value = [
+            {
+              value: '',
+              label: '全部',
+            },
+          ].concat(build)
         } else {
           formBuildingList.value = build
         }
@@ -1524,49 +1471,18 @@
     fileListG.value = []
     fileListP.value = []
   }
-  const addBuildingIds = (value) => {
-    formState.buildingIds = value
-  }
+  // const addBuildingIds = (value) => {
+  //   formState.buildingIds = value
+  // }
   //表单提交
   const submit = async () => {
     modalRef.value.showLoading()
     setBuildingArray = []
     const changeFun = editId.value == '0' ? addU : edit
-    // const formData = new FormData()
-    // for (let formStateKey in formState) {
-    //   if (formState[formStateKey] != undefined) {
-    //     if (formStateKey == 'villageIds') {
-    //       formData.append(
-    //         formStateKey,
-    //         Array.isArray(formState.villageIds)
-    //           ? formState.villageIds.join(',')
-    //           : formState.villageIds
-    //       )
-    //     } else if (formStateKey == 'buildingIds') {
-    //       formData.append(
-    //         formStateKey,
-    //         Array.isArray(formState.buildingIds)
-    //           ? formState.buildingIds.join(',')
-    //           : formState.buildingIds
-    //       )
-    //     } else if (formStateKey == 'photoSrc') {
-    //       formData.append(formStateKey, formState[formStateKey][0] || '')
-    //       formData.append(formStateKey, formState[formStateKey][1] || '')
-    //     } else {
-    //       console.log(formState)
-    //       formData.append(formStateKey, formState[formStateKey])
-    //     }
-    //   } else {
-    //     formData.append(formStateKey, '')
-    //   }
-    // }
     if (editId.value == '0') {
-      formRef.value.validate().then(async () => {
-        let res = await hasU({ username: formState.username })
-        if (res.code == '401') {
-          modalRef.value.hideLoading()
-          messageContent('error', res.desc)
-        } else if (res.code == '200') {
+      formRef.value
+        .validate()
+        .then(async () => {
           await changeFun({
             ...formState,
             buildingIds: Array.isArray(formState.buildingIds)
@@ -1586,13 +1502,13 @@
               messageContent('error', '输入项有误，请检查输入项')
             } else if (res.code == '412') {
               messageContent('error', res.desc)
-              modalRef.value.hideLoading()
-            } else {
-              modalRef.value.hideLoading()
             }
           })
-        }
-      })
+        })
+        .finally(() => {
+          modalRef.value.hideLoading()
+          modalRef.value.disabledCancelFalse()
+        })
     } else {
       // console.log(formState.photoSrc)
       // formData.append()
@@ -1604,23 +1520,30 @@
         villageIds: Array.isArray(formState.villageIds)
           ? formState.villageIds.join(',')
           : formState.villageIds,
-      }).then((res) => {
-        if (res.code == '200') {
-          getList(requestObj)
-          modalRef.value.close()
-          clearFormItem()
-          messageContent('success', '表格项修改成功')
-        } else if (res.code == '400') {
-          messageContent('error', '输入项有误，请检查输入项')
-        } else if (res.code == '412') {
-          messageContent('error', res.desc)
-          modalRef.value.hideLoading()
-        } else {
-          modalRef.value.hideLoading()
-        }
+        base64Img1: formState.base64Img1?.includes('http')
+          ? ''
+          : formState.base64Img1,
+        base64Img2: formState.base64Img2?.includes('http')
+          ? ''
+          : formState.base64Img2,
       })
+        .then((res) => {
+          if (res.code == '200') {
+            getList(requestObj)
+            modalRef.value.close()
+            clearFormItem()
+            messageContent('success', '表格项修改成功')
+          } else if (res.code == '400') {
+            messageContent('error', '输入项有误，请检查输入项')
+          } else if (res.code == '412') {
+            messageContent('error', res.desc)
+          }
+        })
+        .finally(() => {
+          modalRef.value.hideLoading()
+          modalRef.value.disabledCancelFalse()
+        })
     }
-    await modalRef.value.hideLoading()
     startTimeAndEndTime.value = []
   }
   const close = () => {
@@ -1633,6 +1556,10 @@
   }
   const delTableItem = async (record) => {
     await del({ id: record.id })
+    if (dataSource.value.length == 1 && paginationInfo.current > 1) {
+      requestObj.pageNum-- || requestObj.pageNo--
+    }
+    messageContent('success', '删除表格项成功')
     await getList(requestObj)
   }
   // 修改功能
@@ -1641,137 +1568,150 @@
     formState.identityPUrl = ''
     editId.value = record.id
     record.changeLoading = true
-    let buildingList_ = []
-    let zjImageList = []
+    // let buildingList_ = []
+    // let zjImageList = []
+    let res1
     await toEdit({
       id: record.id,
-      identityImage: '',
-    }).then((res) => {
-      buildingList_ = res.result.buildingList_
-      zjImageList = res.result.zjImageList
     })
-    if (zjImageList.length != 0) {
-      zjImageList.forEach((item) => {
-        if (item.type == '2') {
-          formState.identityPUrl = item.originalImage
-        } else if (item.type == '3') {
-          formState.identityGUrl = item.originalImage
-        }
+      .then((res) => {
+        // buildingList_ = res.result.buildingList_
+        // zjImageList = res.result.zjImageList
+        res1 = res.result
+        formRoleGroup.value = res.result.roleGroupList?.map((item) => {
+          return {
+            ...item,
+            value: item.id,
+            label: item.name,
+          }
+        })
+        const RoleList = res.result.roleList?.map((item) => {
+          return {
+            ...item,
+            value: item.id,
+            label: item.name,
+          }
+        })
+        formRoleList.value = RoleList
+        poProvinceList.value = res.result.poProvinceList?.map((item) => {
+          return {
+            ...item,
+            label: item.dicName,
+            value: item.dicCode,
+          }
+        })
+        formPoCityList.value = res.result.poCityList?.map((item) => {
+          return {
+            ...item,
+            label: item.dicName,
+            value: item.dicCode,
+          }
+        })
+        formDistrictList.value = res.result.poDistrictList?.map((item) => {
+          return {
+            ...item,
+            label: item.dicName,
+            value: item.dicCode,
+          }
+        })
       })
-    }
-    await createRole(record.groupType, formState, false, false)
+      .finally(() => {
+        record.changeLoading = false
+      })
     await roleChange(record.roleId)
-    for (let recordKey in record) {
+    const { roleGroupList } = res1
+    const resObj = res1.pd
+    for (let recordKey in resObj) {
       if (recordKey == 'isAuth') {
-        formState[recordKey] = record[recordKey].toString()
+        formState[recordKey] = resObj[recordKey].toString()
         continue
+      } else if (recordKey == 'base64Img1') {
+        formState[recordKey] = resObj[recordKey]
+        formState.identityGUrl = resObj[recordKey]
+        fileListG.value = formState.identityGUrl
+          ? [
+              {
+                uid: '565656',
+                status: 'done',
+                url: formState.identityGUrl,
+              },
+            ]
+          : []
+      } else if (recordKey == 'base64Img2') {
+        formState[recordKey] = resObj[recordKey]
+        formState.identityPUrl = resObj[recordKey]
+        fileListP.value = formState.identityPUrl
+          ? [
+              {
+                uid: '5656562222',
+                status: 'done',
+                url: formState.identityPUrl,
+              },
+            ]
+          : []
       } else if (recordKey == 'password') {
         formState[recordKey] = ''
         continue
-      } else if (recordKey == 'groupType') {
-        formState.roleGroupId = record[recordKey].toString()
+      } else if (recordKey == 'groupId') {
+        formState.roleGroupId = resObj[recordKey].toString()
+        const roleGroupType = roleGroupList.filter(
+          (item) => item.id === resObj[recordKey]
+        )
+        formState.roleGroupType = roleGroupType[0].type
+
         continue
       } else if (recordKey == 'roleId') {
-        formState.roleId = record[recordKey] + '#' + record.isMV
+        formState.roleId = resObj[recordKey]
         continue
       } else if (recordKey == 'isMV') {
-        isMV.value = record[recordKey]
+        isMV.value = resObj[recordKey]
         continue
-      } else if (recordKey == 'villageIds') {
-        formState[recordKey] = record[recordKey].split(',')
-        transferTable.value = formState.villageIds.map((item) => {
-          const ele = villageList.value.filter((itemV) => itemV.value === item)
-          return { value: ele[0].name }
-        })
-        continue
-      } else if (recordKey == 'buildingIds' && record[recordKey] != '') {
-        // record.buildingIds?.length > 32
-        await createBuildingList(record.villageId, false)
-        if (record.isMV === '3') {
-          const dataArray = JSON.parse(record.buildingIds)
-          // // 多个楼栋
-          let completeArray = []
-          //   build = []
-          // // 选中楼栋的id
-          for (const dataArrayKey in dataArray) {
-            let arrayItem = dataArray[dataArrayKey].ids.split(',')
-            completeArray.push(...arrayItem)
-          }
-          // setBuildingArray = []
-          // for (const dataArrayKey in dataArray) {
-          //   await getBuilding({
-          //     villageId: dataArray[dataArrayKey].villageId,
-          //   })
-          //     .then((res) => {
-          //       build = res.result.map((item) => {
-          //         return {
-          //           ...item,
-          //           value: item.id,
-          //           label: item.name,
-          //         }
-          //       })
-          //     })
-          //     .then(() => {
-          //       setBuildingArray.push(...build)
-          //     })
-          // }
-          formState.buildingIds = completeArray
-
-          if (transferBuildingTable.value.length === 0) {
-            transferBuildingTable.value = buildingList_.map((item) => {
-              return {
-                ...item,
-                value: item.villageName,
-                buildingValue: item.name,
-              }
-            })
-            // await toEdit({
-            //   id: record.id,
-            //   identityImage: '',
-            // }).then((res) => {
-            //   const buildingList_ = res.result.buildingList_
-            //   transferBuildingTable.value = buildingList_.map((item) => {
-            //     return {
-            //       ...item,
-            //       value: item.villageName,
-            //       buildingValue: item.name,
-            //     }
-            //   })
-            // })
-            // let buildingAddTable = []
-            // formState.buildingIds.forEach((item) => {
-            //   const ele = setBuildingArray.filter(
-            //     (itemV) => itemV.value === item
-            //   )
-            //   const selectVillage = villageList.value.find(
-            //     (item) => item.value === ele[0]?.villageId
-            //   )
-            //   // console.log(ele, selectVillage)
-            //   if (selectVillage != undefined) {
-            //     buildingAddTable.push({
-            //       value: selectVillage?.name,
-            //       buildingValue: ele[0].name,
-            //     })
-            //   }
-            // })
-            // transferBuildingTable.value = buildingAddTable
-          }
-        } else {
-          await createBuildingList(record.villageIds, false)
-          formState.buildingIds = [].push(record.buildingIds)
+      } else if (recordKey == 'villageList') {
+        if (formState.roleGroupType === 5) {
+          transferTable.value = resObj[recordKey].map((item) => {
+            return {
+              ...item,
+              value: item.name,
+            }
+          })
+          formState.villageIds = resObj[recordKey].map((item) => item.villageId)
+        } else if (formState.roleGroupType === 6) {
+          const BuildingTable = resObj[recordKey].map((item) => {
+            return {
+              ...item,
+              value: item.villageName,
+              buildingValue: item.buildingName,
+            }
+          })
+          transferBuildingTable.value = BuildingTable
+          const setBuildingTable = BuildingTable.map((item) => {
+            return {
+              ...item,
+              key: item.buildingId,
+              id: item.buildingId,
+              value: item.buildingId,
+              label: item.buildingName,
+              name: item.buildingName,
+              title: item.buildingName,
+            }
+          })
+          setBuildingArray.push(...setBuildingTable)
+          formState.buildingIds = resObj[recordKey].map(
+            (item) => item.buildingId
+          )
         }
+
         continue
       } else if (recordKey == 'startTime') {
-        startTimeAndEndTime.value[0] = record[recordKey]
+        startTimeAndEndTime.value[0] = resObj[recordKey]
         continue
       } else if (recordKey == 'endTime') {
-        startTimeAndEndTime.value[1] = record[recordKey]
+        startTimeAndEndTime.value[1] = resObj[recordKey]
         continue
       }
-      formState[recordKey] = record[recordKey]
+      formState[recordKey] = resObj[recordKey]
     }
     setTimeout(() => {
-      record.changeLoading = false
       modalRef.value.open()
       nextTick(() => {
         let modalScroll = document.getElementById('modalScroll')
@@ -1811,20 +1751,26 @@
   }
   // let transferArray = ref([])
   let transferTable = ref([])
+  const villageLoading = ref(false)
+  const disabledCancelButton = ref(false)
+
   const transferSubmit = () => {
+    // villageLoading.value = true
+    //  console.log(villageLoading.value)
+    // disabledCancelButton.value = true
+    // setTimeout(() => {
+    villageLoading.value = true
+    // }, 10)
     formState.villageIds = targetKeys.value
-    // transferArray.value = formState.villageIds.map((item) => {
-    //   const ele = villageList.value.filter((itemV) => itemV.value === item)
-    //   return ele[0].name
-    // })
-    targetKeys.value = []
-    // console.log(transferArray.value)
+    //
     transferTable.value = formState.villageIds.map((item) => {
       const ele = villageList.value.filter((itemV) => itemV.value === item)
       return { value: ele[0].name }
     })
+    //
     transferVisible.value = false
     formState.villageId = formState.villageIds[formState.villageIds.length - 1]
+    targetKeys.value = []
   }
   const closeTransfer = () => {
     targetKeys.value = []
@@ -1860,7 +1806,7 @@
         key: item.value,
       }
     })
-    // 把每次点开的transBUildingData汇聚到一个数组里面 点击确认使用
+    // 把每次点开的transBuildingData汇聚到一个数组里面 点击确认使用
     setBuildingArray.push(...transferBuildingData)
     // 将多选的选项回显到targetKey
     targetBuildingKeys.value = formState.buildingIds
@@ -1890,11 +1836,11 @@
           value: selectVillage.name,
           buildingValue: ele[0].name,
         }
-        // buildingAddArray.push(selectVillage.name + '-' + ele[0].name)
       }
     })
     // transferBuildingArray.value = buildingAddArray
     transferBuildingTable.value = buildingAddTable
+
     targetBuildingKeys.value = []
     transferBuildingVisible.value = false
     formState.buildingId =
@@ -1914,25 +1860,24 @@
   }
   const beforeUploadG = (file) => {
     getBase64(file).then((res) => {
-      formState.base64Img1 = res.replace(/.*;base64,/, '')
+      formState.base64Img1 = res
     })
     return false
   }
   const beforeUploadP = (file) => {
     getBase64(file).then((res) => {
       // console.log(res)
-      formState.base64Img2 = res.replace(/.*;base64,/, '')
+      formState.base64Img2 = res
     })
     return false
   }
   const previewVisible = ref(false)
   const previewImage = ref('')
-  const previewTitle = ref('')
   const fileListG = ref([])
   const fileListP = ref([])
   const handleCancel = () => {
     previewVisible.value = false
-    previewTitle.value = ''
+    // previewTitle.value = ''
   }
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -1940,24 +1885,12 @@
     }
     previewImage.value = file.url || file.preview
     previewVisible.value = true
-    previewTitle.value =
-      file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
-  }
-  const delItemImage = (type) => {
-    if (type == '3') {
-      formState.identityGUrl = ''
-    } else {
-      formState.identityPUrl = ''
-    }
-  }
-  const imgPreview = (type) => {
-    previewVisible.value = true
-    previewTitle.value = type == 3 ? '国徽面' : '人像面'
-    previewImage.value =
-      type == 3 ? formState.identityGUrl : formState.identityPUrl
   }
   const customRequest = (data) => {
     console.log(data.file)
+  }
+  const handleChange = (nextTargetKeys) => {
+    targetKeys.value = nextTargetKeys
   }
 </script>
 
