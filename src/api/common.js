@@ -15,3 +15,12 @@ export function getVillage(data) {
     data,
   })
 }
+
+// 获取小区的楼栋
+export function getBuilding(data) {
+  return request({
+    url: '/managerPC/villageBuilding/getBuilding',
+    method: 'post',
+    data,
+  })
+}

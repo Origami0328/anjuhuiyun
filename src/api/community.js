@@ -357,10 +357,26 @@ export function multipleDeleteApi(data) {
   })
 }
 
-// 房屋下的批量删除
+// 房屋下的删除
 export function deleteHouse(data) {
   return request({
     url: '/managerPC/villageHouse/del',
+    method: 'post',
+    data,
+  })
+}
+// 房屋下的分配房东数据
+export function getDisUser(data) {
+  return request({
+    url: '/managerPC/villageHouse/getDisUser',
+    method: 'post',
+    data,
+  })
+}
+// 房屋下的分配房东
+export function disMaster(data) {
+  return request({
+    url: '/managerPC/villageHouse/disUser',
     method: 'post',
     data,
   })

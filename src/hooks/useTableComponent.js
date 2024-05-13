@@ -9,12 +9,16 @@ export function useTableInit(opt = {}) {
   const formVillageList = ref([])
   const provinceList = ref([])
   const poProvinceList = ref([])
+  const responseData = reactive({
+    result: undefined,
+  })
   const paginationInfo = reactive({
     total: 20,
     pageSize: 10,
     current: 1,
     showQuickJumper: true,
     showSizeChanger: true,
+    showTotal: (total) => `共 ${total} 条数据`,
   })
 
   if (opt.tableObj) {
@@ -37,9 +41,7 @@ export function useTableInit(opt = {}) {
   }
 
   function getData(tableObj) {
-    // console.log(requestObj)
     tableLoading.value = true
-    //针对系统用户列表的特殊情况
 
     if (opt.getTableList && typeof opt.getTableList == 'function') {
       opt
@@ -53,7 +55,6 @@ export function useTableInit(opt = {}) {
             ? res.result.list.map((item, index) => ({
                 ...item,
                 key: item.id,
-                // No: index + 1, //序号字段
                 No:
                   paginationInfo.pageSize * (paginationInfo.current - 1) +
                   index +
@@ -61,13 +62,18 @@ export function useTableInit(opt = {}) {
                 ...item,
                 delLoading: false,
                 changeLoading: false,
+                changeLoading1: false,
+                changeLoading2: false,
+                changeLoading3: false,
+                changeLoading4: false,
+                changeLoading5: false,
                 operation: '',
               }))
             : res.result.map((item, index) => ({
                 key: item.id || index + 1,
                 ...item,
               }))
-
+          responseData.result = res.result
           if (res.result.provieceList) {
             const provinceArray = res.result.provieceList.map((item) => {
               return {
@@ -76,7 +82,6 @@ export function useTableInit(opt = {}) {
                 label: item.dicName,
               }
             })
-            // formProvieceList = provieceList.value.slice(1)
             provinceArray.splice(0, 0, {
               value: '',
               label: '全部',
@@ -108,7 +113,6 @@ export function useTableInit(opt = {}) {
                 label: item.dicName,
               }
             })
-            // formProvieceList = provieceList.value.slice(1)
             poProvinceArray.splice(0, 0, {
               value: '',
               label: '全部',
@@ -154,7 +158,6 @@ export function useTableInit(opt = {}) {
   }
   //删除
   async function delTableItem(record) {
-    console.log(dataSource)
     record.delLoading = true
     const itemId = record.id
     let res = await opt.delTableEle({ id: itemId })
@@ -225,6 +228,7 @@ export function useTableInit(opt = {}) {
     poProvinceList,
     provinceList,
     formVillageList,
+    responseData,
   }
 }
 
@@ -295,12 +299,16 @@ export function useInitFrom(opt = {}) {
           .then(() => {
             modalRef.value.hideLoading()
             modalRef.value.close()
+            formRef.value.resetFields()
             messageContent('success', '新增表单项成功')
           })
           .catch((err) => {
             modalRef.value.hideLoading()
             return Promise.reject(err)
           })
+        // .finally(() => {
+        //   modalRef.value.disabledCancelFalse()
+        // })
       } else {
         // 修改接口
         await opt
@@ -312,6 +320,9 @@ export function useInitFrom(opt = {}) {
           })
           .catch(() => {
             modalRef.value.hideLoading()
+          })
+          .finally(() => {
+            modalRef.value.disabledCancelFalse()
           })
       }
     } else if (res.result && res.result == '1') {
@@ -353,6 +364,7 @@ export function useInitFrom(opt = {}) {
         .catch(() => {})
         .finally(() => {
           modalRef.value.hideLoading()
+          modalRef.value.disabledCancelFalse()
         })
     } else {
       await addOrEdit(submitState, onlyNameObj)

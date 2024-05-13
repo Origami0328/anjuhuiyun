@@ -74,16 +74,16 @@
                 :options="streetList"
               ></a-select>
             </a-col>
-            <a-col :md="4" :sm="2">
-              <a-select
-                v-model:value="requestObj.villageId"
-                style="width: 150px"
-                show-search
-                :options="villageList"
-                placeholder="选择小区"
-                :filter-option="filterOption"
-              ></a-select>
-            </a-col>
+            <!--            <a-col :md="4" :sm="2">-->
+            <!--              <a-select-->
+            <!--                v-model:value="requestObj.villageId"-->
+            <!--                style="width: 150px"-->
+            <!--                show-search-->
+            <!--                :options="villageList"-->
+            <!--                placeholder="选择小区"-->
+            <!--                :filter-option="filterOption"-->
+            <!--              ></a-select>-->
+            <!--            </a-col>-->
             <a-col :md="4" :sm="2">
               <a-select
                 v-model:value="requestObj.poProvinceCode"
@@ -1733,7 +1733,6 @@
     }
   }
   const cityToStreet = (value, options, type, isForm = false) => {
-    console.log(options)
     let changeList
     if (!options.childCode) {
       if (type == 'city') {
@@ -1948,32 +1947,7 @@
     isNeedFace: true,
     contacts: '',
     mobile: '',
-    // noOpen: '',
-    // cardDayNum: '',
-    // weekOpenNum: '',
     houseWeekOpenNum: '',
-    // visitorDayNum: '',
-    // temporaryVisitorTime: '',
-    // longRentNum: '',
-    // companyNum: '',
-    // faceUnknownNum: '',
-    // cardTotalNum: '',
-    // goBackDay: '',
-    // fkfwpfNum: '',
-    // openRange: '',
-    // controlArea: '',
-    // changePhoneDay: '',
-    // cxTime: '',
-    // changePhoneNum: '',
-    // abnormalStartTime: '',
-    // diffTime: '',
-    // abnormalEndTime: '',
-    // faceDay: '',
-    // lxKmpfDay: '',
-    // faceNum: '',
-    // phoneWeekNum: '',
-    // zfycWeekNum: '',
-    // cxWeekNum: '',
     noOpenTime1: '',
     noOpenTime2: '',
     noOpenTime3: '',
@@ -2005,6 +1979,7 @@
     isLaunchAdOpen: true,
     isAddUser: '0',
     cardWarnNum: '',
+    villageId: undefined,
   })
   // const realOptions = [
   //   {
@@ -2077,17 +2052,17 @@
             result[fromVisitorInfoKey].split(',')
         } else if (fromVisitorInfoKey == 'validity') {
           const validity = result.validity ? JSON.parse(result.validity) : ''
-          fromSettingInfo.validityHolder = validity[0].toString()
-          fromSettingInfo.validityFamily = validity[1].toString()
-          fromSettingInfo.validityTenant = validity[2].toString()
-          fromSettingInfo.validityEmployer = validity[21].toString()
-          fromSettingInfo.validityServant = validity[22].toString()
-          fromSettingInfo.validityGuaranteeMain = validity[31].toString()
-          fromSettingInfo.validityGuaranteeJointly = validity[32].toString()
-          fromSettingInfo.validityGuaranteeTemporary = validity[33].toString()
-          fromSettingInfo.validityPublicMain = validity[41].toString()
-          fromSettingInfo.validityPublicJointly = validity[42].toString()
-          fromSettingInfo.validityPublicTemporary = validity[43].toString()
+          fromSettingInfo.validityHolder = validity[0]?.toString()
+          fromSettingInfo.validityFamily = validity[1]?.toString()
+          fromSettingInfo.validityTenant = validity[2]?.toString()
+          fromSettingInfo.validityEmployer = validity[21]?.toString()
+          fromSettingInfo.validityServant = validity[22]?.toString()
+          fromSettingInfo.validityGuaranteeMain = validity[31]?.toString()
+          fromSettingInfo.validityGuaranteeJointly = validity[32]?.toString()
+          fromSettingInfo.validityGuaranteeTemporary = validity[33]?.toString()
+          fromSettingInfo.validityPublicMain = validity[41]?.toString()
+          fromSettingInfo.validityPublicJointly = validity[42]?.toString()
+          fromSettingInfo.validityPublicTemporary = validity[43]?.toString()
         } else if (fromVisitorInfoKey == 'bzfWarm') {
           const bzfWarm = result.bzfWarm ? JSON.parse(result.bzfWarm) : ''
           fromSettingInfo.tempNum = bzfWarm.tempNum
@@ -2124,6 +2099,7 @@
   const modalLoading = ref(false)
   const submitSettingInfo = async () => {
     modalLoading.value = true
+    console.log(fromSettingInfo)
     await submitSetting({
       ...fromSettingInfo,
       visitorPermission: fromSettingInfo.visitorPermission.join(','),
@@ -2149,6 +2125,7 @@
     }).finally(() => {
       modalLoading.value = false
     })
+    console.log(fromSettingInfo.villageId)
     await getData(requestObj)
     basicInfo.value = false
     otherInfo.value = false

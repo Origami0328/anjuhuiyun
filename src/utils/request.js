@@ -13,7 +13,9 @@ import { isArray } from '@/utils/validate'
 import { messageContent } from '@/utils/message'
 import router from '@/router'
 import store from '@/store'
+
 let loadingInstance
+
 /**
  * @description 处理code异常
  * @param {*} code
@@ -95,8 +97,10 @@ instance.interceptors.request.use(
  */
 instance.interceptors.response.use(
   (response) => {
+    if (response.data.status === 'error') {
+      return instance(response.config)
+    }
     if (loadingInstance) loadingInstance.close()
-
     const { data } = response
     const { code, desc } = data
     // 操作正常Code数组

@@ -233,7 +233,7 @@
             >
               修改
             </a-button>
-            <a-button type="link">分配房东(未写)</a-button>
+            <a-button type="link" @click="disUser(record)">分配房东</a-button>
             <a-popconfirm
               title="确定要删除选中项吗?"
               ok-text="确定"
@@ -337,6 +337,22 @@
         </a-form-item>
       </a-form>
     </Modal>
+    <a-modal title="分配房东" v-model:open="disUserVisible" :footer="false">
+      <a-table :data-source="disUserTable" :columns="disUserColumns">
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.dataIndex == 'isHouse'">
+            <a-button
+              type="link"
+              v-if="record.isHouse == 0"
+              @click="disLandlord(record)"
+            >
+              分配
+            </a-button>
+            <a-button type="link" v-else @click="disLandlord">取消</a-button>
+          </template>
+        </template>
+      </a-table>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -364,6 +380,8 @@
     editHouseList,
     multipleDeleteApi,
     deleteHouse,
+    getDisUser,
+    disMaster,
   } from '@/api/community'
   // import { getBuilding } from '@/api/system'
   import { getDictionary } from '@/api/system'
@@ -857,6 +875,44 @@
   const advanced = ref(false)
   const toggleAdvanced = () => {
     advanced.value = !advanced.value
+  }
+  const disUserVisible = ref(false)
+  const disUserTable = ref([])
+  const disUserColumns = [
+    {
+      dataIndex: 'username',
+      title: '用户名',
+    },
+    {
+      dataIndex: 'realName',
+      title: '姓名',
+    },
+    {
+      dataIndex: 'villageName',
+      title: '小区名',
+    },
+    {
+      title: '操作',
+      dataIndex: 'isHouse',
+    },
+  ]
+  const itemId = ref()
+  const disUser = async (record) => {
+    itemId.value = record.id
+    let { result } = await getDisUser({
+      houseId: record.id,
+    })
+    disUserTable.value = result.list
+    disUserVisible.value = true
+  }
+  const disLandlord = async (record) => {
+    await disMaster({
+      id: record.id,
+      type: record.isHouse,
+      houseId: itemId.value,
+    })
+    itemId.value = undefined
+    disUserVisible.value = false
   }
 </script>
 

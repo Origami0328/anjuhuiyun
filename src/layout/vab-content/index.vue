@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-layout-content class="vab-content">
-      <a-watermark :content="$store.state.user.username">
+      <a-watermark :content="$store.state.user.username" :gap="[50, 50]">
         <router-view v-slot="{ Component }">
           <transition name="fade-transform">
             <keep-alive :include="returnList">

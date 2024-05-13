@@ -21,7 +21,7 @@ const { version, author } = require('./package.json')
 const Webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
-const CompressionPlugin = require('compression-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin')
 const dayjs = require('dayjs')
 const date = dayjs().format('YYYY_M_D')
 const time = dayjs().format('YYYY-M-D HH:mm:ss')
@@ -42,6 +42,21 @@ const resolve = (dir) => {
 //     return ''
 //   }
 // }
+// const assetsCDN = {
+//   externals: {
+//     vue: 'Vue',
+//     'vue-router': 'VueRouter',
+//     vuex: 'Vuex',
+//     axios: 'axios',
+//   },
+//   css: [],
+//   js: [
+//     'https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js',
+//     'https://cdn.bootcdn.net/ajax/libs/vue/3.2.45/vue.global.min.js',
+//     'https://cdn.bootcdn.net/ajax/libs/vue-router/4.0.10/vue-router.global.min.js',
+//     'https://cdn.bootcdn.net/ajax/libs/vuex/4.0.2/vuex.global.min.js',
+//   ],
+// }
 
 module.exports = {
   publicPath,
@@ -61,8 +76,8 @@ module.exports = {
     // 注释掉的地方是前端配置代理访问后端的示例
     proxy: {
       [baseURL]: {
-        // target: `http://192.168.1.142`,
-        target: `http://192.168.1.172`,
+        target: `http://192.168.1.183`,
+        //  target: `http://192.168.1.172`,
         ws: true,
         changeOrigin: true,
         pathRewrite: {
@@ -86,17 +101,7 @@ module.exports = {
           name: webpackBarName,
         }),
       ],
-      // isProd ? config.plugins.push(new CompressionWebpackPlugin({
-      //   test: /\.js$|\.html$|\.css$/u,
-      //   threshold: 4096, // 超过 4kb 压缩
-      // })):''
-      // if (isProd) {
-      //   // 启用 gzip 压缩插件
-      //   config.plugins.push(new CompressionWebpackPlugin({
-      //     test: /\.js$|\.html$|\.css$/u,
-      //     threshold: 4096, // 超过 4kb 压缩
-      //   }))
-      // }
+      // externals: isProd ? assetsCDN.externals : {},
     }
   },
   chainWebpack(config) {
@@ -164,6 +169,24 @@ module.exports = {
           ])
           .end()
       })
+    }
+    // if (isProd) {
+    //   config.plugin('html').tap((args) => {
+    //     args[0].cdn = assetsCDN
+    //     return args
+    //   })
+    // }
+    // 只有在生产环境下才打开压缩
+    if (isProd) {
+      config.plugin('compressionPlugin').use(
+        new CompressionPlugin({
+          algorithm: 'gzip',
+          test: /\.js$|\.css$|\.html$/, //匹配文件名
+          threshold: 10240, //对超过10k的数据压缩
+          minRatio: 0.8, //压缩比
+          deleteOriginalAssets: false, // 不能删除源文件，不然报错"Uncaught SyntaxError: Unexpected token <"
+        })
+      )
     }
   },
   runtimeCompiler: true,

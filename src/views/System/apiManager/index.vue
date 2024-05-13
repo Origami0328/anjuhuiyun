@@ -12,6 +12,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="tableLoading"
+      :pagination="false"
       bordered
     >
       <template v-slot:emptyText>

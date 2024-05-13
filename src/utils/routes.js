@@ -142,6 +142,8 @@ function setComponent(secMennuName) {
       return 'cardBlackList'
     case 'cardWhiteList':
       return 'cardWhiteList'
+    case 'downList':
+      return 'downList'
   }
 }
 const constantRouterComponents = {
@@ -223,6 +225,8 @@ const constantRouterComponents = {
   systemUser: () => import('@/views/System/systemUser'),
   platformUser: () => import('@/views/System/platformUser'),
   role: () => import('@/views/System/role'),
+
+  downList: () => import('@/views/downLoad/downList'),
   Layout: () => import('@/layout'),
 }
 // 设置菜单的图标
@@ -248,6 +252,8 @@ function setIcon(rootMenuName) {
       return 'terminal-box-line'
     case 'account':
       return 'account-box-line'
+    case 'downLoad':
+      return 'book-line'
   }
 }
 /**

@@ -87,7 +87,7 @@
     //   router.push('/login')
     // }
     await store.commit('tagsBar/delAllVisitedRoutes')
-
+    await store.commit('keepComponent/removeAllKeepAliveList')
     router.push('/login')
   }
   // const username = computed(() => store.getters['user/username'])
@@ -103,7 +103,7 @@
     await store.dispatch('user/logout')
     // // 取消confirmLoading
     ModalRef.value.hideLoading()
-    // //回到登录页面
+    //回到登录页面
 
     router.push('/login')
   }

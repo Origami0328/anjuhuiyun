@@ -1029,6 +1029,7 @@
     current: 1,
     showQuickJumper: true,
     showSizeChanger: true,
+    showTotal: (total) => `共 ${total} 条数据`,
   })
   // 页面表格数据
   const getList = (tableObj) => {
@@ -1098,7 +1099,12 @@
         label: item.name,
       }
     })
-    villageList.value.push(...village)
+    villageList.value = [
+      {
+        value: '',
+        label: '全部',
+      },
+    ].concat(village)
     formVillageId.value = village
   })
   const filterOption = (inputValue, option) => {
@@ -1440,6 +1446,13 @@
           formBuildingList.value = build
         }
       })
+    } else {
+      buildingList.value = [
+        {
+          value: '',
+          label: '全部',
+        },
+      ]
     }
   }
   // 表格项的拖动表格项功能
@@ -1739,7 +1752,8 @@
   let transferData
   const openTransfer = () => {
     transferVisible.value = true
-    transferData = villageList.value.slice(1).map((item) => {
+    transferData = []
+    transferData = formVillageId.value.map((item) => {
       return {
         ...item,
         title: item.name,
@@ -1755,12 +1769,7 @@
   const disabledCancelButton = ref(false)
 
   const transferSubmit = () => {
-    // villageLoading.value = true
-    //  console.log(villageLoading.value)
-    // disabledCancelButton.value = true
-    // setTimeout(() => {
     villageLoading.value = true
-    // }, 10)
     formState.villageIds = targetKeys.value
     //
     transferTable.value = formState.villageIds.map((item) => {
@@ -1771,6 +1780,7 @@
     transferVisible.value = false
     formState.villageId = formState.villageIds[formState.villageIds.length - 1]
     targetKeys.value = []
+    villageLoading.value = false
   }
   const closeTransfer = () => {
     targetKeys.value = []

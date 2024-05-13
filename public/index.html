@@ -8,7 +8,6 @@
     <title>安居慧云</title>
     <meta name="referrer" content="never">
     <link href="<%= BASE_URL %>static/css/loading.css" rel="stylesheet" />
-
     <script>
       var _hmt = _hmt || [];
       (function () {
@@ -41,6 +40,10 @@
         <h1><%= VUE_APP_TITLE %></h1>
       </div>
     </div>
+    <!-- require cdn assets js -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+    <% } %>
     <!-- built files will be auto injected -->
   </body>
 </html>

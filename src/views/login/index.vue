@@ -102,45 +102,6 @@
         })
         await this.$router.push(this.handleRoute())
       },
-      // initVaptcha() {
-      //   const that = this
-      //   vaptcha().then(() => {
-      //     window
-      //       .vaptcha({
-      //         vid: '6572cc76d3784602950e68eb', // 验证单元id
-      //         mode: 'invisible',
-      //         scene: 0, // 场景值 默认0
-      //       })
-      //       .then((VAPTCHAObj) => {
-      //         vaptchaobj = VAPTCHAObj
-      //         VAPTCHAObj.reset()
-      //         VAPTCHAObj.listen('pass', function () {
-      //           let serverToken = VAPTCHAObj.getServerToken()
-      //           let data = {
-      //             verServer: serverToken.server,
-      //             verToken: serverToken.token,
-      //           }
-      //           that.handleSubmit(data)
-      //         })
-      //         // VAPTCHAObj.listen('close', () => {
-      //         //   VAPTCHAObj.reset()
-      //         // })
-      //         // VAPTCHAObj.render()
-      //       })
-      //   })
-      // },
-      // async showVaptcha() {
-      //   const password = encrypt(this.form.password)
-      //   const res = await tempLogin({ ...this.form, password })
-      //   // if (res.code == '552') {
-      //   //   vaptchaobj.validate()
-      //   // } else
-      //   if (res.code == '200') {
-      //     await this.handleSubmit()
-      //   } else if (res.code == '409') {
-      //     message.error(res.desc)
-      //   }
-      // },
     },
   }
 </script>

@@ -29,6 +29,11 @@ export const constantRoutes = [
     hidden: true,
   },
   {
+    path: '/taskTemp',
+    component: () => import('@/views/downLoad/taskTemp'),
+    hidden: true,
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/index',
